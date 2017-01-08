@@ -23,20 +23,21 @@ using namespace NEAT;
 
 class CartPole;
 
-//rtNEAT validation with pole balancing *****************************
 Population *pole2_test_realtime();
+
 int pole2_realtime_loop(Population *pop, CartPole *thecart);
-bool pole2_evaluate(Organism *org, bool velocity, CartPole *thecart);
+
+bool pole2_evaluate(Organism *org, CartPole *thecart);
 
 class CartPole {
 public:
-    CartPole(bool randomize, bool velocity);
-    virtual double evalNet(Network *net, int thresh);
+    CartPole(bool velocity);
+
+    virtual double evalNet(Network *net);
 
     double maxFitness;
     bool MARKOV;
 
-    bool last_hundred;
     bool nmarkov_long;  //Flag that we are looking at the champ
     bool generalization_test;  //Flag we are testing champ's generalization
 
@@ -45,7 +46,7 @@ public:
     double jigglestep[1000];
 
 protected:
-    virtual void init(bool randomize);
+    virtual void init();
 
 private:
 
@@ -73,9 +74,6 @@ private:
 
     double LENGTH_2;
     double MASSPOLE_2;
-    double MIN_INC;
-    double POLE_INC;
-    double MASS_INC;
 
     //Queues used for Gruau's fitness which damps oscillations
     int balanced_sum;
@@ -88,9 +86,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-

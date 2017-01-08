@@ -1,21 +1,16 @@
 #include "experiments.h"
 
-CartPole::CartPole(bool randomize, bool velocity) {
+CartPole::CartPole(bool velocity) {
     maxFitness = 100000;
 
     MARKOV = velocity;
 
-    MIN_INC = 0.001;
-    POLE_INC = 0.05;
-    MASS_INC = 0.01;
-
     LENGTH_2 = 0.05;
     MASSPOLE_2 = 0.01;
 
-    // CartPole::reset() which is called here
 }
 
-double CartPole::evalNet(Network *net, int thresh) {
+double CartPole::evalNet(Network *net) {
     int steps = 0;
     double input[NUM_INPUTS];
     double output;
@@ -34,7 +29,7 @@ double CartPole::evalNet(Network *net, int thresh) {
     else nmarkovmax = 1000;
 
 
-    init(0);
+    init();
 
     if (MARKOV) {
         while (steps++ < maxFitness) {
@@ -66,25 +61,6 @@ double CartPole::evalNet(Network *net, int thresh) {
 
         while (steps++ < nmarkovmax) {
 
-
-            //Do special parameter summing on last hundred
-            //if ((steps==900)&&(!nmarkov_long)) last_hundred=true;
-
-            /*
-            input[0] = state[0] / 4.8;
-            input[1] = 0.0;
-            input[2] = state[2]  / 0.52;
-            input[3] = 0.0;
-            input[4] = state[4] / 0.52;
-            input[5] = 0.0;
-            input[6] = .5;
-            */
-
-            //cout<<"nmarkov_long: "<<nmarkov_long<<endl;
-
-            //if (nmarkov_long)
-            //cout<<"step: "<<steps<<endl;
-
             input[0] = state[0] / 4.8;
             input[1] = state[2] / 0.52;
             input[2] = state[4] / 0.52;
@@ -92,16 +68,12 @@ double CartPole::evalNet(Network *net, int thresh) {
 
             net->load_sensors(input);
 
-            //cout<<"inputs: "<<input[0]<<" "<<input[1]<<" "<<input[2]<<" "<<input[3]<<endl;
-
             //Activate the net
             //If it loops, exit returning only fitness of 1 step
             if (!(net->activate())) return 0.0001;
 
             output = (*(net->outputs.begin()))->activation;
-
-            //cout<<"output: "<<output<<endl;
-
+            
             performAction(output, steps);
 
             if (outsideBounds())    // if failure
@@ -142,7 +114,7 @@ double CartPole::evalNet(Network *net, int thresh) {
 
 }
 
-void CartPole::init(bool randomize) {
+void CartPole::init() {
     static int first_time = 1;
 
     if (!MARKOV) {
@@ -154,8 +126,6 @@ void CartPole::init(bool randomize) {
     }
 
     balanced_sum = 0; //Always count # balanced
-
-    last_hundred = false;
 
     /*if (randomize) {
       state[0] = (lrand48()%4800)/1000.0 - 2.4;
@@ -204,16 +174,6 @@ void CartPole::performAction(double output, int stepnum) {
             step(output, state, dydx);
             rk4(output, state, dydx, state);
         }
-    } else {
-        for (i = 0; i < 8; ++i) {
-            step(output, state, dydx);
-            state[0] += EULER_TAU * dydx[0];
-            state[1] += EULER_TAU * dydx[1];
-            state[2] += EULER_TAU * dydx[2];
-            state[3] += EULER_TAU * dydx[3];
-            state[4] += EULER_TAU * dydx[4];
-            state[5] += EULER_TAU * dydx[5];
-        }
     }
 
     //Record this state
@@ -224,20 +184,7 @@ void CartPole::performAction(double output, int stepnum) {
     if (stepnum <= 1000)
         jigglestep[stepnum - 1] = fabs(state[0]) + fabs(state[1]) + fabs(state[2]) + fabs(state[3]);
 
-    if (false) {
-        //cout<<"[ x: "<<state[0]<<" xv: "<<state[1]<<" t1: "<<state[2]<<" t1v: "<<state[3]<<" t2:"<<state[4]<<" t2v: "<<state[5]<<" ] "<<
-        //cartpos_sum+cartv_sum+polepos_sum+polepos_sum+polev_sum<<endl;
-        if (!(outsideBounds())) {
-            if (balanced_sum < 1000) {
-                cout << ".";
-                ++balanced_sum;
-            }
-        } else {
-            if (balanced_sum == 1000)
-                balanced_sum = 1000;
-            else balanced_sum = 0;
-        }
-    } else if (!(outsideBounds()))
+    if (!(outsideBounds()))
         ++balanced_sum;
 
 }
@@ -332,17 +279,14 @@ Population *pole2_test_realtime() {
     char curword[20];
     int id;
 
-    ostringstream *fnamebuf;
-    int gen;
     CartPole *thecart;
-
-    double highscore;
 
     ifstream iFile("pole2startgenes1", ios::in);
 
     cout << "START DOUBLE POLE BALANCING REAL-TIME EVOLUTION VALIDATION" << endl;
 
     cout << "Reading in the start genome" << endl;
+
     //Read in the start Genome
     iFile >> curword;
     iFile >> id;
@@ -356,17 +300,14 @@ Population *pole2_test_realtime() {
     cout << "Spawning Population off Genome" << endl;
     pop = new Population(start_genome, NEAT::pop_size);
 
-    //Alternative way to start off of randomly connected genomes
-    //pop=new Population(pop_size,7,1,10,false,0.3);
-
     cout << "Verifying Spawned Pop" << endl;
     pop->verify();
 
     //Create the Cart
-    thecart = new CartPole(true, 1);
+    thecart = new CartPole(1);
 
     //Start the evolution loop using rtNEAT method calls 
-    highscore = pole2_realtime_loop(pop, thecart);
+    pole2_realtime_loop(pop, thecart);
 
     return pop;
 
@@ -374,24 +315,10 @@ Population *pole2_test_realtime() {
 
 int pole2_realtime_loop(Population *pop, CartPole *thecart) {
     vector<Organism *>::iterator curorg;
-    vector<Species *>::iterator curspecies;
-
     vector<Species *>::iterator curspec; //used in printing out debug info
-
-    vector<Species *> sorted_species;  //Species sorted by max fit org in Species
 
     int pause;
     bool win = false;
-
-    double champ_fitness;
-    Organism *champ;
-
-    //double statevals[5]={-0.9,-0.5,0.0,0.5,0.9};
-    double statevals[5] = {0.05, 0.25, 0.5, 0.75, 0.95};
-
-    int s0c, s1c, s2c, s3c;
-
-    int score;
 
     //Real-time evolution variables
     int offspring_count;
@@ -418,7 +345,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
             cin >> pause;
         }
 
-        if (pole2_evaluate((*curorg), 1, thecart)) win = true;
+        if (pole2_evaluate((*curorg), thecart)) win = true;
 
     }
 
@@ -479,7 +406,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
         //Note that in a true real-time simulation, evaluation would be happening to all individuals at all times.
         //That is, this call would not appear here in a true online simulation.
         cout << "Evaluating new baby: " << endl;
-        if (pole2_evaluate(new_org, 1, thecart)) win = true;
+        if (pole2_evaluate(new_org, thecart)) win = true;
 
         if (win) {
             cout << "WINNER" << endl;
@@ -497,23 +424,15 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
 
 }
 
-bool pole2_evaluate(Organism *org, bool velocity, CartPole *thecart) {
+bool pole2_evaluate(Organism *org, CartPole *thecart) {
     Network *net;
-
-    int thresh;  /* How many visits will be allowed before giving up
-		  (for loop detection)  NOW OBSOLETE */
 
     int pause;
 
     net = org->net;
 
-    thresh = 100;  //this is obsolete
-
-    //DEBUG :  Check flushedness of org
-    //org->net->flush_check();
-
     //Try to balance a pole now
-    org->fitness = thecart->evalNet(net, thresh);
+    org->fitness = thecart->evalNet(net);
 
 #ifndef NO_SCREEN_OUT
     if (org->pop_champ_child)
