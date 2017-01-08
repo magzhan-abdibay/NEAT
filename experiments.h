@@ -60,7 +60,6 @@ private:
 
     const static int NUM_INPUTS = 7;
     const static double MUP = 0.000002;
-    const static double MUC = 0.0005;
     const static double GRAVITY = -9.8;
     const static double MASSCART = 1.0;
     const static double MASSPOLE_1 = 0.1;

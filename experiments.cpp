@@ -73,7 +73,7 @@ double CartPole::evalNet(Network *net) {
             if (!(net->activate())) return 0.0001;
 
             output = (*(net->outputs.begin()))->activation;
-            
+
             performAction(output, steps);
 
             if (outsideBounds())    // if failure
@@ -421,7 +421,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
         pop->remove_worst();
 
     }
-
+    return 0;
 }
 
 bool pole2_evaluate(Organism *org, CartPole *thecart) {
