@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include <cmath>
-#include <cstring>
 
 int NEAT::time_alive_minimum = 0;
 double NEAT::trait_param_mut_prob = 0;
@@ -38,61 +37,7 @@ int NEAT::newlink_tries = 0;  // Number of tries mutate_add_link will attempt to
 int NEAT::print_every = 0; // Tells to print population to file every n generations 
 int NEAT::babies_stolen = 0; // The number of babies to siphen off to the champions 
 int NEAT::num_runs = 0;
-//MRandomR250 NEAT::NEATRandGen = MRandomR250(Platform::getRealMilliseconds()); // Random number generator; can pass seed value as argument here
-//MRandomR250 NEAT::NEATRandGen = MRandomR250();
 
-//const char* NEAT::getUnit(const char *string, int index, const char *set)
-//{
-//	int sz;
-//	while(index--)
-//	{
-//		if(!*string)
-//			return "";
-//		sz = strcspn(string, set);
-//		if (string[sz] == 0)
-//			return "";
-//		string += (sz + 1);    
-//	}
-//	sz = strcspn(string, set);
-//	if (sz == 0)
-//		return "";
-//	char *ret = getReturnBuffer(sz+1);
-//	strncpy(ret, string, sz);
-//	ret[sz] = '\0';
-//	return ret;
-//}
-//
-//const char* NEAT::getUnits(const char *string, int startIndex, int endIndex, const char *set)
-//{
-//	int sz;
-//	int index = startIndex;
-//	while(index--)
-//	{
-//		if(!*string)
-//			return "";
-//		sz = strcspn(string, set);
-//		if (string[sz] == 0)
-//			return "";
-//		string += (sz + 1);    
-//	}
-//	const char *startString = string;
-//	while(startIndex <= endIndex--)
-//	{
-//		sz = strcspn(string, set);
-//		string += sz;
-//		if (*string == 0)
-//			break;
-//		string++;
-//	}
-//	if(!*string)
-//		string++;
-//	int totalSize = (int(string - startString));
-//	char *ret = getReturnBuffer(totalSize);
-//	strncpy(ret, startString, totalSize - 1);
-//	ret[totalSize-1] = '\0';
-//	return ret;
-//}
-//
 int NEAT::getUnitCount(const char *string, const char *set)
 {
 	int count = 0;
@@ -443,21 +388,7 @@ double NEAT::gaussrand() {
 }
 
 double NEAT::fsigmoid(double activesum,double slope,double constant) {
-	//RIGHT SHIFTED ---------------------------------------------------------
-	//return (1/(1+(exp(-(slope*activesum-constant))))); //ave 3213 clean on 40 runs of p2m and 3468 on another 40 
-	//41394 with 1 failure on 8 runs
-
-	//LEFT SHIFTED ----------------------------------------------------------
-	//return (1/(1+(exp(-(slope*activesum+constant))))); //original setting ave 3423 on 40 runs of p2m, 3729 and 1 failure also
-
-	//PLAIN SIGMOID ---------------------------------------------------------
-	//return (1/(1+(exp(-activesum)))); //3511 and 1 failure
-
-	//LEFT SHIFTED NON-STEEPENED---------------------------------------------
-	//return (1/(1+(exp(-activesum-constant)))); //simple left shifted
-
-	//NON-SHIFTED STEEPENED
-	return (1/(1+(exp(-(slope*activesum))))); //Compressed
+	return (1/(1+(exp(-(slope*activesum)))));
 }
 
 double NEAT::oldhebbian(double weight, double maxweight, double active_in, double active_out, double hebb_rate, double pre_rate, double post_rate) {
@@ -551,33 +482,13 @@ double NEAT::hebbian(double weight, double maxweight, double active_in, double a
 		weight=-weight;
 	}
 
-
-	//if (weight<0) {
-	//  weight_mag=-weight;
-	//}
-	//else weight_mag=weight;
-
-
 	topweight=weight+2.0;
 	if (topweight>maxweight) topweight=maxweight;
 
 	if (!(neg)) {
-		//if (true) {
 		delta=
 			hebb_rate*(maxweight-weight)*active_in*active_out+
 			pre_rate*(topweight)*active_in*(active_out-1.0);
-		//post_rate*(weight+1.0)*(active_in-1.0)*active_out;
-
-		//delta=delta-hebb_rate/2; //decay
-
-		//delta=delta+randposneg()*randfloat()*0.01; //noise
-
-		//cout<<"delta: "<<delta<<endl;
-
-		//if (weight+delta>0)
-		//  return weight+delta;
-		//else return 0.01;
-
 		return weight+delta;
 
 	}
@@ -586,21 +497,8 @@ double NEAT::hebbian(double weight, double maxweight, double active_in, double a
 		//input is high
 		delta=
 			pre_rate*(maxweight-weight)*active_in*(1.0-active_out)+ //"unhebb"
-			//hebb_rate*(maxweight-weight)*(1.0-active_in)*(active_out)+
 			-hebb_rate*(topweight+2.0)*active_in*active_out+ //anti-hebbian
-			//hebb_rate*(maxweight-weight)*active_in*active_out+
-			//pre_rate*weight*active_in*(active_out-1.0)+
-			//post_rate*weight*(active_in-1.0)*active_out;
 			0;
-
-		//delta=delta-hebb_rate; //decay
-
-		//delta=delta+randposneg()*randfloat()*0.01; //noise
-
-		//if (-(weight+delta)<0)
-		//  return -(weight+delta);
-		//  else return -0.01;
-
 		return -(weight+delta);
 
 	}
