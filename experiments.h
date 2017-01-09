@@ -23,11 +23,11 @@ using namespace NEAT;
 
 class CartPole;
 
-Population *pole2_test_realtime();
+Population *pole2TestRealTime();
 
-int pole2_realtime_loop(Population *pop, CartPole *thecart);
+int pole2RealTimeLoop(Population *pop, CartPole *cart);
 
-bool pole2_evaluate(Organism *org, CartPole *thecart);
+bool pole2Evaluate(Organism *org, CartPole *cart);
 
 class CartPole {
 public:
@@ -35,15 +35,15 @@ public:
 
     virtual double evalNet(Network *net);
 
-    double maxFitness;
+    double MAX_FITNESS;
     bool MARKOV;
 
-    bool nmarkov_long;  //Flag that we are looking at the champ
-    bool generalization_test;  //Flag we are testing champ's generalization
+    bool N_MARKOV_LONG;                     //Flag that we are looking at the champ
+    bool GENERALIZATION_TEST;               //Flag we are testing champ's generalization
 
     double state[6];
 
-    double jigglestep[1000];
+    double JIGGLE_STEP[1000];
 
 protected:
     virtual void init();
@@ -61,26 +61,22 @@ private:
     const static int NUM_INPUTS = 7;
     const static double MUP = 0.000002;
     const static double GRAVITY = -9.8;
-    const static double MASSCART = 1.0;
-    const static double MASSPOLE_1 = 0.1;
-
-    const static double LENGTH_1 = 0.5;          /* actually half the pole's length */
-
+    const static double MASS_CART = 1.0;
+    const static double MASS_POLE_1 = 0.1;
+    const static double LENGTH_1 = 0.5;         //actually half the pole's length
     const static double FORCE_MAG = 10.0;
-    const static double TAU = 0.01;          //seconds between state updates
-
+    const static double TAU = 0.01;             //seconds between state updates
     const static double thirty_six_degrees = 0.628329;
 
     double LENGTH_2;
-    double MASSPOLE_2;
+    double MASS_POLE_2;
 
     //Queues used for Gruau's fitness which damps oscillations
-    int balanced_sum;
-    double cartpos_sum;
-    double cartv_sum;
-    double polepos_sum;
-    double polev_sum;
-
+    int BALANCED_SUM;
+    double CART_POS_SUM;
+    double CART_V_SUM;
+    double POLE_POS_SUM;
+    double POLE_V_SUM;
 
 };
 

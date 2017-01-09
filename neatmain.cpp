@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     cout << "Press any key: ";
     getchar();
 
-    p = pole2_test_realtime();
+    p = pole2TestRealTime();
     if (p)
         delete p;
 

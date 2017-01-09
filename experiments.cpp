@@ -1,13 +1,10 @@
 #include "experiments.h"
 
 CartPole::CartPole(bool velocity) {
-    maxFitness = 100000;
-
+    MAX_FITNESS = 100000;
     MARKOV = velocity;
-
     LENGTH_2 = 0.05;
-    MASSPOLE_2 = 0.01;
-
+    MASS_POLE_2 = 0.01;
 }
 
 double CartPole::evalNet(Network *net) {
@@ -15,26 +12,20 @@ double CartPole::evalNet(Network *net) {
     double input[NUM_INPUTS];
     double output;
 
-    int nmarkovmax;
+    int nMarkovMax;
 
-    double nmarkov_fitness;
+    double nMarkovFitness;
 
-    double jiggletotal; //total jiggle in last 100
-    int count;  //step counter
+    double jiggleTotal; //total jiggle in last 100
+    int count;          //step counter
 
-    //init(randomize);		// restart at some point
-
-    if (nmarkov_long) nmarkovmax = 100000;
-    else if (generalization_test) nmarkovmax = 1000;
-    else nmarkovmax = 1000;
-
+    if (N_MARKOV_LONG) nMarkovMax = 100000;
+    else nMarkovMax = 1000;
 
     init();
 
     if (MARKOV) {
-        while (steps++ < maxFitness) {
-
-
+        while (steps++ < MAX_FITNESS) {
             input[0] = state[0] / 4.8;
             input[1] = state[1] / 2;
             input[2] = state[2] / 0.52;
@@ -53,13 +44,13 @@ double CartPole::evalNet(Network *net) {
 
             performAction(output, steps);
 
-            if (outsideBounds())    // if failure
-                break;            // stop it now
+            if (outsideBounds())    // if failure stop it now
+                break;
         }
         return (double) steps;
     } else {  //NON MARKOV CASE
 
-        while (steps++ < nmarkovmax) {
+        while (steps++ < nMarkovMax) {
 
             input[0] = state[0] / 4.8;
             input[1] = state[2] / 0.52;
@@ -76,38 +67,38 @@ double CartPole::evalNet(Network *net) {
 
             performAction(output, steps);
 
-            if (outsideBounds())    // if failure
-                break;            // stop it now
+            if (outsideBounds())    // if failure  stop it now
+                break;
 
-            if (nmarkov_long && (outsideBounds()))    // if failure
-                break;            // stop it now
+            if (N_MARKOV_LONG && (outsideBounds()))    // if failure stop it now
+                break;
         }
 
         //If we are generalizing we just need to balance it a while
-        if (generalization_test)
-            return (double) balanced_sum;
+        if (GENERALIZATION_TEST)
+            return (double) BALANCED_SUM;
 
         //Sum last 100
-        if ((steps > 100) && (!nmarkov_long)) {
+        if ((steps > 100) && (!N_MARKOV_LONG)) {
 
-            jiggletotal = 0;
+            jiggleTotal = 0;
             cout << "step " << steps - 99 - 2 << " to step " << steps - 2 << endl;
             //Adjust for array bounds and count
             for (count = steps - 99 - 2; count <= steps - 2; count++)
-                jiggletotal += jigglestep[count];
+                jiggleTotal += JIGGLE_STEP[count];
         }
 
-        if (!nmarkov_long) {
-            if (balanced_sum > 100)
-                nmarkov_fitness = ((0.1 * (((double) balanced_sum) / 1000.0)) +
-                                   (0.9 * (0.75 / (jiggletotal))));
-            else nmarkov_fitness = (0.1 * (((double) balanced_sum) / 1000.0));
+        if (!N_MARKOV_LONG) {
+            if (BALANCED_SUM > 100)
+                nMarkovFitness = ((0.1 * (((double) BALANCED_SUM) / 1000.0)) +
+                                  (0.9 * (0.75 / (jiggleTotal))));
+            else nMarkovFitness = (0.1 * (((double) BALANCED_SUM) / 1000.0));
 
 #ifndef NO_SCREEN_OUTR
-            cout << "Balanced:  " << balanced_sum << " jiggle: " << jiggletotal << " ***" << endl;
+            cout << "Balanced:  " << BALANCED_SUM << " jiggle: " << jiggleTotal << " ***" << endl;
 #endif
 
-            return nmarkov_fitness;
+            return nMarkovFitness;
         } else return (double) steps;
 
     }
@@ -115,41 +106,29 @@ double CartPole::evalNet(Network *net) {
 }
 
 void CartPole::init() {
-    static int first_time = 1;
+    static int firstTime = 1;
 
     if (!MARKOV) {
         //Clear all fitness records
-        cartpos_sum = 0.0;
-        cartv_sum = 0.0;
-        polepos_sum = 0.0;
-        polev_sum = 0.0;
+        CART_POS_SUM = 0.0;
+        CART_V_SUM = 0.0;
+        POLE_POS_SUM = 0.0;
+        POLE_V_SUM = 0.0;
     }
 
-    balanced_sum = 0; //Always count # balanced
+    BALANCED_SUM = 0; //Always count # balanced
 
-    /*if (randomize) {
-      state[0] = (lrand48()%4800)/1000.0 - 2.4;
-      state[1] = (lrand48()%2000)/1000.0 - 1;
-      state[2] = (lrand48()%400)/1000.0 - 0.2;
-      state[3] = (lrand48()%400)/1000.0 - 0.2;
-      state[4] = (lrand48()%3000)/1000.0 - 1.5;
-      state[5] = (lrand48()%3000)/1000.0 - 1.5;
-    }
-    else {*/
-
-
-    if (!generalization_test) {
+    if (!GENERALIZATION_TEST) {
         state[0] = state[1] = state[3] = state[4] = state[5] = 0;
         state[2] = 0.07; // one_degree;
     } else {
         state[4] = state[5] = 0;
     }
 
-    //}
-    if (first_time) {
+    if (firstTime) {
         cout << "Initial Long pole angle = %f\n" << state[2] << endl;;
         cout << "Initial Short pole length = %f\n" << LENGTH_2 << endl;
-        first_time = 0;
+        firstTime = 0;
     }
 }
 
@@ -158,66 +137,60 @@ void CartPole::performAction(double output, int stepnum) {
     int i;
     double dydx[6];
 
-    const bool RK4 = true; //Set to Runge-Kutta 4th order integration method
-    const double EULER_TAU = TAU / 4;
+    //Runge-Kutta 4th order integration method
 
-    /*random start state for long pole*/
-    /*state[2]= drand48();   */
+    //Apply action to the simulated cart-pole 
 
-    /*--- Apply action to the simulated cart-pole ---*/
-
-    if (RK4) {
-        for (i = 0; i < 2; ++i) {
-            dydx[0] = state[1];
-            dydx[2] = state[3];
-            dydx[4] = state[5];
-            step(output, state, dydx);
-            rk4(output, state, dydx, state);
-        }
+    for (i = 0; i < 2; ++i) {
+        dydx[0] = state[1];
+        dydx[2] = state[3];
+        dydx[4] = state[5];
+        step(output, state, dydx);
+        rk4(output, state, dydx, state);
     }
 
     //Record this state
-    cartpos_sum += fabs(state[0]);
-    cartv_sum += fabs(state[1]);
-    polepos_sum += fabs(state[2]);
-    polev_sum += fabs(state[3]);
+    CART_POS_SUM += fabs(state[0]);
+    CART_V_SUM += fabs(state[1]);
+    POLE_POS_SUM += fabs(state[2]);
+    POLE_V_SUM += fabs(state[3]);
     if (stepnum <= 1000)
-        jigglestep[stepnum - 1] = fabs(state[0]) + fabs(state[1]) + fabs(state[2]) + fabs(state[3]);
+        JIGGLE_STEP[stepnum - 1] = fabs(state[0]) + fabs(state[1]) + fabs(state[2]) + fabs(state[3]);
 
     if (!(outsideBounds()))
-        ++balanced_sum;
+        ++BALANCED_SUM;
 
 }
 
 void CartPole::step(double action, double *st, double *derivs) {
-    double force, costheta_1, costheta_2, sintheta_1, sintheta_2,
-            gsintheta_1, gsintheta_2, temp_1, temp_2, ml_1, ml_2, fi_1, fi_2, mi_1, mi_2;
+    double force, cosTheta1, cosTheta2, sinTheta1, sinTheta2,
+            gSinTheta1, gSinTheta2, temp1, temp2, ml_1, ml_2, fi_1, fi_2, mi_1, mi_2;
 
     force = (action - 0.5) * FORCE_MAG * 2;
-    costheta_1 = cos(st[2]);
-    sintheta_1 = sin(st[2]);
-    gsintheta_1 = GRAVITY * sintheta_1;
-    costheta_2 = cos(st[4]);
-    sintheta_2 = sin(st[4]);
-    gsintheta_2 = GRAVITY * sintheta_2;
+    cosTheta1 = cos(st[2]);
+    sinTheta1 = sin(st[2]);
+    gSinTheta1 = GRAVITY * sinTheta1;
+    cosTheta2 = cos(st[4]);
+    sinTheta2 = sin(st[4]);
+    gSinTheta2 = GRAVITY * sinTheta2;
 
-    ml_1 = LENGTH_1 * MASSPOLE_1;
-    ml_2 = LENGTH_2 * MASSPOLE_2;
-    temp_1 = MUP * st[3] / ml_1;
-    temp_2 = MUP * st[5] / ml_2;
-    fi_1 = (ml_1 * st[3] * st[3] * sintheta_1) +
-           (0.75 * MASSPOLE_1 * costheta_1 * (temp_1 + gsintheta_1));
-    fi_2 = (ml_2 * st[5] * st[5] * sintheta_2) +
-           (0.75 * MASSPOLE_2 * costheta_2 * (temp_2 + gsintheta_2));
-    mi_1 = MASSPOLE_1 * (1 - (0.75 * costheta_1 * costheta_1));
-    mi_2 = MASSPOLE_2 * (1 - (0.75 * costheta_2 * costheta_2));
+    ml_1 = LENGTH_1 * MASS_POLE_1;
+    ml_2 = LENGTH_2 * MASS_POLE_2;
+    temp1 = MUP * st[3] / ml_1;
+    temp2 = MUP * st[5] / ml_2;
+    fi_1 = (ml_1 * st[3] * st[3] * sinTheta1) +
+           (0.75 * MASS_POLE_1 * cosTheta1 * (temp1 + gSinTheta1));
+    fi_2 = (ml_2 * st[5] * st[5] * sinTheta2) +
+           (0.75 * MASS_POLE_2 * cosTheta2 * (temp2 + gSinTheta2));
+    mi_1 = MASS_POLE_1 * (1 - (0.75 * cosTheta1 * cosTheta1));
+    mi_2 = MASS_POLE_2 * (1 - (0.75 * cosTheta2 * cosTheta2));
 
     derivs[1] = (force + fi_1 + fi_2)
-                / (mi_1 + mi_2 + MASSCART);
+                / (mi_1 + mi_2 + MASS_CART);
 
-    derivs[3] = -0.75 * (derivs[1] * costheta_1 + gsintheta_1 + temp_1)
+    derivs[3] = -0.75 * (derivs[1] * cosTheta1 + gSinTheta1 + temp1)
                 / LENGTH_1;
-    derivs[5] = -0.75 * (derivs[1] * costheta_2 + gsintheta_2 + temp_2)
+    derivs[5] = -0.75 * (derivs[1] * cosTheta2 + gSinTheta2 + temp2)
                 / LENGTH_2;
 
 }
@@ -273,7 +246,7 @@ bool CartPole::outsideBounds() {
 //Always uses Markov case (i.e. velocities provided)
 //This test is meant to validate the rtNEAT methods and show how they can be used instead
 // of the usual generational NEAT
-Population *pole2_test_realtime() {
+Population *pole2TestRealTime() {
     Population *pop;
     Genome *start_genome;
     char curword[20];
@@ -307,13 +280,13 @@ Population *pole2_test_realtime() {
     thecart = new CartPole(1);
 
     //Start the evolution loop using rtNEAT method calls 
-    pole2_realtime_loop(pop, thecart);
+    pole2RealTimeLoop(pop, thecart);
 
     return pop;
 
 }
 
-int pole2_realtime_loop(Population *pop, CartPole *thecart) {
+int pole2RealTimeLoop(Population *pop, CartPole *cart) {
     vector<Organism *>::iterator curorg;
     vector<Species *>::iterator curspec; //used in printing out debug info
 
@@ -324,8 +297,8 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
     int offspring_count;
     Organism *new_org;
 
-    thecart->nmarkov_long = false;
-    thecart->generalization_test = false;
+    cart->N_MARKOV_LONG = false;
+    cart->GENERALIZATION_TEST = false;
 
     //We try to keep the number of species constant at this number
     int num_species_target = NEAT::pop_size / 15;
@@ -345,7 +318,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
             cin >> pause;
         }
 
-        if (pole2_evaluate((*curorg), thecart)) win = true;
+        if (pole2Evaluate((*curorg), cart)) win = true;
 
     }
 
@@ -368,7 +341,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
         //and reassign the population to new species
         if (offspring_count % compat_adjust_frequency == 0) {
 
-            int num_species = pop->species.size();
+            int num_species = (int) pop->species.size();
             double compat_mod = 0.1;  //Modify compat thresh to control speciation
 
             // This tinkers with the compatibility threshold
@@ -406,11 +379,11 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
         //Note that in a true real-time simulation, evaluation would be happening to all individuals at all times.
         //That is, this call would not appear here in a true online simulation.
         cout << "Evaluating new baby: " << endl;
-        if (pole2_evaluate(new_org, thecart)) win = true;
+        if (pole2Evaluate(new_org, cart)) win = true;
 
         if (win) {
             cout << "WINNER" << endl;
-            pop->print_to_file_by_species("rt_winpop");
+            pop->print_to_file_by_species((char *) "rt_winpop");
             break;
         }
 
@@ -424,7 +397,7 @@ int pole2_realtime_loop(Population *pop, CartPole *thecart) {
     return 0;
 }
 
-bool pole2_evaluate(Organism *org, CartPole *thecart) {
+bool pole2Evaluate(Organism *org, CartPole *cart) {
     Network *net;
 
     int pause;
@@ -432,7 +405,7 @@ bool pole2_evaluate(Organism *org, CartPole *thecart) {
     net = org->net;
 
     //Try to balance a pole now
-    org->fitness = thecart->evalNet(net);
+    org->fitness = cart->evalNet(net);
 
 #ifndef NO_SCREEN_OUT
     if (org->pop_champ_child)
@@ -448,7 +421,7 @@ bool pole2_evaluate(Organism *org, CartPole *thecart) {
     cout << endl;
 #endif
 
-    if ((!(thecart->generalization_test)) && (!(thecart->nmarkov_long)))
+    if ((!(cart->GENERALIZATION_TEST)) && (!(cart->N_MARKOV_LONG)))
         if (org->pop_champ_child) {
             cout << org->gnome << endl;
             //DEBUG CHECK
@@ -460,8 +433,8 @@ bool pole2_evaluate(Organism *org, CartPole *thecart) {
         }
 
     //Decide if its a winner, in Markov Case
-    if (thecart->MARKOV) {
-        if (org->fitness >= (thecart->maxFitness - 1)) {
+    if (cart->MARKOV) {
+        if (org->fitness >= (cart->MAX_FITNESS - 1)) {
             org->winner = true;
             return true;
         } else {
@@ -470,16 +443,15 @@ bool pole2_evaluate(Organism *org, CartPole *thecart) {
         }
     }
         //if doing the long test non-markov
-    else if (thecart->nmarkov_long) {
+    else if (cart->N_MARKOV_LONG) {
         if (org->fitness >= 99999) {
-            //if (org->fitness>=9000) {
             org->winner = true;
             return true;
         } else {
             org->winner = false;
             return false;
         }
-    } else if (thecart->generalization_test) {
+    } else if (cart->GENERALIZATION_TEST) {
         if (org->fitness >= 999) {
             org->winner = true;
             return true;

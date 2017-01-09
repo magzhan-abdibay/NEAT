@@ -272,7 +272,7 @@ more advanced than the pole2_realtime_loop because it is actually part of
 a true simulator with (usually) 50 agents running around and evolving 
 simultaneously.  Accordingly, the main rtNEAT evolution code in the NERO 
 file is in a function that is called periodically by a system tick rather 
-than in a for loop like in pole2_realtime_loop.  You will notice some 
+than in a for loop like in pole2RealTimeLoop.  You will notice some
 additional cleanup and debug code in the NERO code sample that may also 
 be helpful.
 
