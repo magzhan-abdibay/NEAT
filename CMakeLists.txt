@@ -16,7 +16,7 @@ SET(rtneat_sources
   population.cpp
   species.cpp
   trait.cpp
-)
+  CartPole.cpp)
 #FILE(GLOB rtneat_sources *.cpp)
 
 ADD_EXECUTABLE( rtneat ${rtneat_sources} )
