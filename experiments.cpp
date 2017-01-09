@@ -1,20 +1,18 @@
 #include "experiments.h"
 
-/* ------------------------------------------------------------------ */
-/* Real-time NEAT Validation                                          */
-/* ------------------------------------------------------------------ */
-
-//Perform evolution on double pole balacing using rtNEAT methods calls
-//Always uses Markov case (i.e. velocities provided)
-//This test is meant to validate the rtNEAT methods and show how they can be used instead
-// of the usual generational NEAT
+/** Real-time NEAT Validation
+Perform evolution on double pole balacing using rtNEAT methods calls
+Always uses Markov case (i.e. velocities provided)
+This test is meant to validate the rtNEAT methods and show how they can be used instead
+ of the usual generational NEAT
+ */
 Population *pole2TestRealTime() {
     Population *pop;
     Genome *start_genome;
-    char curword[20];
+    char curWord[20];
     int id;
 
-    CartPole *thecart;
+    CartPole *cartPole;
 
     ifstream iFile("pole2startgenes1", ios::in);
 
@@ -23,7 +21,7 @@ Population *pole2TestRealTime() {
     cout << "Reading in the start genome" << endl;
 
     //Read in the start Genome
-    iFile >> curword;
+    iFile >> curWord;
     iFile >> id;
     cout << "Reading in Genome id " << id << endl;
     start_genome = new Genome(id, iFile);
@@ -39,18 +37,18 @@ Population *pole2TestRealTime() {
     pop->verify();
 
     //Create the Cart
-    thecart = new CartPole(1);
+    cartPole = new CartPole(1);
 
     //Start the evolution loop using rtNEAT method calls 
-    pole2RealTimeLoop(pop, thecart);
+    pole2RealTimeLoop(pop, cartPole);
 
     return pop;
 
 }
 
 int pole2RealTimeLoop(Population *pop, CartPole *cart) {
-    vector<Organism *>::iterator curorg;
-    vector<Species *>::iterator curspec; //used in printing out debug info
+    vector<Organism *>::iterator curOrg;
+    vector<Species *>::iterator curSpec; //used in printing out debug info
 
     int pause;
     bool win = false;
@@ -72,15 +70,15 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
 
     //Initially, we evaluate the whole population
     //Evaluate each organism on a test
-    for (curorg = (pop->organisms).begin(); curorg != (pop->organisms).end(); ++curorg) {
+    for (curOrg = (pop->organisms).begin(); curOrg != (pop->organisms).end(); ++curOrg) {
 
         //shouldn't happen
-        if (((*curorg)->gnome) == 0) {
-            cout << "ERROR EMPTY GEMOME!" << endl;
+        if (((*curOrg)->gnome) == 0) {
+            cout << "ERROR EMPTY GENOME!" << endl;
             cin >> pause;
         }
 
-        if (pole2Evaluate((*curorg), cart)) win = true;
+        if (pole2Evaluate((*curOrg), cart)) win = true;
 
     }
 
@@ -118,16 +116,16 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
             cout << "compat_thresh = " << NEAT::compat_threshold << endl;
 
             //Go through entire population, reassigning organisms to new species
-            for (curorg = (pop->organisms).begin(); curorg != pop->organisms.end(); ++curorg) {
-                pop->reassign_species(*curorg);
+            for (curOrg = (pop->organisms).begin(); curOrg != pop->organisms.end(); ++curOrg) {
+                pop->reassign_species(*curOrg);
             }
         }
 
 
         //For printing only
-        for (curspec = (pop->species).begin(); curspec != (pop->species).end(); curspec++) {
-            cout << "Species " << (*curspec)->id << " size" << (*curspec)->organisms.size() << " average= "
-                 << (*curspec)->average_est << endl;
+        for (curSpec = (pop->species).begin(); curSpec != (pop->species).end(); curSpec++) {
+            cout << "Species " << (*curSpec)->id << " size" << (*curSpec)->organisms.size() << " average= "
+                 << (*curSpec)->average_est << endl;
         }
 
         cout << "Pop size: " << pop->organisms.size() << endl;

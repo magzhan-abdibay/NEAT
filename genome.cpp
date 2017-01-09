@@ -24,7 +24,7 @@ Genome::Genome(int id, std::vector<Trait*> t, std::vector<NNode*> n, std::vector
 	//We go through the links and turn them into original genes
 	for(curlink=links.begin();curlink!=links.end();++curlink) {
 		//Create genes one at a time
-		tempgene=new Gene((*curlink)->linktrait, (*curlink)->weight,(*curlink)->in_node,(*curlink)->out_node,(*curlink)->is_recurrent,1.0,0.0);
+		tempgene=new Gene((*curlink)->linkTrait, (*curlink)->weight,(*curlink)->inNode,(*curlink)->outNode,(*curlink)->isRecurrent,1.0,0.0);
 		genes.push_back(tempgene);
 	}
 
@@ -69,11 +69,11 @@ Genome::Genome(const Genome& genome)
 	for(curgene=genome.genes.begin(); curgene!=genome.genes.end(); ++curgene) {
 		//First find the nodes connected by the gene's link
 
-		inode=(((*curgene)->lnk)->in_node)->dup;
-		onode=(((*curgene)->lnk)->out_node)->dup;
+		inode=(((*curgene)->lnk)->inNode)->dup;
+		onode=(((*curgene)->lnk)->outNode)->dup;
 
 		//Get a pointer to the trait expressed by this gene
-		traitptr=((*curgene)->lnk)->linktrait;
+		traitptr=((*curgene)->lnk)->linkTrait;
 		if (traitptr==0) assoc_trait=0;
 		else {
 			curtrait=traits.begin();
@@ -673,19 +673,19 @@ Network *Genome::genesis(int id) {
 		//Only create the link if the gene is enabled
 		if (((*curgene)->enable)==true) {
 			curlink=(*curgene)->lnk;
-			inode=(curlink->in_node)->analogue;
-			onode=(curlink->out_node)->analogue;
+			inode=(curlink->inNode)->analogue;
+			onode=(curlink->outNode)->analogue;
 			//NOTE: This line could be run through a recurrency check if desired
 			// (no need to in the current implementation of NEAT)
-			newlink=new Link(curlink->weight,inode,onode,curlink->is_recurrent);
+			newlink=new Link(curlink->weight,inode,onode,curlink->isRecurrent);
 
 			(onode->incoming).push_back(newlink);
 			(inode->outgoing).push_back(newlink);
 
 			//Derive link's parameters from its Trait pointer
-			curtrait=(curlink->linktrait);
+			curtrait=(curlink->linkTrait);
 
-			newlink->derive_trait(curtrait);
+			newlink->deriveTrait(curtrait);
 
 			//Keep track of maximum weight
 			if (newlink->weight>0)
@@ -731,8 +731,8 @@ bool Genome::verify() {
 
 	//Check each gene's nodes
 	for(curgene=genes.begin();curgene!=genes.end();++curgene) {
-		inode=((*curgene)->lnk)->in_node;
-		onode=((*curgene)->lnk)->out_node;
+		inode=((*curgene)->lnk)->inNode;
+		onode=((*curgene)->lnk)->outNode;
 
 		//Look for inode
 		curnode=nodes.begin();
@@ -778,9 +778,9 @@ bool Genome::verify() {
 
 		for(curgene2=genes.begin();curgene2!=genes.end();++curgene2) {
 			if (((*curgene)!=(*curgene2))&&
-				((((*curgene)->lnk)->is_recurrent)==(((*curgene2)->lnk)->is_recurrent))&&
-				((((((*curgene2)->lnk)->in_node)->node_id)==((((*curgene)->lnk)->in_node)->node_id))&&
-				(((((*curgene2)->lnk)->out_node)->node_id)==((((*curgene)->lnk)->out_node)->node_id)))) {
+				((((*curgene)->lnk)->isRecurrent)==(((*curgene2)->lnk)->isRecurrent))&&
+				((((((*curgene2)->lnk)->inNode)->node_id)==((((*curgene)->lnk)->inNode)->node_id))&&
+				(((((*curgene2)->lnk)->outNode)->node_id)==((((*curgene)->lnk)->outNode)->node_id)))) {
 					//cout<<"ALERT: DUPLICATE GENES: "<<(*curgene)<<(*curgene2)<<endl;
 					//cout<<"INSIDE GENOME: "<<this<<endl;
 
@@ -960,11 +960,11 @@ Genome *Genome::duplicate(int new_id) {
 	for(curgene=genes.begin();curgene!=genes.end();++curgene) {
 		//First find the nodes connected by the gene's link
 
-		inode=(((*curgene)->lnk)->in_node)->dup;
-		onode=(((*curgene)->lnk)->out_node)->dup;
+		inode=(((*curgene)->lnk)->inNode)->dup;
+		onode=(((*curgene)->lnk)->outNode)->dup;
 
 		//Get a pointer to the trait expressed by this gene
-		traitptr=((*curgene)->lnk)->linktrait;
+		traitptr=((*curgene)->lnk)->linkTrait;
 		if (traitptr==0) assoc_trait=0;
 		else {
 			curtrait=traits_dup.begin();
@@ -1025,7 +1025,7 @@ void Genome::mutate_link_trait(int times) {
 		if (!((*thegene)->frozen)) {
 			thetrait=traits.begin();
 
-			((*thegene)->lnk)->linktrait=thetrait[traitnum];
+			((*thegene)->lnk)->linkTrait=thetrait[traitnum];
 
 		}
 		//TRACK INNOVATION- future use
@@ -1298,7 +1298,7 @@ void Genome::mutate_toggle_enable(int times) {
 			//Because if not a section of network will break off and become isolated
 			checkgene=genes.begin();
 			while((checkgene!=genes.end())&&
-				(((((*checkgene)->lnk)->in_node)!=(((*thegene)->lnk)->in_node))||
+				(((((*checkgene)->lnk)->inNode)!=(((*thegene)->lnk)->inNode))||
 				(((*checkgene)->enable)==false)||
 				((*checkgene)->innovation_num==(*thegene)->innovation_num)))
 				++checkgene;
@@ -1361,7 +1361,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 		while (((thegene!=genes.end())
 			&&(!((*thegene)->enable)))||
 			((thegene!=genes.end())
-			&&(((*thegene)->lnk->in_node)->gen_node_label==BIAS)))
+			&&(((*thegene)->lnk->inNode)->gen_node_label==BIAS)))
 			++thegene;
 
 		//Now randomize which node is chosen at this point
@@ -1370,7 +1370,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 		while (((thegene!=genes.end())&&
 			(randfloat()<0.3))||
 			((thegene!=genes.end())
-			&&(((*thegene)->lnk->in_node)->gen_node_label==BIAS)))
+			&&(((*thegene)->lnk->inNode)->gen_node_label==BIAS)))
 		{
 			++thegene;
 		}
@@ -1407,7 +1407,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 
 			//If either the gene is disabled, or it has a bias input, try again
 			if (!(((*thegene)->enable==false)||
-				(((((*thegene)->lnk)->in_node)->gen_node_label)==BIAS)))
+				(((((*thegene)->lnk)->inNode)->gen_node_label)==BIAS)))
 				found=true;
 
 			++trycount;
@@ -1427,8 +1427,8 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 	oldweight=(*thegene)->lnk->weight;
 
 	//Extract the nodes
-	in_node=thelink->in_node;
-	out_node=thelink->out_node;
+	in_node=thelink->inNode;
+	out_node=thelink->outNode;
 
 	//Check to see if this innovation has already been done   
 	//in another genome
@@ -1444,7 +1444,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 			//The innovation is totally novel
 
 			//Get the old link's trait
-			traitptr=thelink->linktrait;
+			traitptr=thelink->linkTrait;
 
 			//Create the new NNode
 			//By convention, it will point to the first trait
@@ -1452,7 +1452,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 			newnode->nodetrait=(*(traits.begin()));
 
 			//Create the new Genes
-			if (thelink->is_recurrent) {
+			if (thelink->isRecurrent) {
 				newgene1=new Gene(traitptr,1.0,in_node,newnode,true,curinnov,0);
 				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,curinnov+1,0);
 				curinnov+=2.0;
@@ -1486,7 +1486,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 			//Here, the innovation has been done before
 
 			//Get the old link's trait
-			traitptr=thelink->linktrait;
+			traitptr=thelink->linkTrait;
 
 			//Create the new NNode
 			newnode=new NNode(NEURON,(*theinnov)->newnode_id,HIDDEN);      
@@ -1495,7 +1495,7 @@ bool Genome::mutate_add_node(std::vector<Innovation*> &innovs,int &curnode_id,do
 			newnode->nodetrait=(*(traits.begin()));
 
 			//Create the new Genes
-			if (thelink->is_recurrent) {
+			if (thelink->isRecurrent) {
 				newgene1=new Gene(traitptr,1.0,in_node,newnode,true,(*theinnov)->innovation_num1,0);
 				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,(*theinnov)->innovation_num2,0);
 			}
@@ -1608,9 +1608,9 @@ bool Genome::mutate_add_link(std::vector<Innovation*> &innovs,double &curinnov,i
 			thegene=genes.begin();
 			while ((thegene!=genes.end()) && 
 				((nodep2->type)!=SENSOR) &&   //Don't allow SENSORS to get input
-				(!((((*thegene)->lnk)->in_node==nodep1)&&
-				(((*thegene)->lnk)->out_node==nodep2)&&
-				((*thegene)->lnk)->is_recurrent))) {
+				(!((((*thegene)->lnk)->inNode==nodep1)&&
+				(((*thegene)->lnk)->outNode==nodep2)&&
+				((*thegene)->lnk)->isRecurrent))) {
 					++thegene;
 				}
 
@@ -1673,9 +1673,9 @@ bool Genome::mutate_add_link(std::vector<Innovation*> &innovs,double &curinnov,i
 			thegene=genes.begin();
 			while ((thegene!=genes.end()) && 
 				((nodep2->type)!=SENSOR) &&   //Don't allow SENSORS to get input
-				(!((((*thegene)->lnk)->in_node==nodep1)&&
-				(((*thegene)->lnk)->out_node==nodep2)&&
-				(!(((*thegene)->lnk)->is_recurrent))))) {
+				(!((((*thegene)->lnk)->inNode==nodep1)&&
+				(((*thegene)->lnk)->outNode==nodep2)&&
+				(!(((*thegene)->lnk)->isRecurrent))))) {
 					++thegene;
 				}
 
@@ -1846,7 +1846,7 @@ void Genome::mutate_add_sensor(std::vector<Innovation*> &innovs,double &curinnov
 		for (int j = 0; j < genes.size(); j++) {
 			gene=genes[j];
 
-			if ((gene->lnk)->out_node->gen_node_label == OUTPUT)
+			if ((gene->lnk)->outNode->gen_node_label == OUTPUT)
 				outputConnections++;	
 
 		}
@@ -1871,8 +1871,8 @@ void Genome::mutate_add_sensor(std::vector<Innovation*> &innovs,double &curinnov
 		found=false;
 		for (j = 0; j < genes.size(); j++) {
 			gene=genes[j];
-			if ((gene->lnk->in_node==sensor)&&
-				(gene->lnk->out_node==output))
+			if ((gene->lnk->inNode==sensor)&&
+				(gene->lnk->outNode==output))
 				found=true;	
 		}
 
@@ -2127,12 +2127,12 @@ Genome *Genome::mate_multipoint(Genome *g,int genomeid,double fitness1,double fi
 			//i.e. do they represent the same link    
 			curgene2=newgenes.begin();
 			while ((curgene2!=newgenes.end())&&
-				(!((((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-				(((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&((((*curgene2)->lnk)->is_recurrent)== (((chosengene)->lnk)->is_recurrent)) ))&&
-				(!((((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&
-				(((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-				(!((((*curgene2)->lnk)->is_recurrent)))&&
-				(!((((chosengene)->lnk)->is_recurrent))) )))
+				(!((((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+				(((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&((((*curgene2)->lnk)->isRecurrent)== (((chosengene)->lnk)->isRecurrent)) ))&&
+				(!((((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&
+				(((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+				(!((((*curgene2)->lnk)->isRecurrent)))&&
+				(!((((chosengene)->lnk)->isRecurrent))) )))
 			{	
 				++curgene2;
 			}
@@ -2144,13 +2144,13 @@ Genome *Genome::mate_multipoint(Genome *g,int genomeid,double fitness1,double fi
 				//Now add the chosengene to the baby
 
 				//First, get the trait pointer
-				if ((((chosengene->lnk)->linktrait))==0) traitnum=(*(traits.begin()))->trait_id - 1; 
+				if ((((chosengene->lnk)->linkTrait))==0) traitnum=(*(traits.begin()))->trait_id - 1;
 				else
-					traitnum=(((chosengene->lnk)->linktrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
+					traitnum=(((chosengene->lnk)->linkTrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
 
 				//Next check for the nodes, add them if not in the baby Genome already
-				inode=(chosengene->lnk)->in_node;
-				onode=(chosengene->lnk)->out_node;
+				inode=(chosengene->lnk)->inNode;
+				onode=(chosengene->lnk)->outNode;
 
 				//Check for inode in the newnodes list
 				if (inode->node_id<onode->node_id) {
@@ -2394,8 +2394,8 @@ Genome *Genome::mate_multipoint_avg(Genome *g,int genomeid,double fitness1,doubl
 
 				if (p1innov==p2innov) {
 					//Average them into the avgene
-					if (randfloat()>0.5) (avgene->lnk)->linktrait=((*p1gene)->lnk)->linktrait;
-					else (avgene->lnk)->linktrait=((*p2gene)->lnk)->linktrait;
+					if (randfloat()>0.5) (avgene->lnk)->linkTrait=((*p1gene)->lnk)->linkTrait;
+					else (avgene->lnk)->linkTrait=((*p2gene)->lnk)->linkTrait;
 
 					//WEIGHTS AVERAGED HERE
 					(avgene->lnk)->weight=(((*p1gene)->lnk)->weight+((*p2gene)->lnk)->weight)/2.0;
@@ -2425,14 +2425,14 @@ Genome *Genome::mate_multipoint_avg(Genome *g,int genomeid,double fitness1,doubl
 					//(avgene->lnk)->weight=blx_min+blx_pos*blx_range;
 					//
 
-					if (randfloat()>0.5) (avgene->lnk)->in_node=((*p1gene)->lnk)->in_node;
-					else (avgene->lnk)->in_node=((*p2gene)->lnk)->in_node;
+					if (randfloat()>0.5) (avgene->lnk)->inNode=((*p1gene)->lnk)->inNode;
+					else (avgene->lnk)->inNode=((*p2gene)->lnk)->inNode;
 
-					if (randfloat()>0.5) (avgene->lnk)->out_node=((*p1gene)->lnk)->out_node;
-					else (avgene->lnk)->out_node=((*p2gene)->lnk)->out_node;
+					if (randfloat()>0.5) (avgene->lnk)->outNode=((*p1gene)->lnk)->outNode;
+					else (avgene->lnk)->outNode=((*p2gene)->lnk)->outNode;
 
-					if (randfloat()>0.5) (avgene->lnk)->is_recurrent=((*p1gene)->lnk)->is_recurrent;
-					else (avgene->lnk)->is_recurrent=((*p2gene)->lnk)->is_recurrent;
+					if (randfloat()>0.5) (avgene->lnk)->isRecurrent=((*p1gene)->lnk)->isRecurrent;
+					else (avgene->lnk)->isRecurrent=((*p2gene)->lnk)->isRecurrent;
 
 					avgene->innovation_num=(*p1gene)->innovation_num;
 					avgene->mutation_num=((*p1gene)->mutation_num+(*p2gene)->mutation_num)/2.0;
@@ -2475,13 +2475,13 @@ Genome *Genome::mate_multipoint_avg(Genome *g,int genomeid,double fitness1,doubl
 
 			{
 
-				if (((((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-					(((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&
-					((((*curgene2)->lnk)->is_recurrent)== (((chosengene)->lnk)->is_recurrent)))||
-					((((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-					(((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&
-					(!((((*curgene2)->lnk)->is_recurrent)))&&
-					(!((((chosengene)->lnk)->is_recurrent)))     ))
+				if (((((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+					(((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&
+					((((*curgene2)->lnk)->isRecurrent)== (((chosengene)->lnk)->isRecurrent)))||
+					((((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+					(((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&
+					(!((((*curgene2)->lnk)->isRecurrent)))&&
+					(!((((chosengene)->lnk)->isRecurrent)))     ))
 				{ 
 					skip=true;
 
@@ -2494,13 +2494,13 @@ Genome *Genome::mate_multipoint_avg(Genome *g,int genomeid,double fitness1,doubl
 				//Now add the chosengene to the baby
 
 				//First, get the trait pointer
-				if ((((chosengene->lnk)->linktrait))==0) traitnum=(*(traits.begin()))->trait_id - 1;
+				if ((((chosengene->lnk)->linkTrait))==0) traitnum=(*(traits.begin()))->trait_id - 1;
 				else
-					traitnum=(((chosengene->lnk)->linktrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
+					traitnum=(((chosengene->lnk)->linkTrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
 
 				//Next check for the nodes, add them if not in the baby Genome already
-				inode=(chosengene->lnk)->in_node;
-				onode=(chosengene->lnk)->out_node;
+				inode=(chosengene->lnk)->inNode;
+				onode=(chosengene->lnk)->outNode;
 
 				//Check for inode in the newnodes list
 				if (inode->node_id<onode->node_id) {
@@ -2717,21 +2717,21 @@ Genome *Genome::mate_singlepoint(Genome *g,int genomeid) {
 				else {
 
 					//Average them into the avgene
-					if (randfloat()>0.5) (avgene->lnk)->linktrait=((*p1gene)->lnk)->linktrait;
-					else (avgene->lnk)->linktrait=((*p2gene)->lnk)->linktrait;
+					if (randfloat()>0.5) (avgene->lnk)->linkTrait=((*p1gene)->lnk)->linkTrait;
+					else (avgene->lnk)->linkTrait=((*p2gene)->lnk)->linkTrait;
 
 					//WEIGHTS AVERAGED HERE
 					(avgene->lnk)->weight=(((*p1gene)->lnk)->weight+((*p2gene)->lnk)->weight)/2.0;
 
 
-					if (randfloat()>0.5) (avgene->lnk)->in_node=((*p1gene)->lnk)->in_node;
-					else (avgene->lnk)->in_node=((*p2gene)->lnk)->in_node;
+					if (randfloat()>0.5) (avgene->lnk)->inNode=((*p1gene)->lnk)->inNode;
+					else (avgene->lnk)->inNode=((*p2gene)->lnk)->inNode;
 
-					if (randfloat()>0.5) (avgene->lnk)->out_node=((*p1gene)->lnk)->out_node;
-					else (avgene->lnk)->out_node=((*p2gene)->lnk)->out_node;
+					if (randfloat()>0.5) (avgene->lnk)->outNode=((*p1gene)->lnk)->outNode;
+					else (avgene->lnk)->outNode=((*p2gene)->lnk)->outNode;
 
-					if (randfloat()>0.5) (avgene->lnk)->is_recurrent=((*p1gene)->lnk)->is_recurrent;
-					else (avgene->lnk)->is_recurrent=((*p2gene)->lnk)->is_recurrent;
+					if (randfloat()>0.5) (avgene->lnk)->isRecurrent=((*p1gene)->lnk)->isRecurrent;
+					else (avgene->lnk)->isRecurrent=((*p2gene)->lnk)->isRecurrent;
 
 					avgene->innovation_num=(*p1gene)->innovation_num;
 					avgene->mutation_num=((*p1gene)->mutation_num+(*p2gene)->mutation_num)/2.0;
@@ -2770,12 +2770,12 @@ Genome *Genome::mate_singlepoint(Genome *g,int genomeid) {
 		curgene2=newgenes.begin();
 
 		while ((curgene2!=newgenes.end())&&
-			(!((((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-			(((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&((((*curgene2)->lnk)->is_recurrent)== (((chosengene)->lnk)->is_recurrent)) ))&&
-			(!((((((*curgene2)->lnk)->in_node)->node_id)==((((chosengene)->lnk)->out_node)->node_id))&&
-			(((((*curgene2)->lnk)->out_node)->node_id)==((((chosengene)->lnk)->in_node)->node_id))&&
-			(!((((*curgene2)->lnk)->is_recurrent)))&&
-			(!((((chosengene)->lnk)->is_recurrent))) )))
+			(!((((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+			(((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&((((*curgene2)->lnk)->isRecurrent)== (((chosengene)->lnk)->isRecurrent)) ))&&
+			(!((((((*curgene2)->lnk)->inNode)->node_id)==((((chosengene)->lnk)->outNode)->node_id))&&
+			(((((*curgene2)->lnk)->outNode)->node_id)==((((chosengene)->lnk)->inNode)->node_id))&&
+			(!((((*curgene2)->lnk)->isRecurrent)))&&
+			(!((((chosengene)->lnk)->isRecurrent))) )))
 		{
 
 			++curgene2;
@@ -2788,13 +2788,13 @@ Genome *Genome::mate_singlepoint(Genome *g,int genomeid) {
 			//Now add the chosengene to the baby
 
 			//First, get the trait pointer
-			if ((((chosengene->lnk)->linktrait))==0) traitnum=(*(traits.begin()))->trait_id - 1;
+			if ((((chosengene->lnk)->linkTrait))==0) traitnum=(*(traits.begin()))->trait_id - 1;
 			else
-				traitnum=(((chosengene->lnk)->linktrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
+				traitnum=(((chosengene->lnk)->linkTrait)->trait_id)-(*(traits.begin()))->trait_id;  //The subtracted number normalizes depending on whether traits start counting at 1 or 0
 
 			//Next check for the nodes, add them if not in the baby Genome already
-			inode=(chosengene->lnk)->in_node;
-			onode=(chosengene->lnk)->out_node;
+			inode=(chosengene->lnk)->inNode;
+			onode=(chosengene->lnk)->outNode;
 
 			//Check for inode in the newnodes list
 			if (inode->node_id<onode->node_id) {
@@ -3053,12 +3053,12 @@ void Genome::randomize_traits() {
 	//Go through all connections and randomize their trait pointers
 	for(curgene=genes.begin();curgene!=genes.end();++curgene) {
 		traitnum=randint(1,numtraits); //randomize trait
-		(*curgene)->lnk->trait_id=traitnum;
+		(*curgene)->lnk->traitId=traitnum;
 
 		curtrait=traits.begin();
 		while(((*curtrait)->trait_id)!=traitnum)
 			++curtrait;
-		(*curgene)->lnk->linktrait=(*curtrait);
+		(*curgene)->lnk->linkTrait=(*curtrait);
 
 		//if ((*curtrait)==0) cout<<"ERROR: Random trait empty"<<std::endl;
 	}

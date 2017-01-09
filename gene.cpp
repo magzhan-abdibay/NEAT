@@ -27,7 +27,7 @@ Gene::Gene(Trait *tp, double w, NNode *inode, NNode *onode, bool recur, double i
 }
 
 Gene::Gene(Gene *g, Trait *tp, NNode *inode, NNode *onode) {
-    lnk = new Link(tp, (g->lnk)->weight, inode, onode, (g->lnk)->is_recurrent);
+    lnk = new Link(tp, (g->lnk)->weight, inode, onode, (g->lnk)->isRecurrent);
     innovation_num = g->innovation_num;
     mutation_num = g->mutation_num;
     enable = g->enable;
@@ -97,12 +97,12 @@ Gene::~Gene() {
 void Gene::print_to_file(std::ofstream &outFile) {
     outFile << "gene ";
     //Start off with the trait number for this gene
-    if ((lnk->linktrait) == 0) outFile << "0 ";
-    else outFile << ((lnk->linktrait)->trait_id) << " ";
-    outFile << (lnk->in_node)->node_id << " ";
-    outFile << (lnk->out_node)->node_id << " ";
+    if ((lnk->linkTrait) == 0) outFile << "0 ";
+    else outFile << ((lnk->linkTrait)->trait_id) << " ";
+    outFile << (lnk->inNode)->node_id << " ";
+    outFile << (lnk->outNode)->node_id << " ";
     outFile << (lnk->weight) << " ";
-    outFile << (lnk->is_recurrent) << " ";
+    outFile << (lnk->isRecurrent) << " ";
     outFile << innovation_num << " ";
     outFile << mutation_num << " ";
     outFile << enable << std::endl;
@@ -114,16 +114,16 @@ void Gene::print_to_file(std::ostream &outFile) {
     //outFile.write(5, "gene ");
 
     //Start off with the trait number for this gene
-    if ((lnk->linktrait) == 0) {
+    if ((lnk->linkTrait) == 0) {
         outFile << "0 ";
         //outFile.write(2, "0 ");
     } else {
-        outFile << ((lnk->linktrait)->trait_id) << " ";
+        outFile << ((lnk->linkTrait)->trait_id) << " ";
     }
-    outFile << (lnk->in_node)->node_id << " ";
-    outFile << (lnk->out_node)->node_id << " ";
+    outFile << (lnk->inNode)->node_id << " ";
+    outFile << (lnk->outNode)->node_id << " ";
     outFile << (lnk->weight) << " ";
-    outFile << (lnk->is_recurrent) << " ";
+    outFile << (lnk->isRecurrent) << " ";
     outFile << innovation_num << " ";
     outFile << mutation_num << " ";
     outFile << enable << std::endl;

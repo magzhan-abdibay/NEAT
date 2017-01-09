@@ -2,64 +2,62 @@
 
 using namespace NEAT;
 
-Link::Link(double w,NNode *inode,NNode *onode,bool recur) {
-	weight=w;
-	in_node=inode;
-	out_node=onode;
-	is_recurrent=recur;
-	added_weight=0;
-	linktrait=0;
-	time_delay=false;
-	trait_id=1;
+Link::Link(double weight, NNode *inNode, NNode *outNode, bool isRecurrent) {
+    this->weight = weight;
+    this->inNode = inNode;
+    this->outNode = outNode;
+    this->isRecurrent = isRecurrent;
+    added_weight = 0;
+    linkTrait = 0;
+    timeDelay = false;
+    traitId = 1;
 }
 
-Link::Link(Trait *lt,double w,NNode *inode,NNode *onode,bool recur) {
-	weight=w;
-	in_node=inode;
-	out_node=onode;
-	is_recurrent=recur;
-	added_weight=0;
-	linktrait=lt;
-	time_delay=false;
-	if (lt!=0)
-		trait_id=lt->trait_id;
-	else trait_id=1;
-}	
-
-Link::Link(double w) {
-	weight=w;
-	in_node=out_node=0;  
-	is_recurrent=false;
-	linktrait=0;
-	time_delay=false;
-	trait_id=1;
+Link::Link(Trait *linkTrait, double weight, NNode *inNode, NNode *outNode, bool isRecurrent) {
+    this->weight = weight;
+    this->inNode = inNode;
+    this->outNode = outNode;
+    this->isRecurrent = isRecurrent;
+    added_weight = 0;
+    this->linkTrait = linkTrait;
+    timeDelay = false;
+    if (linkTrait != 0)
+        traitId = linkTrait->trait_id;
+    else traitId = 1;
 }
 
-Link::Link(const Link& link)
-{
-	weight = link.weight;
-	in_node = link.in_node;
-	out_node = link.out_node;
-	is_recurrent = link.is_recurrent;
-	added_weight = link.added_weight;
-	linktrait = link.linktrait;
-	time_delay = link.time_delay;
-	trait_id = link.trait_id;
+Link::Link(double weight) {
+    this->weight = weight;
+    inNode = outNode = 0;
+    isRecurrent = false;
+    linkTrait = 0;
+    timeDelay = false;
+    traitId = 1;
 }
 
-void Link::derive_trait(Trait *curtrait) {
+Link::Link(const Link &link) {
+    weight = link.weight;
+    inNode = link.inNode;
+    outNode = link.outNode;
+    isRecurrent = link.isRecurrent;
+    added_weight = link.added_weight;
+    linkTrait = link.linkTrait;
+    timeDelay = link.timeDelay;
+    traitId = link.traitId;
+}
 
-	if (curtrait!=0) {
-		for (int count=0;count<NEAT::num_trait_params;count++)
-			params[count]=(curtrait->params)[count];
-	}
-	else {
-		for (int count=0;count<NEAT::num_trait_params;count++)
-			params[count]=0;
-	}
+void Link::deriveTrait(Trait *curTrait) {
 
-	if (curtrait!=0)
-		trait_id=curtrait->trait_id;
-	else trait_id=1;
+    if (curTrait != 0) {
+        for (int count = 0; count < NEAT::num_trait_params; count++)
+            params[count] = (curTrait->params)[count];
+    } else {
+        for (int count = 0; count < NEAT::num_trait_params; count++)
+            params[count] = 0;
+    }
+
+    if (curTrait != 0)
+        traitId = curTrait->trait_id;
+    else traitId = 1;
 
 }

@@ -134,16 +134,16 @@ bool Network::activate() {
                 // For each incoming connection, add the activity from the connection to the activesum
                 for (curlink = ((*curnode)->incoming).begin(); curlink != ((*curnode)->incoming).end(); ++curlink) {
                     //Handle possible time delays
-                    if (!((*curlink)->time_delay)) {
-                        add_amount = ((*curlink)->weight) * (((*curlink)->in_node)->get_active_out());
-                        if ((((*curlink)->in_node)->active_flag) ||
-                            (((*curlink)->in_node)->type == SENSOR))
+                    if (!((*curlink)->timeDelay)) {
+                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->get_active_out());
+                        if ((((*curlink)->inNode)->active_flag) ||
+                            (((*curlink)->inNode)->type == SENSOR))
                             (*curnode)->active_flag = true;
                         (*curnode)->activesum += add_amount;
                         //std::cout<<"Node "<<(*curnode)->node_id<<" adding "<<add_amount<<" from node "<<((*curlink)->in_node)->node_id<<std::endl;
                     } else {
                         //Input over a time delayed connection
-                        add_amount = ((*curlink)->weight) * (((*curlink)->in_node)->get_active_out_td());
+                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->get_active_out_td());
                         (*curnode)->activesum += add_amount;
                     }
 
@@ -203,16 +203,16 @@ bool Network::activate() {
                 // For each incoming connection, perform adaptation based on the trait of the connection
                 for (curlink = ((*curnode)->incoming).begin(); curlink != ((*curnode)->incoming).end(); ++curlink) {
 
-                    if (((*curlink)->trait_id == 2) ||
-                        ((*curlink)->trait_id == 3) ||
-                        ((*curlink)->trait_id == 4)) {
+                    if (((*curlink)->traitId == 2) ||
+                        ((*curlink)->traitId == 3) ||
+                        ((*curlink)->traitId == 4)) {
 
                         //In the recurrent case we must take the last activation of the input for calculating hebbian changes
-                        if ((*curlink)->is_recurrent) {
+                        if ((*curlink)->isRecurrent) {
                             (*curlink)->weight =
                                     hebbian((*curlink)->weight, maxweight,
-                                            (*curlink)->in_node->last_activation,
-                                            (*curlink)->out_node->get_active_out(),
+                                            (*curlink)->inNode->last_activation,
+                                            (*curlink)->outNode->get_active_out(),
                                             (*curlink)->params[0], (*curlink)->params[1],
                                             (*curlink)->params[2]);
 
@@ -220,8 +220,8 @@ bool Network::activate() {
                         } else { //non-recurrent case
                             (*curlink)->weight =
                                     hebbian((*curlink)->weight, maxweight,
-                                            (*curlink)->in_node->get_active_out(),
-                                            (*curlink)->out_node->get_active_out(),
+                                            (*curlink)->inNode->get_active_out(),
+                                            (*curlink)->outNode->get_active_out(),
                                             (*curlink)->params[0], (*curlink)->params[1],
                                             (*curlink)->params[2]);
                         }
@@ -293,11 +293,11 @@ void Network::nodecounthelper(NNode *curnode, int &counter, std::vector<NNode *>
 
     if (!((curnode->type) == SENSOR)) {
         for (curlink = innodes.begin(); curlink != innodes.end(); ++curlink) {
-            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->in_node));
+            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->inNode));
             if (location == seenlist.end()) {
                 counter++;
-                seenlist.push_back((*curlink)->in_node);
-                nodecounthelper((*curlink)->in_node, counter, seenlist);
+                seenlist.push_back((*curlink)->inNode);
+                nodecounthelper((*curlink)->inNode, counter, seenlist);
             }
         }
 
@@ -316,7 +316,7 @@ void Network::linkcounthelper(NNode *curnode, int &counter, std::vector<NNode *>
 
         for (curlink = inlinks.begin(); curlink != inlinks.end(); ++curlink) {
             counter++;
-            linkcounthelper((*curlink)->in_node, counter, seenlist);
+            linkcounthelper((*curlink)->inNode, counter, seenlist);
         }
 
     }
@@ -369,10 +369,10 @@ void Network::destroy_helper(NNode *curnode, std::vector<NNode *> &seenlist) {
 
     if (!((curnode->type) == SENSOR)) {
         for (curlink = innodes.begin(); curlink != innodes.end(); ++curlink) {
-            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->in_node));
+            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->inNode));
             if (location == seenlist.end()) {
-                seenlist.push_back((*curlink)->in_node);
-                destroy_helper((*curlink)->in_node, seenlist);
+                seenlist.push_back((*curlink)->inNode);
+                destroy_helper((*curlink)->inNode, seenlist);
             }
         }
 
@@ -398,8 +398,8 @@ bool Network::is_recur(NNode *potin_node, NNode *potout_node, int &count, int th
         for (curlink = (potin_node->incoming).begin(); curlink != (potin_node->incoming).end(); curlink++) {
             //But skip links that are already recurrent
             //(We want to check back through the forward flow of signals only
-            if (!((*curlink)->is_recurrent)) {
-                if (is_recur((*curlink)->in_node, potout_node, count, thresh)) return true;
+            if (!((*curlink)->isRecurrent)) {
+                if (is_recur((*curlink)->inNode, potout_node, count, thresh)) return true;
             }
         }
         return false;

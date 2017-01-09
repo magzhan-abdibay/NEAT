@@ -184,8 +184,8 @@ void NNode::flushback() {
         for (curlink = incoming.begin(); curlink != incoming.end(); ++curlink) {
             //Flush the link itself (For future learning parameters possibility)
             (*curlink)->added_weight = 0;
-            if ((((*curlink)->in_node)->activation_count > 0))
-                ((*curlink)->in_node)->flushback();
+            if ((((*curlink)->inNode)->activation_count > 0))
+                ((*curlink)->inNode)->flushback();
         }
     } else {
         //Flush the SENSOR
@@ -232,10 +232,10 @@ void NNode::flushback_check(std::vector<NNode *> &seenlist) {
         }
 
         for (curlink = innodes.begin(); curlink != innodes.end(); ++curlink) {
-            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->in_node));
+            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->inNode));
             if (location == seenlist.end()) {
-                seenlist.push_back((*curlink)->in_node);
-                ((*curlink)->in_node)->flushback_check(seenlist);
+                seenlist.push_back((*curlink)->inNode);
+                ((*curlink)->inNode)->flushback_check(seenlist);
             }
         }
 
@@ -345,7 +345,7 @@ int NNode::depth(int d, Network *mynet) {
     else {
 
         for (curlink = innodes.begin(); curlink != innodes.end(); ++curlink) {
-            cur_depth = ((*curlink)->in_node)->depth(d + 1, mynet);
+            cur_depth = ((*curlink)->inNode)->depth(d + 1, mynet);
             if (cur_depth > max) max = cur_depth;
         }
 

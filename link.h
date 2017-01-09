@@ -7,46 +7,55 @@
 
 namespace NEAT {
 
-	class NNode;
+    class NNode;
 
-	// ----------------------------------------------------------------------- 
-	// A LINK is a connection from one node to another with an associated weight 
-	// It can be marked as recurrent 
-	// Its parameters are made public for efficiency 
-	class Link {
-	public: 
-		double weight; // Weight of connection
-		NNode *in_node; // NNode inputting into the link
-		NNode *out_node; // NNode that the link affects
-		bool is_recurrent;
-		bool time_delay;
+    /**
+     * A LINK is a connection from one node to another with an associated weight
+     * It can be marked as recurrent
+     * Its parameters are made public for efficiency
+     */
+    class Link {
+    public:
+        /**@brief Weight of connection */
+        double weight;
+        /**@brief  NNode inputting into the link*/
+        NNode *inNode;
+        /**@brief NNode that the link affects*/
+        NNode *outNode;
 
-		Trait *linktrait; // Points to a trait of parameters for genetic creation
+        bool isRecurrent;
+        bool timeDelay;
 
-		int trait_id;  // identify the trait derived by this link
+        /**@brief Points to a trait of parameters for genetic creation*/
+        Trait *linkTrait;
+        /**@brief identify the trait derived by this link*/
+        int traitId;
 
-		// ************ LEARNING PARAMETERS *********** 
-		// These are link-related parameters that change during Hebbian type learning
+        /**
+         * LEARNING PARAMETERS
+         * These are link-related parameters that change during Hebbian type learning
+        */
 
-		double added_weight;  // The amount of weight adjustment 
-		double params[NEAT::num_trait_params];
+        /**@brief The amount of weight adjustment*/
+        double added_weight;
+        double params[NEAT::num_trait_params];
 
-		Link(double w,NNode *inode,NNode *onode,bool recur);
+        Link(double weight, NNode *inNode, NNode *outNode, bool isRecurrent);
 
-		// Including a trait pointer in the Link creation
-		Link(Trait *lt,double w,NNode *inode,NNode *onode,bool recur);
+        /**@brief Including a trait pointer in the Link creation*/
+        Link(Trait *linkTrait, double weight, NNode *inNode, NNode *outNode, bool isRecurrent);
 
-		// For when you don't know the connections yet
-		Link(double w);
+        /**@brief For when you don't know the connections yet*/
+        Link(double weight);
 
-		// Copy Constructor
-		Link(const Link& link);
+        /** Copy Constructor*/
+        Link(const Link &link);
 
-		// Derive a trait into link params
-		void derive_trait(Trait *curtrait);
+        /**@brief Derive a trait into link params*/
+        void deriveTrait(Trait *curTrait);
 
-	};
+    };
 
-} // namespace NEAT
+}
 
 #endif
