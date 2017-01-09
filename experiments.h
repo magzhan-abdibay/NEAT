@@ -21,14 +21,6 @@ using namespace std;
 
 using namespace NEAT;
 
-class CartPole;
-
-Population *pole2TestRealTime();
-
-int pole2RealTimeLoop(Population *pop, CartPole *cart);
-
-bool pole2Evaluate(Organism *org, CartPole *cart);
-
 class CartPole {
 public:
     CartPole(bool velocity);
@@ -79,5 +71,11 @@ private:
     double POLE_V_SUM;
 
 };
+
+Population *pole2TestRealTime();
+
+int pole2RealTimeLoop(Population *pop, CartPole *cart);
+
+bool pole2Evaluate(Organism *org, CartPole *cart);
 
 #endif
