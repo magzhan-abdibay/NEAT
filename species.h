@@ -42,22 +42,7 @@ namespace NEAT {
 		bool print_to_file(std::ostream &outFile);
 		bool print_to_file(std::ofstream &outFile);
 
-		//Change the fitness of all the organisms in the species to possibly depend slightly on the age of the species
-		//and then divide it by the size of the species so that the organisms in the species "share" the fitness
-		void adjust_fitness();
-
-		double compute_average_fitness(); 
-
 		double compute_max_fitness();
-
-		//Counts the number of offspring expected from all its members skim is for keeping track of remaining 
-		// fractional parts of offspring and distributing them among species
-		double count_offspring(double skim);
-
-		//Compute generations since last improvement
-		int last_improved() {
-			return age-age_of_last_improvement;
-		}
 
 		//Remove an organism from Species
 		bool remove_org(Organism *org);

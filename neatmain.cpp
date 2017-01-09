@@ -6,11 +6,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-
-    NEAT::Population *p = 0;
-
     srand((unsigned) time(NULL));
-
     if (argc != 2) {
         cerr << "A NEAT parameters file (.ne file) is required to run the experiments!" << endl;
         return -1;
@@ -21,10 +17,11 @@ int main(int argc, char *argv[]) {
     cout << "Press any key: ";
     getchar();
 
+    NEAT::Population *p = 0;
     p = pole2TestRealTime();
     if (p)
         delete p;
 
-    return (0);
+    return 0;
 }
 

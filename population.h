@@ -44,9 +44,6 @@ namespace NEAT {
         // Separate the Organisms into species
         bool speciate();
 
-        // Print Population to a file specified by a string
-        bool print_to_file(std::ostream &outFile);
-
         bool print_to_file_by_species(char *filename);
 
         // Run verify on all Genomes in this Population (Debugging)

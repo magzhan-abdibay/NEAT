@@ -43,10 +43,7 @@ namespace NEAT {
 		char metadata[128];
 		bool modified;
 
-		// Regenerate the network based on a change in the genotype 
-		void update_phenotype();
-
-		// Print the Organism's genome to a file preceded by a comment detailing the organism's species, number, and fitness 
+		// Print the Organism's genome to a file preceded by a comment detailing the organism's species, number, and fitness
 		bool print_to_file(char *filename);   
 		bool write_to_file(std::ostream &outFile);
 
@@ -58,8 +55,6 @@ namespace NEAT {
 
 	// This is used for list sorting of Organisms by fitness..highest fitness first
 	bool order_orgs(Organism *x, Organism *y);
-
-	bool order_orgs_by_adjusted_fit(Organism *x, Organism *y);
 
 } // namespace NEAT
 

@@ -120,19 +120,10 @@ namespace NEAT {
 		// Returns the type of the node, NEURON or SENSOR
 		const nodetype get_type();
 
-		// Allows alteration between NEURON and SENSOR.  Returns its argument
-		nodetype set_type(nodetype);
-
-		// If the node is a SENSOR, returns true and loads the value
+        // If the node is a SENSOR, returns true and loads the value
 		bool sensor_load(double);
 
-		// Adds a NONRECURRENT Link to a new NNode in the incoming List
-		void add_incoming(NNode*,double);
-
-		// Adds a Link to a new NNode in the incoming List
-		void add_incoming(NNode*,double,bool);
-
-		// Recursively deactivate backwards through the network
+        // Recursively deactivate backwards through the network
 		void flushback();
 
 		// Verify flushing for debugging
@@ -145,10 +136,7 @@ namespace NEAT {
 		// Have NNode gain its properties from the trait
 		void derive_trait(Trait *curtrait);
 
-		// Returns the gene that created the node
-		NNode *get_analogue();
-
-		// Force an output value on the node
+        // Force an output value on the node
 		void override_output(double new_output);
 
 		// Tell whether node has been overridden
