@@ -4,7 +4,7 @@
 
 using namespace NEAT;
 
-extern int NEAT::time_alive_minimum;
+extern int NEAT::timeAliveMinimum;
 
 Population::Population(Genome *g, int size) {
     spawn(g, size);
@@ -395,7 +395,7 @@ Organism *Population::removeWorst() {
     for (curorg = organisms.begin(); curorg != organisms.end(); ++curorg) {
         adjusted_fitness = ((*curorg)->fitness) / ((*curorg)->species->organisms.size());
         if ((adjusted_fitness < min_fitness) &&
-            (((*curorg)->timeAlive) >= NEAT::time_alive_minimum)) {
+            (((*curorg)->timeAlive) >= NEAT::timeAliveMinimum)) {
             min_fitness = adjusted_fitness;
             org_to_kill = (*curorg);
             deadorg = curorg;

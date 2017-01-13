@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cmath>
 
-int NEAT::time_alive_minimum = 0;
+int NEAT::timeAliveMinimum = 0;
 double NEAT::trait_param_mut_prob = 0;
 double NEAT::trait_mutation_power = 0; // Power of mutation on a signle trait param 
 double NEAT::linktrait_mut_sig = 0; // Amount that mutation_num changes for a trait change inside a link

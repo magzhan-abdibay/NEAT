@@ -6,7 +6,7 @@
 
 namespace NEAT {
 
-    extern int time_alive_minimum; // Minimum time alive to be considered for selection or death in real-time evolution
+    extern int timeAliveMinimum; // Minimum time alive to be considered for selection or death in real-time evolution
     const int num_trait_params = 8;
 
     extern double trait_param_mut_prob;
