@@ -12,7 +12,7 @@ SET(rtneat_sources
   neatmain.cpp
         Network.cpp
         NNode.cpp
-  organism.cpp
+        Organism.cpp
   population.cpp
         Species.cpp
         Trait.cpp

@@ -2,7 +2,7 @@
 #define _SPECIES_H_
 
 #include "neat.h"
-#include "organism.h"
+#include "Organism.h"
 #include "population.h"
 
 namespace NEAT {

@@ -12,7 +12,7 @@
 #include "neat.h"
 #include "Network.h"
 #include "population.h"
-#include "organism.h"
+#include "Organism.h"
 #include "Genome.h"
 #include "Species.h"
 #include "CartPole.h"

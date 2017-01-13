@@ -168,7 +168,7 @@ bool pole2Evaluate(Organism *org, CartPole *cart) {
     org->fitness = cart->evalNet(net);
 
 #ifndef NO_SCREEN_OUT
-    if (org->pop_champ_child)
+    if (org->popChampChild)
         cout << " <<DUPLICATE OF CHAMPION>> ";
 
     //Output to screen
@@ -176,16 +176,16 @@ bool pole2Evaluate(Organism *org, CartPole *cart) {
     cout << " (" << (org->gnome)->genes.size();
     cout << " / " << (org->gnome)->nodes.size() << ")";
     cout << "   ";
-    if (org->mut_struct_baby) cout << " [struct]";
-    if (org->mate_baby) cout << " [mate]";
+    if (org->mutStructBaby) cout << " [struct]";
+    if (org->mateBaby) cout << " [mate]";
     cout << endl;
 #endif
 
     if ((!(cart->GENERALIZATION_TEST)) && (!(cart->N_MARKOV_LONG)))
-        if (org->pop_champ_child) {
+        if (org->popChampChild) {
             cout << org->gnome << endl;
             //DEBUG CHECK
-            if (org->high_fit > org->fitness) {
+            if (org->highFit > org->fitness) {
                 cout << "ALERT: ORGANISM DAMAGED" << endl;
                 printGenomeToFile(org->gnome, "failure_champ_genome");
                 cin >> pause;

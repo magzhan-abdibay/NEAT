@@ -59,7 +59,7 @@ double Species::estimateAverage() {
 
 	for(curorg = organisms.begin(); curorg != organisms.end(); ++curorg) {
 		//New variable time_alive
-		if (((*curorg)->time_alive) >= NEAT::time_alive_minimum) {    
+		if (((*curorg)->timeAlive) >= NEAT::time_alive_minimum) {
 			total += (*curorg)->fitness;
 			++num_orgs;
 		}
@@ -141,7 +141,7 @@ double Species::estimateAverage() {
 	//ADDED CODE (Ken) 
 	//Now transfer the list to elig_orgs without including the ones that are too young (Ken)
 	for(curorg=organisms.begin();curorg!=organisms.end();++curorg) {
-		if ((*curorg)->time_alive >= NEAT::time_alive_minimum)
+		if ((*curorg)->timeAlive >= NEAT::time_alive_minimum)
 			elig_orgs.push_back(*curorg);
 	}
 
@@ -359,10 +359,10 @@ double Species::estimateAverage() {
 
 		//Perform mating based on probabilities of differrent mating types
 		if (randfloat()<NEAT::mate_multipoint_prob) { 
-			new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->orig_fitness, dad->orig_fitness, outside);
+			new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->origFitness, dad->origFitness, outside);
 		}
 		else if (randfloat()<(NEAT::mate_multipoint_avg_prob/(NEAT::mate_multipoint_avg_prob+NEAT::mate_singlepoint_prob))) {
-			new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+			new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->origFitness, dad->origFitness,
 														outside);
 		}
 		else {
@@ -435,8 +435,8 @@ double Species::estimateAverage() {
 	//Add the baby to its proper Species
 	//If it doesn't fit a Species, create a new one
 
-	baby->mut_struct_baby=mut_struct_baby;
-	baby->mate_baby=mate_baby;
+	baby->mutStructBaby=mut_struct_baby;
+	baby->mateBaby=mate_baby;
 
 	curspecies=(pop->species).begin();
 	if (curspecies==(pop->species).end()){
@@ -630,7 +630,7 @@ bool Species::printToFile(std::ostream &outFile) {
 		//Put the fitness for each organism in a comment
 		//outFile<<std::endl<<"/* Organism #"<<((*curorg)->gnome)->genome_id<<" Fitness: "<<(*curorg)->fitness<<" Error: "<<(*curorg)->error<<" */"<<std::endl;
 		char tempbuf2[1024];
-		sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genomeId, (*curorg)->fitness, (*curorg)->time_alive);
+		sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genomeId, (*curorg)->fitness, (*curorg)->timeAlive);
 		outFile << tempbuf2;
 
 		//If it is a winner, mark it in a comment
@@ -790,11 +790,11 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 			}
 
 			//If we have a super_champ (Population champion), finish off some special clones
-			if ((thechamp->super_champ_offspring) > 0) {
+			if ((thechamp->superChampOffspring) > 0) {
 				mom=thechamp;
 				new_genome=(mom->gnome)->duplicate(count);
 
-				if ((thechamp->super_champ_offspring) == 1) {
+				if ((thechamp->superChampOffspring) == 1) {
 
 				}
 
@@ -802,7 +802,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 				//The last offspring will be an exact duplicate of this super_champ
 				//Note: Superchamp offspring only occur with stolen babies!
 				//      Settings used for published experiments did not use this
-				if ((thechamp->super_champ_offspring) > 1) {
+				if ((thechamp->superChampOffspring) > 1) {
 					if ((randfloat()<0.8)||
 						(NEAT::mutate_add_link_prob==0.0)) 
 						//ABOVE LINE IS FOR:
@@ -819,15 +819,15 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 				baby=new Organism(0.0,new_genome,generation);
 
-				if ((thechamp->super_champ_offspring) == 1) {
-					if (thechamp->pop_champ) {
+				if ((thechamp->superChampOffspring) == 1) {
+					if (thechamp->popChamp) {
 						//std::cout<<"The new org baby's genome is "<<baby->gnome<<std::endl;
-						baby->pop_champ_child=true;
-						baby->high_fit=mom->orig_fitness;
+						baby->popChampChild=true;
+						baby->highFit=mom->origFitness;
 					}
 				}
 
-				thechamp->super_champ_offspring--;
+				thechamp->superChampOffspring--;
 			}
 			//If we have a Species champion, just clone it 
 			else if ((!champ_done)&&
@@ -1021,11 +1021,11 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 				//Perform mating based on probabilities of differrent mating types
 				if (randfloat()<NEAT::mate_multipoint_prob) { 
-					new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+					new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->origFitness, dad->origFitness,
 															 outside);
 				}
 				else if (randfloat()<(NEAT::mate_multipoint_avg_prob/(NEAT::mate_multipoint_avg_prob+NEAT::mate_singlepoint_prob))) {
-					new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+					new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->origFitness, dad->origFitness,
 																outside);
 				}
 				else {
@@ -1098,8 +1098,8 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 			//Add the baby to its proper Species
 			//If it doesn't fit a Species, create a new one
 
-			baby->mut_struct_baby=mut_struct_baby;
-			baby->mate_baby=mate_baby;
+			baby->mutStructBaby=mut_struct_baby;
+			baby->mateBaby=mate_baby;
 
 			curspecies=(pop->species).begin();
 			if (curspecies==(pop->species).end()){
@@ -1155,7 +1155,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 bool NEAT::orderSpecies(Species *x, Species *y) {
 	//std::cout<<"Comparing "<<((*((x->organisms).begin()))->orig_fitness)<<" and "<<((*((y->organisms).begin()))->orig_fitness)<<": "<<(((*((x->organisms).begin()))->orig_fitness) > ((*((y->organisms).begin()))->orig_fitness))<<std::endl;
-	return (((*((x->organisms).begin()))->orig_fitness) > ((*((y->organisms).begin()))->orig_fitness));
+	return (((*((x->organisms).begin()))->origFitness) > ((*((y->organisms).begin()))->origFitness));
 }
 
 bool NEAT::orderNewSpecies(Species *x, Species *y) {

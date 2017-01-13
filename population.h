@@ -6,7 +6,7 @@
 #include "Innovation.h"
 #include "Genome.h"
 #include "Species.h"
-#include "organism.h"
+#include "Organism.h"
 
 namespace NEAT {
 

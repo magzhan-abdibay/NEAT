@@ -395,7 +395,7 @@ Organism *Population::remove_worst() {
     for (curorg = organisms.begin(); curorg != organisms.end(); ++curorg) {
         adjusted_fitness = ((*curorg)->fitness) / ((*curorg)->species->organisms.size());
         if ((adjusted_fitness < min_fitness) &&
-            (((*curorg)->time_alive) >= NEAT::time_alive_minimum)) {
+            (((*curorg)->timeAlive) >= NEAT::time_alive_minimum)) {
             min_fitness = adjusted_fitness;
             org_to_kill = (*curorg);
             deadorg = curorg;
