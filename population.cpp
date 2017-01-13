@@ -28,7 +28,7 @@ Population::Population(std::vector<Genome *> genomeList, float power) {
 
         new_genome = (*iter);
         if (power > 0)
-            new_genome->mutate_link_weights(power, 1.0, GAUSSIAN);
+            new_genome->mutateLinkWeights(power, 1.0, GAUSSIAN);
         //new_genome->mutate_link_weights(1.0,1.0,COLDGAUSSIAN);
         new_genome->randomize_traits();
         new_organism = new Organism(0.0, new_genome, 1);
@@ -36,8 +36,8 @@ Population::Population(std::vector<Genome *> genomeList, float power) {
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->get_last_node_id();
-    cur_innov_num = new_genome->get_last_gene_innovnum();
+    cur_node_id = new_genome->getLastNodeId();
+    cur_innov_num = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();
@@ -84,11 +84,11 @@ Population::Population(const char *filename) {
 
                 new_genome = new Genome(idcheck, iFile);
                 organisms.push_back(new Organism(0, new_genome, 1, metadata));
-                if (cur_node_id < (new_genome->get_last_node_id()))
-                    cur_node_id = new_genome->get_last_node_id();
+                if (cur_node_id < (new_genome->getLastNodeId()))
+                    cur_node_id = new_genome->getLastNodeId();
 
-                if (cur_innov_num < (new_genome->get_last_gene_innovnum()))
-                    cur_innov_num = new_genome->get_last_gene_innovnum();
+                if (cur_innov_num < (new_genome->getLastGeneInnovationNum()))
+                    cur_innov_num = new_genome->getLastGeneInnovationNum();
             } else if (strcmp(curword, "/*") == 0) {
                 // New metadata possibly, so clear out the metadata
                 strcpy(metadata, "");
@@ -181,7 +181,7 @@ bool Population::clone(Genome *g, int size, float power) {
     for (count = 2; count <= size; count++) {
         new_genome = g->duplicate(count);
         if (power > 0)
-            new_genome->mutate_link_weights(power, 1.0, GAUSSIAN);
+            new_genome->mutateLinkWeights(power, 1.0, GAUSSIAN);
 
         new_genome->randomize_traits();
         new_organism = new Organism(0.0, new_genome, 1);
@@ -189,8 +189,8 @@ bool Population::clone(Genome *g, int size, float power) {
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->get_last_node_id();
-    cur_innov_num = new_genome->get_last_gene_innovnum();
+    cur_node_id = new_genome->getLastNodeId();
+    cur_innov_num = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();
@@ -210,15 +210,15 @@ bool Population::spawn(Genome *g, int size) {
 
         new_genome = g->duplicate(count);
         //new_genome->mutate_link_weights(1.0,1.0,GAUSSIAN);
-        new_genome->mutate_link_weights(1.0, 1.0, COLDGAUSSIAN);
+        new_genome->mutateLinkWeights(1.0, 1.0, COLDGAUSSIAN);
         new_genome->randomize_traits();
         new_organism = new Organism(0.0, new_genome, 1);
         organisms.push_back(new_organism);
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->get_last_node_id();
-    cur_innov_num = new_genome->get_last_gene_innovnum();
+    cur_node_id = new_genome->getLastNodeId();
+    cur_innov_num = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();

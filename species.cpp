@@ -217,13 +217,13 @@ double Species::estimate_average() {
 
 			if (randfloat()<NEAT::mutate_add_node_prob) {
 				//cout<<"mutate add node"<<endl;
-				new_genome->mutate_add_node(pop->innovations,pop->cur_node_id,pop->cur_innov_num);
+				new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
 				mut_struct_baby=true;
 			}
 			else if (randfloat()<NEAT::mutate_add_link_prob) {
 				//cout<<"mutate add link"<<endl;
 				net_analogue=new_genome->genesis(generation);
-				new_genome->mutate_add_link(pop->innovations,pop->cur_innov_num,NEAT::newlink_tries);
+				new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
 				delete net_analogue;
 				mut_struct_baby=true;
 			}
@@ -234,28 +234,28 @@ double Species::estimate_average() {
 
 				if (randfloat()<NEAT::mutate_random_trait_prob) {
 					//cout<<"mutate random trait"<<endl;
-					new_genome->mutate_random_trait();
+					new_genome->mutateRandomTrait();
 				}
 				if (randfloat()<NEAT::mutate_link_trait_prob) {
 					//cout<<"mutate_link_trait"<<endl;
-					new_genome->mutate_link_trait(1);
+					new_genome->mutateLinkTrait(1);
 				}
 				if (randfloat()<NEAT::mutate_node_trait_prob) {
 					//cout<<"mutate_node_trait"<<endl;
-					new_genome->mutate_node_trait(1);
+					new_genome->mutateNodeTrait(1);
 				}
 				if (randfloat()<NEAT::mutate_link_weights_prob) {
 					//cout<<"mutate_link_weights"<<endl;
-					new_genome->mutate_link_weights(mut_power,1.0,GAUSSIAN);
+					new_genome->mutateLinkWeights(mut_power, 1.0, GAUSSIAN);
 				}
 				if (randfloat()<NEAT::mutate_toggle_enable_prob) {
 					//cout<<"mutate toggle enable"<<endl;
-					new_genome->mutate_toggle_enable(1);
+					new_genome->mutateToggleEnable(1);
 
 				}
 				if (randfloat()<NEAT::mutate_gene_reenable_prob) {
 					//cout<<"mutate gene reenable"<<endl;
-					new_genome->mutate_gene_reenable();
+					new_genome->mutateGeneReEnable();
 				}
 			}
 
@@ -359,13 +359,14 @@ double Species::estimate_average() {
 
 		//Perform mating based on probabilities of differrent mating types
 		if (randfloat()<NEAT::mate_multipoint_prob) { 
-			new_genome=(mom->gnome)->mate_multipoint(dad->gnome,count,mom->orig_fitness,dad->orig_fitness,outside);
+			new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->orig_fitness, dad->orig_fitness, outside);
 		}
 		else if (randfloat()<(NEAT::mate_multipoint_avg_prob/(NEAT::mate_multipoint_avg_prob+NEAT::mate_singlepoint_prob))) {
-			new_genome=(mom->gnome)->mate_multipoint_avg(dad->gnome,count,mom->orig_fitness,dad->orig_fitness,outside);
+			new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+														outside);
 		}
 		else {
-			new_genome=(mom->gnome)->mate_singlepoint(dad->gnome,count);
+			new_genome= (mom->gnome)->mateSinglePoint(dad->gnome, count);
 		}
 
 		mate_baby=true;
@@ -373,20 +374,20 @@ double Species::estimate_average() {
 		//Determine whether to mutate the baby's Genome
 		//This is done randomly or if the mom and dad are the same organism
 		if ((randfloat()>NEAT::mate_only_prob)||
-			((dad->gnome)->genome_id==(mom->gnome)->genome_id)||
+			((dad->gnome)->genomeId==(mom->gnome)->genomeId)||
 			(((dad->gnome)->compatibility(mom->gnome))==0.0))
 		{
 
 			//Do the mutation depending on probabilities of 
 			//various mutations
 			if (randfloat()<NEAT::mutate_add_node_prob) {
-				new_genome->mutate_add_node(pop->innovations,pop->cur_node_id,pop->cur_innov_num);
+				new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
 				//  cout<<"mutate_add_node: "<<new_genome<<endl;
 				mut_struct_baby=true;
 			}
 			else if (randfloat()<NEAT::mutate_add_link_prob) {
 				net_analogue=new_genome->genesis(generation);
-				new_genome->mutate_add_link(pop->innovations,pop->cur_innov_num,NEAT::newlink_tries);
+				new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
 				delete net_analogue;
 				//cout<<"mutate_add_link: "<<new_genome<<endl;
 				mut_struct_baby=true;
@@ -395,27 +396,27 @@ double Species::estimate_average() {
 				//Only do other mutations when not doing strurctural mutations
 
 				if (randfloat()<NEAT::mutate_random_trait_prob) {
-					new_genome->mutate_random_trait();
+					new_genome->mutateRandomTrait();
 					//cout<<"..mutate random trait: "<<new_genome<<endl;
 				}
 				if (randfloat()<NEAT::mutate_link_trait_prob) {
-					new_genome->mutate_link_trait(1);
+					new_genome->mutateLinkTrait(1);
 					//cout<<"..mutate link trait: "<<new_genome<<endl;
 				}
 				if (randfloat()<NEAT::mutate_node_trait_prob) {
-					new_genome->mutate_node_trait(1);
+					new_genome->mutateNodeTrait(1);
 					//cout<<"mutate_node_trait: "<<new_genome<<endl;
 				}
 				if (randfloat()<NEAT::mutate_link_weights_prob) {
-					new_genome->mutate_link_weights(mut_power,1.0,GAUSSIAN);
+					new_genome->mutateLinkWeights(mut_power, 1.0, GAUSSIAN);
 					//cout<<"mutate_link_weights: "<<new_genome<<endl;
 				}
 				if (randfloat()<NEAT::mutate_toggle_enable_prob) {
-					new_genome->mutate_toggle_enable(1);
+					new_genome->mutateToggleEnable(1);
 					//cout<<"mutate_toggle_enable: "<<new_genome<<endl;
 				}
 				if (randfloat()<NEAT::mutate_gene_reenable_prob) {
-					new_genome->mutate_gene_reenable(); 
+					new_genome->mutateGeneReEnable();
 					//cout<<"mutate_gene_reenable: "<<new_genome<<endl;
 				}
 			}
@@ -595,12 +596,12 @@ bool Species::print_to_file(std::ofstream &outFile) {
   for(curorg=organisms.begin();curorg!=organisms.end();++curorg) {
 
     //Put the fitness for each organism in a comment
-    outFile<<std::endl<<"/* Organism #"<<((*curorg)->gnome)->genome_id<<" Fitness: "<<(*curorg)->fitness<<" Error: "<<(*curorg)->error<<" */"<<std::endl;
+    outFile<<std::endl<<"/* Organism #"<<((*curorg)->gnome)->genomeId<<" Fitness: "<<(*curorg)->fitness<<" Error: "<<(*curorg)->error<<" */"<<std::endl;
 
     //If it is a winner, mark it in a comment
-    if ((*curorg)->winner) outFile<<"/* ##------$ WINNER "<<((*curorg)->gnome)->genome_id<<" SPECIES #"<<id<<" $------## */"<<std::endl;
+    if ((*curorg)->winner) outFile<<"/* ##------$ WINNER "<<((*curorg)->gnome)->genomeId<<" SPECIES #"<<id<<" $------## */"<<std::endl;
 
-    ((*curorg)->gnome)->print_to_file(outFile);
+	  ((*curorg)->gnome)->printToFile(outFile);
     //We can confirm by writing the genome #'s to the screen
     //std::cout<<((*curorg)->gnome)->genome_id<<std::endl;
   }
@@ -629,17 +630,17 @@ bool Species::print_to_file(std::ostream &outFile) {
 		//Put the fitness for each organism in a comment
 		//outFile<<std::endl<<"/* Organism #"<<((*curorg)->gnome)->genome_id<<" Fitness: "<<(*curorg)->fitness<<" Error: "<<(*curorg)->error<<" */"<<std::endl;
 		char tempbuf2[1024];
-		sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genome_id, (*curorg)->fitness, (*curorg)->time_alive);
+		sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genomeId, (*curorg)->fitness, (*curorg)->time_alive);
 		outFile << tempbuf2;
 
 		//If it is a winner, mark it in a comment
 		if ((*curorg)->winner) {
 			char tempbuf3[1024];
-			sprintf(tempbuf3, "/* ##------$ WINNER %d SPECIES #%d $------## */\n", ((*curorg)->gnome)->genome_id, id);
+			sprintf(tempbuf3, "/* ##------$ WINNER %d SPECIES #%d $------## */\n", ((*curorg)->gnome)->genomeId, id);
 			//outFile<<"/* ##------$ WINNER "<<((*curorg)->gnome)->genome_id<<" SPECIES #"<<id<<" $------## */"<<std::endl;
 		}
 
-		((*curorg)->gnome)->print_to_file(outFile);
+		((*curorg)->gnome)->printToFile(outFile);
 		//We can confirm by writing the genome #'s to the screen
 		//std::cout<<((*curorg)->gnome)->genome_id<<std::endl;
 	}
@@ -806,11 +807,11 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 						(NEAT::mutate_add_link_prob==0.0)) 
 						//ABOVE LINE IS FOR:
 						//Make sure no links get added when the system has link adding disabled
-						new_genome->mutate_link_weights(mut_power,1.0,GAUSSIAN);
+						new_genome->mutateLinkWeights(mut_power, 1.0, GAUSSIAN);
 					else {
 						//Sometimes we add a link to a superchamp
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutate_add_link(pop->innovations,pop->cur_innov_num,NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
 						delete net_analogue;
 						mut_struct_baby=true;
 					}
@@ -878,13 +879,13 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 					if (randfloat()<NEAT::mutate_add_node_prob) {
 						//std::cout<<"mutate add node"<<std::endl;
-						new_genome->mutate_add_node(pop->innovations,pop->cur_node_id,pop->cur_innov_num);
+						new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
 						mut_struct_baby=true;
 					}
 					else if (randfloat()<NEAT::mutate_add_link_prob) {
 						//std::cout<<"mutate add link"<<std::endl;
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutate_add_link(pop->innovations,pop->cur_innov_num,NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
 						delete net_analogue;
 						mut_struct_baby=true;
 					}
@@ -895,28 +896,28 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 						if (randfloat()<NEAT::mutate_random_trait_prob) {
 							//std::cout<<"mutate random trait"<<std::endl;
-							new_genome->mutate_random_trait();
+							new_genome->mutateRandomTrait();
 						}
 						if (randfloat()<NEAT::mutate_link_trait_prob) {
 							//std::cout<<"mutate_link_trait"<<std::endl;
-							new_genome->mutate_link_trait(1);
+							new_genome->mutateLinkTrait(1);
 						}
 						if (randfloat()<NEAT::mutate_node_trait_prob) {
 							//std::cout<<"mutate_node_trait"<<std::endl;
-							new_genome->mutate_node_trait(1);
+							new_genome->mutateNodeTrait(1);
 						}
 						if (randfloat()<NEAT::mutate_link_weights_prob) {
 							//std::cout<<"mutate_link_weights"<<std::endl;
-							new_genome->mutate_link_weights(mut_power,1.0,GAUSSIAN);
+							new_genome->mutateLinkWeights(mut_power, 1.0, GAUSSIAN);
 						}
 						if (randfloat()<NEAT::mutate_toggle_enable_prob) {
 							//std::cout<<"mutate toggle enable"<<std::endl;
-							new_genome->mutate_toggle_enable(1);
+							new_genome->mutateToggleEnable(1);
 
 						}
 						if (randfloat()<NEAT::mutate_gene_reenable_prob) {
 							//std::cout<<"mutate gene reenable"<<std::endl;
-							new_genome->mutate_gene_reenable();
+							new_genome->mutateGeneReEnable();
 						}
 					}
 
@@ -1020,13 +1021,15 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 				//Perform mating based on probabilities of differrent mating types
 				if (randfloat()<NEAT::mate_multipoint_prob) { 
-					new_genome=(mom->gnome)->mate_multipoint(dad->gnome,count,mom->orig_fitness,dad->orig_fitness,outside);
+					new_genome= (mom->gnome)->mateMultiPoint(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+															 outside);
 				}
 				else if (randfloat()<(NEAT::mate_multipoint_avg_prob/(NEAT::mate_multipoint_avg_prob+NEAT::mate_singlepoint_prob))) {
-					new_genome=(mom->gnome)->mate_multipoint_avg(dad->gnome,count,mom->orig_fitness,dad->orig_fitness,outside);
+					new_genome= (mom->gnome)->mateMultiPointAvg(dad->gnome, count, mom->orig_fitness, dad->orig_fitness,
+																outside);
 				}
 				else {
-					new_genome=(mom->gnome)->mate_singlepoint(dad->gnome,count);
+					new_genome= (mom->gnome)->mateSinglePoint(dad->gnome, count);
 				}
 
 				mate_baby=true;
@@ -1034,20 +1037,20 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 				//Determine whether to mutate the baby's Genome
 				//This is done randomly or if the mom and dad are the same organism
 				if ((randfloat()>NEAT::mate_only_prob)||
-					((dad->gnome)->genome_id==(mom->gnome)->genome_id)||
+					((dad->gnome)->genomeId==(mom->gnome)->genomeId)||
 					(((dad->gnome)->compatibility(mom->gnome))==0.0))
 				{
 
 					//Do the mutation depending on probabilities of 
 					//various mutations
 					if (randfloat()<NEAT::mutate_add_node_prob) {
-						new_genome->mutate_add_node(pop->innovations,pop->cur_node_id,pop->cur_innov_num);
+						new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
 						//  std::cout<<"mutate_add_node: "<<new_genome<<std::endl;
 						mut_struct_baby=true;
 					}
 					else if (randfloat()<NEAT::mutate_add_link_prob) {
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutate_add_link(pop->innovations,pop->cur_innov_num,NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
 						delete net_analogue;
 						//std::cout<<"mutate_add_link: "<<new_genome<<std::endl;
 						mut_struct_baby=true;
@@ -1056,27 +1059,27 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 						//Only do other mutations when not doing sturctural mutations
 
 						if (randfloat()<NEAT::mutate_random_trait_prob) {
-							new_genome->mutate_random_trait();
+							new_genome->mutateRandomTrait();
 							//std::cout<<"..mutate random trait: "<<new_genome<<std::endl;
 						}
 						if (randfloat()<NEAT::mutate_link_trait_prob) {
-							new_genome->mutate_link_trait(1);
+							new_genome->mutateLinkTrait(1);
 							//std::cout<<"..mutate link trait: "<<new_genome<<std::endl;
 						}
 						if (randfloat()<NEAT::mutate_node_trait_prob) {
-							new_genome->mutate_node_trait(1);
+							new_genome->mutateNodeTrait(1);
 							//std::cout<<"mutate_node_trait: "<<new_genome<<std::endl;
 						}
 						if (randfloat()<NEAT::mutate_link_weights_prob) {
-							new_genome->mutate_link_weights(mut_power,1.0,GAUSSIAN);
+							new_genome->mutateLinkWeights(mut_power, 1.0, GAUSSIAN);
 							//std::cout<<"mutate_link_weights: "<<new_genome<<std::endl;
 						}
 						if (randfloat()<NEAT::mutate_toggle_enable_prob) {
-							new_genome->mutate_toggle_enable(1);
+							new_genome->mutateToggleEnable(1);
 							//std::cout<<"mutate_toggle_enable: "<<new_genome<<std::endl;
 						}
 						if (randfloat()<NEAT::mutate_gene_reenable_prob) {
-							new_genome->mutate_gene_reenable(); 
+							new_genome->mutateGeneReEnable();
 							//std::cout<<"mutate_gene_reenable: "<<new_genome<<std::endl;
 						}
 					}

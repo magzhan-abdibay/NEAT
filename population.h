@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 #include "innovation.h"
-#include "genome.h"
+#include "Genome.h"
 #include "species.h"
 #include "organism.h"
 

@@ -13,7 +13,7 @@
 #include "network.h"
 #include "population.h"
 #include "organism.h"
-#include "genome.h"
+#include "Genome.h"
 #include "species.h"
 #include "CartPole.h"
 

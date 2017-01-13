@@ -5,7 +5,7 @@ PROJECT( rtneat )
 SET(rtneat_sources 
   experiments.cpp
         Gene.cpp
-  genome.cpp
+        Genome.cpp
   innovation.cpp
         Link.cpp
   neat.cpp

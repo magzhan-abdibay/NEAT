@@ -172,7 +172,7 @@ bool pole2Evaluate(Organism *org, CartPole *cart) {
         cout << " <<DUPLICATE OF CHAMPION>> ";
 
     //Output to screen
-    cout << "Org " << (org->gnome)->genome_id << " fitness: " << org->fitness;
+    cout << "Org " << (org->gnome)->genomeId << " fitness: " << org->fitness;
     cout << " (" << (org->gnome)->genes.size();
     cout << " / " << (org->gnome)->nodes.size() << ")";
     cout << "   ";
@@ -187,7 +187,7 @@ bool pole2Evaluate(Organism *org, CartPole *cart) {
             //DEBUG CHECK
             if (org->high_fit > org->fitness) {
                 cout << "ALERT: ORGANISM DAMAGED" << endl;
-                print_Genome_tofile(org->gnome, "failure_champ_genome");
+                printGenomeToFile(org->gnome, "failure_champ_genome");
                 cin >> pause;
             }
         }

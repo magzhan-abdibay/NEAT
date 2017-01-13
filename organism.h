@@ -1,7 +1,7 @@
 #ifndef _ORGANISM_H_
 #define _ORGANISM_H_
 
-#include "genome.h"
+#include "Genome.h"
 #include "species.h"
 
 namespace NEAT {
