@@ -45,10 +45,10 @@ Genome::Genome(const Genome& genome)
 	//Duplicate NNodes
 	for(curnode=genome.nodes.begin();curnode!=genome.nodes.end();++curnode) {
 		//First, find the trait that this node points to
-		if (((*curnode)->nodetrait)==0) assoc_trait=0;
+		if (((*curnode)->nodeTrait)==0) assoc_trait=0;
 		else {
 			curtrait=traits.begin();
-			while(((*curtrait)->traitId)!=(((*curnode)->nodetrait)->traitId))
+			while(((*curtrait)->traitId)!=(((*curnode)->nodeTrait)->traitId))
 				++curtrait;
 			assoc_trait=(*curtrait);
 		}
@@ -265,7 +265,7 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 			newnode=new NNode(SENSOR,ncount,INPUT);
 		else newnode=new NNode(SENSOR,ncount,BIAS);
 
-		newnode->nodetrait=newtrait;
+		newnode->nodeTrait=newtrait;
 
 		//Add the node to the list of nodes
 		nodes.push_back(newnode);
@@ -274,7 +274,7 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 	//Build the hidden nodes
 	for(ncount=i+1;ncount<=i+n;ncount++) {
 		newnode=new NNode(NEURON,ncount,HIDDEN);
-		newnode->nodetrait=newtrait;
+		newnode->nodeTrait=newtrait;
 		//Add the node to the list of nodes
 		nodes.push_back(newnode);
 	}
@@ -282,7 +282,7 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 	//Build the output nodes
 	for(ncount=first_output;ncount<=totalnodes;ncount++) {
 		newnode=new NNode(NEURON,ncount,OUTPUT);
-		newnode->nodetrait=newtrait;
+		newnode->nodeTrait=newtrait;
 		//Add the node to the list of nodes
 		nodes.push_back(newnode);
 	}
@@ -308,14 +308,14 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 
 						//Retrieve the in_node
 						node_iter=nodes.begin();
-						while((*node_iter)->node_id!=row)
+						while((*node_iter)->nodeId!=row)
 							node_iter++;
 
 						in_node=(*node_iter);
 
 						//Retrieve the out_node
 						node_iter=nodes.begin();
-						while((*node_iter)->node_id!=col)
+						while((*node_iter)->nodeId!=col)
 							node_iter++;
 
 						out_node=(*node_iter);
@@ -332,14 +332,14 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 
 						//Retrieve the in_node
 						node_iter=nodes.begin();
-						while((*node_iter)->node_id!=row)
+						while((*node_iter)->nodeId!=row)
 							node_iter++;
 
 						in_node=(*node_iter);
 
 						//Retrieve the out_node
 						node_iter=nodes.begin();
-						while((*node_iter)->node_id!=col)
+						while((*node_iter)->nodeId!=col)
 							node_iter++;
 
 						out_node=(*node_iter);
@@ -645,11 +645,11 @@ Network *Genome::genesis(int id) {
 
 	//Create the nodes
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
-		newnode=new NNode((*curnode)->type,(*curnode)->node_id);
+		newnode=new NNode((*curnode)->type,(*curnode)->nodeId);
 
 		//Derive the node parameters from the trait pointed to
-		curtrait=(*curnode)->nodetrait;
-		newnode->derive_trait(curtrait);
+		curtrait=(*curnode)->nodeTrait;
+		newnode->deriveTrait(curtrait);
 
 		//Check for input or output designation of node
 		if (((*curnode)->gen_node_label)==INPUT) 
@@ -762,13 +762,13 @@ bool Genome::verify() {
 	//Check for NNodes being out of order
 	last_id=0;
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
-		if ((*curnode)->node_id<last_id) {
+		if ((*curnode)->nodeId<last_id) {
 			//cout<<"ALERT: NODES OUT OF ORDER in "<<this<<endl;
 			//cin>>pause;
 			return false;
 		}
 
-		last_id=(*curnode)->node_id;
+		last_id=(*curnode)->nodeId;
 	}
 
 
@@ -778,8 +778,8 @@ bool Genome::verify() {
 		for(curgene2=genes.begin();curgene2!=genes.end();++curgene2) {
 			if (((*curgene)!=(*curgene2))&&
 				((((*curgene)->link)->isRecurrent)==(((*curgene2)->link)->isRecurrent))&&
-				((((((*curgene2)->link)->inNode)->node_id)==((((*curgene)->link)->inNode)->node_id))&&
-				(((((*curgene2)->link)->outNode)->node_id)==((((*curgene)->link)->outNode)->node_id)))) {
+				((((((*curgene2)->link)->inNode)->nodeId)==((((*curgene)->link)->inNode)->nodeId))&&
+				(((((*curgene2)->link)->outNode)->nodeId)==((((*curgene)->link)->outNode)->nodeId)))) {
 					//cout<<"ALERT: DUPLICATE GENES: "<<(*curgene)<<(*curgene2)<<endl;
 					//cout<<"INSIDE GENOME: "<<this<<endl;
 
@@ -843,7 +843,7 @@ void Genome::printToFile(std::ofstream &outFile) {
 
   //Output the nodes
   for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
-    (*curnode)->print_to_file(outFile);
+	  (*curnode)->printToFile(outFile);
   }
 
   //Output the genes
@@ -874,7 +874,7 @@ void Genome::printToFile(std::ostream &outFile) {
 
 	//Output the nodes
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
-		(*curnode)->print_to_file(outFile);
+		(*curnode)->printToFile(outFile);
 	}
 
 	//Output the genes
@@ -899,7 +899,7 @@ void Genome::printToFileName(char *fileName) {
 }
 
 int Genome::getLastNodeId() {
-	return ((*(nodes.end() - 1))->node_id)+1;
+	return ((*(nodes.end() - 1))->nodeId)+1;
 }
 
 double Genome::getLastGeneInnovationNum() {
@@ -940,10 +940,10 @@ Genome *Genome::duplicate(int new_id) {
 	//Duplicate NNodes
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
 		//First, find the trait that this node points to
-		if (((*curnode)->nodetrait)==0) assoc_trait=0;
+		if (((*curnode)->nodeTrait)==0) assoc_trait=0;
 		else {
 			curtrait=traits_dup.begin();
-			while(((*curtrait)->traitId)!=(((*curnode)->nodetrait)->traitId))
+			while(((*curtrait)->traitId)!=(((*curnode)->nodeTrait)->traitId))
 				++curtrait;
 			assoc_trait=(*curtrait);
 		}
@@ -1060,7 +1060,7 @@ void Genome::mutateNodeTrait(int times) {
 
 			thetrait=traits.begin();
 
-			(*thenode)->nodetrait=thetrait[traitnum];
+			(*thenode)->nodeTrait=thetrait[traitnum];
 
 		}
 		//TRACK INNOVATION! - possible future use
@@ -1448,7 +1448,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 			//Create the new NNode
 			//By convention, it will point to the first trait
 			newnode=new NNode(NEURON,curnodeId++,HIDDEN);
-			newnode->nodetrait=(*(traits.begin()));
+			newnode->nodeTrait=(*(traits.begin()));
 
 			//Create the new Genes
 			if (thelink->isRecurrent) {
@@ -1463,7 +1463,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 			}
 
 			//Add the innovations (remember what was done)
-			innovs.push_back(new Innovation(in_node->node_id,out_node->node_id,curInnov-2.0,curInnov-1.0,newnode->node_id,(*thegene)->innovationNum));
+			innovs.push_back(new Innovation(in_node->nodeId,out_node->nodeId,curInnov-2.0,curInnov-1.0,newnode->nodeId,(*thegene)->innovationNum));
 
 			done=true;
 		}
@@ -1477,8 +1477,8 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 		//   so we make it match the original, identical mutation which occured
 		//   elsewhere in the population by coincidence 
 		else if (((*theinnov)->innovationType==NEWNODE)&&
-			((*theinnov)->nodeInId==(in_node->node_id))&&
-			((*theinnov)->nodeOutId==(out_node->node_id))&&
+			((*theinnov)->nodeInId==(in_node->nodeId))&&
+			((*theinnov)->nodeOutId==(out_node->nodeId))&&
 			((*theinnov)->oldInnovNum==(*thegene)->innovationNum))
 		{
 
@@ -1491,7 +1491,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 			newnode=new NNode(NEURON,(*theinnov)->newNodeId,HIDDEN);
 			//By convention, it will point to the first trait
 			//Note: In future may want to change this
-			newnode->nodetrait=(*(traits.begin()));
+			newnode->nodeTrait=(*(traits.begin()));
 
 			//Create the new Genes
 			if (thelink->isRecurrent) {
@@ -1564,7 +1564,7 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 	//possible destinations
 	first_nonsensor=0;
 	thenode1=nodes.begin();
-	while(((*thenode1)->get_type())==SENSOR) {
+	while(((*thenode1)->getType())==SENSOR) {
 		first_nonsensor++;
 		++thenode1;
 	}
@@ -1760,7 +1760,7 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 				newgene=new Gene(((thetrait[traitnum])),newweight,nodep1,nodep2,recurflag,curInnov,newweight);
 
 				//Add the innovation
-				innovs.push_back(new Innovation(nodep1->node_id,nodep2->node_id,curInnov,newweight,traitnum));
+				innovs.push_back(new Innovation(nodep1->nodeId,nodep2->nodeId,curInnov,newweight,traitnum));
 
 				curInnov=curInnov+1.0;
 
@@ -1768,8 +1768,8 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 			}
 			//OTHERWISE, match the innovation in the innovs list
 			else if (((*theinnov)->innovationType==NEWLINK)&&
-				((*theinnov)->nodeInId==(nodep1->node_id))&&
-				((*theinnov)->nodeOutId==(nodep2->node_id))&&
+				((*theinnov)->nodeInId==(nodep1->nodeId))&&
+				((*theinnov)->nodeOutId==(nodep2->nodeId))&&
 				((*theinnov)->recurFlag==(bool)recurflag)) {
 
 					thetrait=traits.begin();
@@ -1898,8 +1898,8 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 						curInnov,newweight);
 
 					//Add the innovation
-					innovs.push_back(new Innovation(sensor->node_id,
-						output->node_id,curInnov,newweight,traitnum));
+					innovs.push_back(new Innovation(sensor->nodeId,
+						output->nodeId,curInnov,newweight,traitnum));
 
 					curInnov=curInnov+1.0;
 
@@ -1907,8 +1907,8 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 				} //end novel innovation case
 				//OTHERWISE, match the innovation in the innovs list
 				else if (((*theinnov)->innovationType==NEWLINK)&&
-					((*theinnov)->nodeInId==(sensor->node_id))&&
-					((*theinnov)->nodeOutId==(output->node_id))&&
+					((*theinnov)->nodeInId==(sensor->nodeId))&&
+					((*theinnov)->nodeOutId==(output->nodeId))&&
 					((*theinnov)->recurFlag==false)) {
 
 						thetrait=traits.begin();
@@ -1966,11 +1966,11 @@ void Genome::addGene(std::vector<Gene *> &glist, Gene *g) {
 void Genome::node_insert(std::vector<NNode*> &nlist,NNode *n) {
 	std::vector<NNode*>::iterator curnode;
 
-	int id=n->node_id;
+	int id=n->nodeId;
 
 	curnode=nlist.begin();
 	while ((curnode!=nlist.end())&&
-		(((*curnode)->node_id)<id)) 
+		(((*curnode)->nodeId)<id))
 		++curnode;
 
 	nlist.insert(curnode,n);
@@ -2042,9 +2042,9 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 		if ((((*curnode)->gen_node_label)==INPUT)||
 			(((*curnode)->gen_node_label)==BIAS)||
 			(((*curnode)->gen_node_label)==OUTPUT)) {
-				if (!((*curnode)->nodetrait)) nodetraitnum=0;
+				if (!((*curnode)->nodeTrait)) nodetraitnum=0;
 				else
-					nodetraitnum=(((*curnode)->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+					nodetraitnum=(((*curnode)->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 				//Create a new node off the sensor or output
 				new_onode=new NNode((*curnode),newtraits[nodetraitnum]);
@@ -2126,10 +2126,10 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 			//i.e. do they represent the same link    
 			curgene2=newgenes.begin();
 			while ((curgene2!=newgenes.end())&&
-				(!((((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
-				(((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&((((*curgene2)->link)->isRecurrent)== (((chosengene)->link)->isRecurrent)) ))&&
-				(!((((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&
-				(((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
+				(!((((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
+				(((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&((((*curgene2)->link)->isRecurrent)== (((chosengene)->link)->isRecurrent)) ))&&
+				(!((((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&
+				(((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
 				(!((((*curgene2)->link)->isRecurrent)))&&
 				(!((((chosengene)->link)->isRecurrent))) )))
 			{	
@@ -2152,13 +2152,13 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 				onode=(chosengene->link)->outNode;
 
 				//Check for inode in the newnodes list
-				if (inode->node_id<onode->node_id) {
+				if (inode->nodeId<onode->nodeId) {
 					//inode before onode
 
 					//Checking for inode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=inode->node_id)) 
+						((*curnode)->nodeId!=inode->nodeId))
 						++curnode;
 
 					if (curnode==newnodes.end()) {
@@ -2167,9 +2167,9 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 
 						//old buggy version:
 						// if (!(onode->nodetrait)) nodetraitnum=((*(traits.begin()))->trait_id);
-						if (!(inode->nodetrait)) nodetraitnum=0;
+						if (!(inode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((inode->nodetrait)->traitId)-((*(traits.begin()))->traitId);
+							nodetraitnum=((inode->nodeTrait)->traitId)-((*(traits.begin()))->traitId);
 
 						new_inode=new NNode(inode,newtraits[nodetraitnum]);
 						node_insert(newnodes,new_inode);
@@ -2183,15 +2183,15 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 					//Checking for onode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=onode->node_id)) 
+						((*curnode)->nodeId!=onode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
 
-						if (!(onode->nodetrait)) nodetraitnum=0;
+						if (!(onode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 						new_onode=new NNode(onode,newtraits[nodetraitnum]);
 
@@ -2208,14 +2208,14 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 					//Checking for onode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=onode->node_id)) 
+						((*curnode)->nodeId!=onode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
-						if (!(onode->nodetrait)) nodetraitnum=0;
+						if (!(onode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 						new_onode=new NNode(onode,newtraits[nodetraitnum]);
 						//newnodes.push_back(new_onode);
@@ -2230,14 +2230,14 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 					//Checking for inode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=inode->node_id)) 
+						((*curnode)->nodeId!=inode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
-						if (!(inode->nodetrait)) nodetraitnum=0;
+						if (!(inode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((inode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((inode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 						new_inode=new NNode(inode,newtraits[nodetraitnum]);
 
@@ -2335,9 +2335,9 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 		if ((((*curnode)->gen_node_label)==INPUT)||
 			(((*curnode)->gen_node_label)==OUTPUT)||
 			(((*curnode)->gen_node_label)==BIAS)) {
-				if (!((*curnode)->nodetrait)) nodetraitnum=0;
+				if (!((*curnode)->nodeTrait)) nodetraitnum=0;
 				else
-					nodetraitnum=(((*curnode)->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+					nodetraitnum=(((*curnode)->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 				//Create a new node off the sensor or output
 				new_onode=new NNode((*curnode),newtraits[nodetraitnum]);
@@ -2474,11 +2474,11 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 
 			{
 
-				if (((((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
-					(((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&
+				if (((((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
+					(((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&
 					((((*curgene2)->link)->isRecurrent)== (((chosengene)->link)->isRecurrent)))||
-					((((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
-					(((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&
+					((((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
+					(((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&
 					(!((((*curgene2)->link)->isRecurrent)))&&
 					(!((((chosengene)->link)->isRecurrent)))     ))
 				{ 
@@ -2502,21 +2502,21 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 				onode=(chosengene->link)->outNode;
 
 				//Check for inode in the newnodes list
-				if (inode->node_id<onode->node_id) {
+				if (inode->nodeId<onode->nodeId) {
 
 					//Checking for inode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=inode->node_id)) 
+						((*curnode)->nodeId!=inode->nodeId))
 						++curnode;
 
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
 
-						if (!(inode->nodetrait)) nodetraitnum=0;
+						if (!(inode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((inode->nodetrait)->traitId)-((*(traits.begin()))->traitId);
+							nodetraitnum=((inode->nodeTrait)->traitId)-((*(traits.begin()))->traitId);
 
 						new_inode=new NNode(inode,newtraits[nodetraitnum]);
 
@@ -2530,15 +2530,15 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 					//Checking for onode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=onode->node_id)) 
+						((*curnode)->nodeId!=onode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
 
-						if (!(onode->nodetrait)) nodetraitnum=0;
+						if (!(onode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 						new_onode=new NNode(onode,newtraits[nodetraitnum]);
 
 						node_insert(newnodes,new_onode);
@@ -2552,14 +2552,14 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 					//Checking for onode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=onode->node_id)) 
+						((*curnode)->nodeId!=onode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
-						if (!(onode->nodetrait)) nodetraitnum=0;
+						if (!(onode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 						new_onode=new NNode(onode,newtraits[nodetraitnum]);
 
@@ -2572,14 +2572,14 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 					//Checking for inode's existence
 					curnode=newnodes.begin();
 					while((curnode!=newnodes.end())&&
-						((*curnode)->node_id!=inode->node_id)) 
+						((*curnode)->nodeId!=inode->nodeId))
 						++curnode;
 					if (curnode==newnodes.end()) {
 						//Here we know the node doesn't exist so we have to add it
 						//normalized trait number for new NNode
-						if (!(inode->nodetrait)) nodetraitnum=0;
+						if (!(inode->nodeTrait)) nodetraitnum=0;
 						else
-							nodetraitnum=((inode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+							nodetraitnum=((inode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 						new_inode=new NNode(inode,newtraits[nodetraitnum]);
 
@@ -2769,10 +2769,10 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 		curgene2=newgenes.begin();
 
 		while ((curgene2!=newgenes.end())&&
-			(!((((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
-			(((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&((((*curgene2)->link)->isRecurrent)== (((chosengene)->link)->isRecurrent)) ))&&
-			(!((((((*curgene2)->link)->inNode)->node_id)==((((chosengene)->link)->outNode)->node_id))&&
-			(((((*curgene2)->link)->outNode)->node_id)==((((chosengene)->link)->inNode)->node_id))&&
+			(!((((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
+			(((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&((((*curgene2)->link)->isRecurrent)== (((chosengene)->link)->isRecurrent)) ))&&
+			(!((((((*curgene2)->link)->inNode)->nodeId)==((((chosengene)->link)->outNode)->nodeId))&&
+			(((((*curgene2)->link)->outNode)->nodeId)==((((chosengene)->link)->inNode)->nodeId))&&
 			(!((((*curgene2)->link)->isRecurrent)))&&
 			(!((((chosengene)->link)->isRecurrent))) )))
 		{
@@ -2796,21 +2796,21 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 			onode=(chosengene->link)->outNode;
 
 			//Check for inode in the newnodes list
-			if (inode->node_id<onode->node_id) {
+			if (inode->nodeId<onode->nodeId) {
 				//cout<<"inode before onode"<<std::endl;
 				//Checking for inode's existence
 				curnode=newnodes.begin();
 				while((curnode!=newnodes.end())&&
-					((*curnode)->node_id!=inode->node_id)) 
+					((*curnode)->nodeId!=inode->nodeId))
 					++curnode;
 
 				if (curnode==newnodes.end()) {
 					//Here we know the node doesn't exist so we have to add it
 					//normalized trait number for new NNode
 
-					if (!(inode->nodetrait)) nodetraitnum=0;
+					if (!(inode->nodeTrait)) nodetraitnum=0;
 					else
-						nodetraitnum=((inode->nodetrait)->traitId)-((*(traits.begin()))->traitId);
+						nodetraitnum=((inode->nodeTrait)->traitId)-((*(traits.begin()))->traitId);
 
 					new_inode=new NNode(inode,newtraits[nodetraitnum]);
 
@@ -2823,15 +2823,15 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 				//Checking for onode's existence
 				curnode=newnodes.begin();
 				while((curnode!=newnodes.end())&&
-					((*curnode)->node_id!=onode->node_id)) 
+					((*curnode)->nodeId!=onode->nodeId))
 					++curnode;
 				if (curnode==newnodes.end()) {
 					//Here we know the node doesn't exist so we have to add it
 					//normalized trait number for new NNode
 
-					if (!(onode->nodetrait)) nodetraitnum=0;
+					if (!(onode->nodeTrait)) nodetraitnum=0;
 					else
-						nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+						nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 					new_onode=new NNode(onode,newtraits[nodetraitnum]);
 					node_insert(newnodes,new_onode);
@@ -2846,14 +2846,14 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 				//Checking for onode's existence
 				curnode=newnodes.begin();
 				while((curnode!=newnodes.end())&&
-					((*curnode)->node_id!=onode->node_id)) 
+					((*curnode)->nodeId!=onode->nodeId))
 					++curnode;
 				if (curnode==newnodes.end()) {
 					//Here we know the node doesn't exist so we have to add it
 					//normalized trait number for new NNode
-					if (!(onode->nodetrait)) nodetraitnum=0;
+					if (!(onode->nodeTrait)) nodetraitnum=0;
 					else
-						nodetraitnum=((onode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+						nodetraitnum=((onode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 					new_onode=new NNode(onode,newtraits[nodetraitnum]);
 					node_insert(newnodes,new_onode);
@@ -2866,14 +2866,14 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 				curnode=newnodes.begin();
 
 				while((curnode!=newnodes.end())&&
-					((*curnode)->node_id!=inode->node_id)) 
+					((*curnode)->nodeId!=inode->nodeId))
 					++curnode;
 				if (curnode==newnodes.end()) {
 					//Here we know the node doesn't exist so we have to add it
 					//normalized trait number for new NNode
-					if (!(inode->nodetrait)) nodetraitnum=0;
+					if (!(inode->nodeTrait)) nodetraitnum=0;
 					else
-						nodetraitnum=((inode->nodetrait)->traitId)-(*(traits.begin()))->traitId;
+						nodetraitnum=((inode->nodeTrait)->traitId)-(*(traits.begin()))->traitId;
 
 					new_inode=new NNode(inode,newtraits[nodetraitnum]);
 					//newnodes.push_back(new_inode);
@@ -3038,12 +3038,12 @@ void Genome::randomize_traits() {
 	//Go through all nodes and randomize their trait pointers
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
 		traitnum=randint(1,numtraits); //randomize trait
-		(*curnode)->trait_id=traitnum;
+		(*curnode)->traitId=traitnum;
 
 		curtrait=traits.begin();
 		while(((*curtrait)->traitId)!=traitnum)
 			++curtrait;
-		(*curnode)->nodetrait=(*curtrait);
+		(*curnode)->nodeTrait=(*curtrait);
 
 		//if ((*curtrait)==0) cout<<"ERROR: Random trait empty"<<std::endl;
 

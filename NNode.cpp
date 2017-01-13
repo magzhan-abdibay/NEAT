@@ -1,95 +1,95 @@
-#include "nnode.h"
+#include "NNode.h"
 #include <iostream>
 #include <sstream>
 
 using namespace NEAT;
 
-NNode::NNode(nodetype ntype, int nodeid) {
-    active_flag = false;
-    activesum = 0;
+NNode::NNode(nodeType nType, int nodeid) {
+    activeFlag = false;
+    activeSum = 0;
     activation = 0;
     output = 0;
     last_activation = 0;
     last_activation2 = 0;
-    type = ntype; //NEURON or SENSOR type
+    type = nType; //NEURON or SENSOR type
     activation_count = 0; //Inactive upon creation
-    node_id = nodeid;
-    ftype = SIGMOID;
-    nodetrait = 0;
+    nodeId = nodeid;
+    fType = SIGMOID;
+    nodeTrait = 0;
     gen_node_label = HIDDEN;
     dup = 0;
     analogue = 0;
     frozen = false;
-    trait_id = 1;
+    traitId = 1;
     override = false;
 }
 
-NNode::NNode(nodetype ntype, int nodeid, nodeplace placement) {
-    active_flag = false;
-    activesum = 0;
+NNode::NNode(nodeType nType, int nodeid, nodePlace placement) {
+    activeFlag = false;
+    activeSum = 0;
     activation = 0;
     output = 0;
     last_activation = 0;
     last_activation2 = 0;
-    type = ntype; //NEURON or SENSOR type
+    type = nType; //NEURON or SENSOR type
     activation_count = 0; //Inactive upon creation
-    node_id = nodeid;
-    ftype = SIGMOID;
-    nodetrait = 0;
+    nodeId = nodeid;
+    fType = SIGMOID;
+    nodeTrait = 0;
     gen_node_label = placement;
     dup = 0;
     analogue = 0;
     frozen = false;
-    trait_id = 1;
+    traitId = 1;
     override = false;
 }
 
 NNode::NNode(NNode *n, Trait *t) {
-    active_flag = false;
+    activeFlag = false;
     activation = 0;
     output = 0;
     last_activation = 0;
     last_activation2 = 0;
     type = n->type; //NEURON or SENSOR type
     activation_count = 0; //Inactive upon creation
-    node_id = n->node_id;
-    ftype = SIGMOID;
-    nodetrait = 0;
+    nodeId = n->nodeId;
+    fType = SIGMOID;
+    nodeTrait = 0;
     gen_node_label = n->gen_node_label;
     dup = 0;
     analogue = 0;
-    nodetrait = t;
+    nodeTrait = t;
     frozen = false;
     if (t != 0)
-        trait_id = t->traitId;
-    else trait_id = 1;
+        traitId = t->traitId;
+    else traitId = 1;
     override = false;
 }
 
-NNode::NNode(const char *argline, std::vector<Trait *> &traits) {
+NNode::NNode(const char *argLine, std::vector<Trait *> &traits) {
     int traitnum;
     std::vector<Trait *>::iterator curtrait;
 
-    activesum = 0;
+    activeSum = 0;
 
-    std::stringstream ss(argline);
+    std::stringstream ss(argLine);
     int nodety, nodepl;
-    ss >> node_id >> traitnum >> nodety >> nodepl;
-    type = (nodetype) nodety;
-    gen_node_label = (nodeplace) nodepl;
+    ss >> nodeId >> traitnum >> nodety >> nodepl;
+    type = (nodeType) nodety;
+    gen_node_label = (nodePlace) nodepl;
 
     // Get the Sensor Identifier and Parameter String
     // mySensor = SensorRegistry::getSensor(id, param);
     frozen = false;  //TODO: Maybe change
 
     //Get a pointer to the trait this node points to
-    if (traitnum == 0) nodetrait = 0;
+    if (traitnum == 0) nodeTrait = 0;
     else {
         curtrait = traits.begin();
         while (((*curtrait)->traitId) != traitnum)
             ++curtrait;
-        nodetrait = (*curtrait);
-        trait_id = nodetrait->traitId;
+        nodeTrait = (*curtrait);
+        traitId = nodeTrait->traitId;
     }
 
     override = false;
@@ -97,22 +97,22 @@ NNode::NNode(const char *argline, std::vector<Trait *> &traits) {
 
 // This one might be incomplete
 NNode::NNode(const NNode &nnode) {
-    active_flag = nnode.active_flag;
-    activesum = nnode.activesum;
+    activeFlag = nnode.activeFlag;
+    activeSum = nnode.activeSum;
     activation = nnode.activation;
     output = nnode.output;
     last_activation = nnode.last_activation;
     last_activation2 = nnode.last_activation2;
     type = nnode.type; //NEURON or SENSOR type
     activation_count = nnode.activation_count; //Inactive upon creation
-    node_id = nnode.node_id;
-    ftype = nnode.ftype;
-    nodetrait = nnode.nodetrait;
+    nodeId = nnode.nodeId;
+    fType = nnode.fType;
+    nodeTrait = nnode.nodeTrait;
     gen_node_label = nnode.gen_node_label;
     dup = nnode.dup;
     analogue = nnode.dup;
     frozen = nnode.frozen;
-    trait_id = nnode.trait_id;
+    traitId = nnode.traitId;
     override = nnode.override;
 }
 
@@ -126,12 +126,12 @@ NNode::~NNode() {
 }
 
 //Returns the type of the node, NEURON or SENSOR
-const nodetype NNode::get_type() {
+const nodeType NNode::getType() {
     return type;
 }
 
 //If the node is a SENSOR, returns true and loads the value
-bool NNode::sensor_load(double value) {
+bool NNode::sensorLoad(double value) {
     if (type == SENSOR) {
 
         //Time delay memory
@@ -152,7 +152,7 @@ bool NNode::sensor_load(double value) {
 //    that may become recurrent
 
 // Return activation currently in node, if it has been activated
-double NNode::get_active_out() {
+double NNode::getActiveOut() {
     if (activation_count > 0)
         return activation;
     else return 0.0;
@@ -160,14 +160,14 @@ double NNode::get_active_out() {
 
 // Return activation currently in node from PREVIOUS (time-delayed) time step,
 // if there is one
-double NNode::get_active_out_td() {
+double NNode::getActiveOutTd() {
     if (activation_count > 1)
         return last_activation;
     else return 0.0;
 }
 
 // This recursively flushes everything leading into and including this NNode, including recurrencies
-void NNode::flushback() {
+void NNode::flushBack() {
     std::vector<Link *>::iterator curlink;
 
     //A sensor should not flush black
@@ -185,7 +185,7 @@ void NNode::flushback() {
             //Flush the link itself (For future learning parameters possibility)
             (*curlink)->added_weight = 0;
             if ((((*curlink)->inNode)->activation_count > 0))
-                ((*curlink)->inNode)->flushback();
+                ((*curlink)->inNode)->flushBack();
         }
     } else {
         //Flush the SENSOR
@@ -201,7 +201,7 @@ void NNode::flushback() {
 // This recursively checks everything leading into and including this NNode, 
 // including recurrencies
 // Useful for debugging
-void NNode::flushback_check(std::vector<NNode *> &seenlist) {
+void NNode::flushBackCheck(std::vector<NNode *> &seenList) {
     std::vector<Link *>::iterator curlink;
     //int pause;
     std::vector<Link *> innodes = incoming;
@@ -232,10 +232,10 @@ void NNode::flushback_check(std::vector<NNode *> &seenlist) {
         }
 
         for (curlink = innodes.begin(); curlink != innodes.end(); ++curlink) {
-            location = std::find(seenlist.begin(), seenlist.end(), ((*curlink)->inNode));
-            if (location == seenlist.end()) {
-                seenlist.push_back((*curlink)->inNode);
-                ((*curlink)->inNode)->flushback_check(seenlist);
+            location = std::find(seenList.begin(), seenList.end(), ((*curlink)->inNode));
+            if (location == seenList.end()) {
+                seenList.push_back((*curlink)->inNode);
+                ((*curlink)->inNode)->flushBackCheck(seenList);
             }
         }
 
@@ -268,25 +268,25 @@ void NNode::flushback_check(std::vector<NNode *> &seenlist) {
 }
 
 // Reserved for future system expansion
-void NNode::derive_trait(Trait *curtrait) {
+void NNode::deriveTrait(Trait *curTrait) {
 
-    if (curtrait != 0) {
+    if (curTrait != 0) {
         for (int count = 0; count < NEAT::num_trait_params; count++)
-            params[count] = (curtrait->params)[count];
+            params[count] = (curTrait->params)[count];
     } else {
         for (int count = 0; count < NEAT::num_trait_params; count++)
             params[count] = 0;
     }
 
-    if (curtrait != 0)
-        trait_id = curtrait->traitId;
-    else trait_id = 1;
+    if (curTrait != 0)
+        traitId = curTrait->traitId;
+    else traitId = 1;
 
 }
 
 // Force an output value on the node
-void NNode::override_output(double new_output) {
-    override_value = new_output;
+void NNode::overrideOutput(double newOutput) {
+    override_value = newOutput;
     override = true;
 }
 
@@ -296,29 +296,29 @@ bool NNode::overridden() {
 }
 
 // Set activation to the override value and turn off override
-void NNode::activate_override() {
+void NNode::activateOverride() {
     activation = override_value;
     override = false;
 }
 
 
-void NNode::print_to_file(std::ofstream &outFile) {
-    outFile << "node " << node_id << " ";
-    if (nodetrait != 0) outFile << nodetrait->traitId << " ";
+void NNode::printToFile(std::ofstream &outFile) {
+    outFile << "node " << nodeId << " ";
+    if (nodeTrait != 0) outFile << nodeTrait->traitId << " ";
     else outFile << "0 ";
     outFile << type << " ";
     outFile << gen_node_label << std::endl;
 }
 
 
-void NNode::print_to_file(std::ostream &outFile) {
+void NNode::printToFile(std::ostream &outFile) {
     char tempbuf[128];
-    sprintf(tempbuf, "node %d ", node_id);
+    sprintf(tempbuf, "node %d ", nodeId);
     outFile << tempbuf;
 
-    if (nodetrait != 0) {
+    if (nodeTrait != 0) {
         char tempbuf2[128];
-        sprintf(tempbuf2, "%d ", nodetrait->traitId);
+        sprintf(tempbuf2, "%d ", nodeTrait->traitId);
         outFile << tempbuf2;
     } else outFile << "0 ";
 

@@ -3,7 +3,7 @@
 
 #include "neat.h"
 #include "Trait.h"
-#include "nnode.h"
+#include "NNode.h"
 
 namespace NEAT {
 

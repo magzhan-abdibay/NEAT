@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include "neat.h"
-#include "nnode.h"
+#include "NNode.h"
 
 namespace NEAT {
 

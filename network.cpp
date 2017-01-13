@@ -128,23 +128,23 @@ bool Network::activate() {
             //cout<<"On node "<<(*curnode)->node_id<<endl;
 
             if (((*curnode)->type) != SENSOR) {
-                (*curnode)->activesum = 0;
-                (*curnode)->active_flag = false;  //This will tell us if it has any active inputs
+                (*curnode)->activeSum = 0;
+                (*curnode)->activeFlag = false;  //This will tell us if it has any active inputs
 
                 // For each incoming connection, add the activity from the connection to the activesum
                 for (curlink = ((*curnode)->incoming).begin(); curlink != ((*curnode)->incoming).end(); ++curlink) {
                     //Handle possible time delays
                     if (!((*curlink)->timeDelay)) {
-                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->get_active_out());
-                        if ((((*curlink)->inNode)->active_flag) ||
+                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->getActiveOut());
+                        if ((((*curlink)->inNode)->activeFlag) ||
                             (((*curlink)->inNode)->type == SENSOR))
-                            (*curnode)->active_flag = true;
-                        (*curnode)->activesum += add_amount;
+                            (*curnode)->activeFlag = true;
+                        (*curnode)->activeSum += add_amount;
                         //std::cout<<"Node "<<(*curnode)->node_id<<" adding "<<add_amount<<" from node "<<((*curlink)->in_node)->node_id<<std::endl;
                     } else {
                         //Input over a time delayed connection
-                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->get_active_out_td());
-                        (*curnode)->activesum += add_amount;
+                        add_amount = ((*curlink)->weight) * (((*curlink)->inNode)->getActiveOutTd());
+                        (*curnode)->activeSum += add_amount;
                     }
 
                 } //End for over incoming links
@@ -158,7 +158,7 @@ bool Network::activate() {
 
             if (((*curnode)->type) != SENSOR) {
                 //Only activate if some active input came in
-                if ((*curnode)->active_flag) {
+                if ((*curnode)->activeFlag) {
                     //cout<<"Activating "<<(*curnode)->node_id<<" with "<<(*curnode)->activesum<<": ";
 
                     //Keep a memory of activations for potential time delayed connections
@@ -169,11 +169,11 @@ bool Network::activate() {
                     //stick in the override value
                     if ((*curnode)->overridden()) {
                         //Set activation to the override value and turn off override
-                        (*curnode)->activate_override();
+                        (*curnode)->activateOverride();
                     } else {
                         //Now run the net activation through an activation function
-                        if ((*curnode)->ftype == SIGMOID)
-                            (*curnode)->activation = NEAT::fsigmoid((*curnode)->activesum, 4.924273,
+                        if ((*curnode)->fType == SIGMOID)
+                            (*curnode)->activation = NEAT::fsigmoid((*curnode)->activeSum, 4.924273,
                                                                     2.4621365);  //Sigmoidal activation- see comments under fsigmoid
                     }
                     //cout<<(*curnode)->activation<<endl;
@@ -212,7 +212,7 @@ bool Network::activate() {
                             (*curlink)->weight =
                                     hebbian((*curlink)->weight, maxweight,
                                             (*curlink)->inNode->last_activation,
-                                            (*curlink)->outNode->get_active_out(),
+                                            (*curlink)->outNode->getActiveOut(),
                                             (*curlink)->params[0], (*curlink)->params[1],
                                             (*curlink)->params[2]);
 
@@ -220,8 +220,8 @@ bool Network::activate() {
                         } else { //non-recurrent case
                             (*curlink)->weight =
                                     hebbian((*curlink)->weight, maxweight,
-                                            (*curlink)->inNode->get_active_out(),
-                                            (*curlink)->outNode->get_active_out(),
+                                            (*curlink)->inNode->getActiveOut(),
+                                            (*curlink)->outNode->getActiveOut(),
                                             (*curlink)->params[0], (*curlink)->params[1],
                                             (*curlink)->params[2]);
                         }
@@ -274,7 +274,7 @@ void Network::load_sensors(double *sensvals) {
     for (sensPtr = inputs.begin(); sensPtr != inputs.end(); ++sensPtr) {
         //only load values into SENSORS (not BIASes)
         if (((*sensPtr)->type) == SENSOR) {
-            (*sensPtr)->sensor_load(*sensvals);
+            (*sensPtr)->sensorLoad(*sensvals);
             sensvals++;
         }
     }

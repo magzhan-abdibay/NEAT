@@ -65,13 +65,13 @@ Gene::Gene(const char *argLine, std::vector<Trait *> &traits, std::vector<NNode 
 
     //Get a pointer to the input node
     curNode = nodes.begin();
-    while (((*curNode)->node_id) != inNodeNum)
+    while (((*curNode)->nodeId) != inNodeNum)
         ++curNode;
     inNode = (*curNode);
 
     //Get a pointer to the output node
     curNode = nodes.begin();
-    while (((*curNode)->node_id) != outNodeNum)
+    while (((*curNode)->nodeId) != outNodeNum)
         ++curNode;
     outNode = (*curNode);
 
@@ -96,8 +96,8 @@ void Gene::printToFile(std::ofstream &outFile) {
     //Start off with the trait number for this gene
     if ((this->link->linkTrait) == 0) outFile << "0 ";
     else outFile << ((this->link->linkTrait)->traitId) << " ";
-    outFile << (this->link->inNode)->node_id << " ";
-    outFile << (this->link->outNode)->node_id << " ";
+    outFile << (this->link->inNode)->nodeId << " ";
+    outFile << (this->link->outNode)->nodeId << " ";
     outFile << (this->link->weight) << " ";
     outFile << (this->link->isRecurrent) << " ";
     outFile << this->innovationNum << " ";
@@ -117,8 +117,8 @@ void Gene::printToFile(std::ostream &outFile) {
     } else {
         outFile << ((link->linkTrait)->traitId) << " ";
     }
-    outFile << (link->inNode)->node_id << " ";
-    outFile << (link->outNode)->node_id << " ";
+    outFile << (link->inNode)->nodeId << " ";
+    outFile << (link->outNode)->nodeId << " ";
     outFile << (link->weight) << " ";
     outFile << (link->isRecurrent) << " ";
     outFile << innovationNum << " ";
