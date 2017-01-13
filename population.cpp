@@ -243,7 +243,7 @@ bool Population::speciate() {
             //Create the first species
             newspecies = new Species(++counter);
             species.push_back(newspecies);
-            newspecies->add_Organism(*curorg);  //Add the current organism
+            newspecies->addOrganism(*curorg);  //Add the current organism
             (*curorg)->species = newspecies;  //Point organism to its species
         } else {
             comporg = (*curspecies)->first();
@@ -253,7 +253,7 @@ bool Population::speciate() {
                 if ((((*curorg)->gnome)->compatibility(comporg->gnome)) < NEAT::compat_threshold) {
 
                     //Found compatible species, so add this organism to it
-                    (*curspecies)->add_Organism(*curorg);
+                    (*curspecies)->addOrganism(*curorg);
                     (*curorg)->species = (*curspecies);  //Point organism to its species
                     comporg = 0;  //Note the search is over
                 } else {
@@ -269,7 +269,7 @@ bool Population::speciate() {
             if (comporg != 0) {
                 newspecies = new Species(++counter);
                 species.push_back(newspecies);
-                newspecies->add_Organism(*curorg);  //Add the current organism
+                newspecies->addOrganism(*curorg);  //Add the current organism
                 (*curorg)->species = newspecies;  //Point organism to its species
             }
 
@@ -297,7 +297,7 @@ bool Population::print_to_file_by_species(char *filename) {
 
     //Step through the Species and print them to the file
     for (curspecies = species.begin(); curspecies != species.end(); ++curspecies) {
-        (*curspecies)->print_to_file(outFile);
+        (*curspecies)->printToFile(outFile);
     }
 
     outFile.close();
@@ -322,7 +322,7 @@ void Population::estimate_all_averages() {
     std::vector<Species *>::iterator curspecies;
 
     for (curspecies = species.begin(); curspecies != species.end(); ++curspecies) {
-        (*curspecies)->estimate_average();
+        (*curspecies)->estimateAverage();
     }
 
 }
@@ -345,17 +345,17 @@ Species *Population::choose_parent_species() {
     //Sum all the average fitness estimates of the different species
     //for the purposes of the roulette
     for (curspecies = species.begin(); curspecies != species.end(); ++curspecies) {
-        total_fitness += (*curspecies)->average_est;
+        total_fitness += (*curspecies)->avgEst;
     }
 
     marble = randfloat() * total_fitness;
     curspecies = species.begin();
-    spin = (*curspecies)->average_est;
+    spin = (*curspecies)->avgEst;
     while (spin < marble) {
         ++curspecies;
 
         //Keep the wheel spinning
-        spin += (*curspecies)->average_est;
+        spin += (*curspecies)->avgEst;
     }
     //Finished roulette
 
@@ -406,7 +406,7 @@ Organism *Population::remove_worst() {
     if (org_to_kill) {
 
         //Remove the organism from its species and the population
-        orgs_species->remove_org(org_to_kill);  //Remove from species
+        orgs_species->removeOrg(org_to_kill);  //Remove from species
         delete org_to_kill;  //Delete the organism itself
         organisms.erase(deadorg); //Remove from population list
 
@@ -418,7 +418,7 @@ Organism *Population::remove_worst() {
         }
             //If not, re-estimate the species average after removing the organism
         else {
-            orgs_species->estimate_average();
+            orgs_species->estimateAverage();
         }
     }
 
@@ -483,10 +483,10 @@ void Population::reassign_species(Organism *org) {
 void Population::switch_species(Organism *org, Species *orig_species, Species *new_species) {
 
     //Remove organism from the species we want to remove it from
-    orig_species->remove_org(org);
+    orig_species->removeOrg(org);
 
     //Add the organism to the new species it is being moved to
-    new_species->add_Organism(org);
+    new_species->addOrganism(org);
     org->species = new_species;
 
     //KEN: Delete orig_species if empty, and remove it from pop
@@ -496,12 +496,12 @@ void Population::switch_species(Organism *org, Species *orig_species, Species *n
         delete orig_species;
 
         //Re-estimate the average of the species that now has a new member
-        new_species->estimate_average();
+        new_species->estimateAverage();
     }
         //If not, re-estimate the species average after removing the organism
         // AND the new species with the new member
     else {
-        orig_species->estimate_average();
-        new_species->estimate_average();
+        orig_species->estimateAverage();
+        new_species->estimateAverage();
     }
 }

@@ -14,7 +14,7 @@
 #include "population.h"
 #include "organism.h"
 #include "Genome.h"
-#include "species.h"
+#include "Species.h"
 #include "CartPole.h"
 
 using namespace std;

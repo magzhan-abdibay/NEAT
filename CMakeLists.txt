@@ -14,7 +14,7 @@ SET(rtneat_sources
         NNode.cpp
   organism.cpp
   population.cpp
-  species.cpp
+        Species.cpp
         Trait.cpp
   CartPole.cpp)
 #FILE(GLOB rtneat_sources *.cpp)

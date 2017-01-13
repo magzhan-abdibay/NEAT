@@ -125,7 +125,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         //For printing only
         for (curSpec = (pop->species).begin(); curSpec != (pop->species).end(); curSpec++) {
             cout << "Species " << (*curSpec)->id << " size" << (*curSpec)->organisms.size() << " average= "
-                 << (*curSpec)->average_est << endl;
+                 << (*curSpec)->avgEst << endl;
         }
 
         cout << "Pop size: " << pop->organisms.size() << endl;
@@ -133,7 +133,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         //Here we call two rtNEAT calls:
         //1) choose_parent_species() decides which species should produce the next offspring
         //2) reproduce_one(...) creates a single offspring fromt the chosen species
-        new_org = (pop->choose_parent_species())->reproduce_one(offspring_count, pop, pop->species);
+        new_org = (pop->choose_parent_species())->reproduceOne(offspring_count, pop, pop->species);
 
         //Now we evaluate the new individual
         //Note that in a true real-time simulation, evaluation would be happening to all individuals at all times.
@@ -148,7 +148,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         }
 
         //Now we reestimate the baby's species' fitness
-        new_org->species->estimate_average();
+        new_org->species->estimateAverage();
 
         //Remove the worst organism
         pop->remove_worst();

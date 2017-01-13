@@ -1,33 +1,33 @@
-#include "species.h"
+#include "Species.h"
 #include <iostream>
 using namespace NEAT;
 
 Species::Species(int i) {
 	id=i;
 	age=1;
-	ave_fitness=0.0;
-	expected_offspring=0;
+	avgFitness=0.0;
+	expectedOffspring=0;
 	novel=false;
-	age_of_last_improvement=0;
-	max_fitness=0;
-	max_fitness_ever=0;
+	ageOfLastImprovement=0;
+	maxFitness=0;
+	maxFitnessEver=0;
 	obliterate=false;
 
-	average_est=0;
+	avgEst=0;
 }
 
 Species::Species(int i,bool n) {
 	id=i;
 	age=1;
-	ave_fitness=0.0;
-	expected_offspring=0;
+	avgFitness=0.0;
+	expectedOffspring=0;
 	novel=n;
-	age_of_last_improvement=0;
-	max_fitness=0;
-	max_fitness_ever=0;
+	ageOfLastImprovement=0;
+	maxFitness=0;
+	maxFitnessEver=0;
 	obliterate=false;
 
-	average_est=0;
+	avgEst=0;
 }
 
 
@@ -47,7 +47,7 @@ bool Species::rank() {
 	return true;
 }
 
-double Species::estimate_average() {
+double Species::estimateAverage() {
 	std::vector<Organism*>::iterator curorg;
 	double total = 0.0; //running total of fitnesses
 
@@ -66,16 +66,16 @@ double Species::estimate_average() {
 	}
 
 	if (num_orgs > 0)
-		average_est = total / num_orgs;
+		avgEst = total / num_orgs;
 	else {
-		average_est = 0;
+		avgEst = 0;
 	}
 
-	return average_est;
+	return avgEst;
 } 
 
 	
-	Organism *Species::reproduce_one(int generation, Population *pop,std::vector<Species*> &sorted_species) {
+	Organism *Species::reproduceOne(int generation, Population *pop, std::vector<Species *> &sorted_species) {
 	//bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &sorted_species) {
 	int count=generation; //This will assign genome id's according to the generation
 	std::vector<Organism*>::iterator curorg;
@@ -443,7 +443,7 @@ double Species::estimate_average() {
 		//Create the first species
 		newspecies=new Species(++(pop->last_species),true);
 		(pop->species).push_back(newspecies);
-		newspecies->add_Organism(baby);  //Add the baby
+		newspecies->addOrganism(baby);  //Add the baby
 		baby->species=newspecies;  //Point the baby to its species
 	} 
 	else {
@@ -467,7 +467,7 @@ double Species::estimate_average() {
 			}
 			else if (((baby->gnome)->compatibility(comporg->gnome))<NEAT::compat_threshold) {
 				//Found compatible species, so add this organism to it
-				(*curspecies)->add_Organism(baby);
+				(*curspecies)->addOrganism(baby);
 				baby->species=(*curspecies);  //Point organism to its species
 				found=true;  //Note the search is over
 			}
@@ -483,7 +483,7 @@ double Species::estimate_average() {
 		if (found==false) {
 			newspecies=new Species(++(pop->last_species),true);
 			(pop->species).push_back(newspecies);
-			newspecies->add_Organism(baby);  //Add the baby
+			newspecies->addOrganism(baby);  //Add the baby
 			baby->species=newspecies;  //Point baby to its species
 		}
 
@@ -495,7 +495,7 @@ double Species::estimate_average() {
 	return baby; //Return a pointer to the baby
 }
 
-bool Species::add_Organism(Organism *o){
+bool Species::addOrganism(Organism *o){
 	organisms.push_back(o);
 	return true;
 }
@@ -520,7 +520,7 @@ Organism *Species::get_champ() {
 
 }
 
-bool Species::remove_org(Organism *org) {
+bool Species::removeOrg(Organism *org) {
 	std::vector<Organism*>::iterator curorg;
 
 	curorg=organisms.begin();
@@ -583,14 +583,14 @@ bool Species::print_to_file(std::ostream &outFile) {
 //}*/
 
 //Print Species to a file outFile
-bool Species::print_to_file(std::ofstream &outFile) {
+bool Species::printToFile(std::ofstream &outFile) {
   std::vector<Organism*>::iterator curorg;
 
   //Print a comment on the Species info
-  outFile<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<ave_fitness<<") (Age "<<age<<")  */"<<std::endl<<std::endl;
+  outFile<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<avgFitness<<") (Age "<<age<<")  */"<<std::endl<<std::endl;
 
   //Show user what's going on
-  std::cout<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<ave_fitness<<") (Age "<<age<<")  */"<<std::endl;
+  std::cout<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<avgFitness<<") (Age "<<age<<")  */"<<std::endl;
 
   //Print all the Organisms' Genomes to the outFile
   for(curorg=organisms.begin();curorg!=organisms.end();++curorg) {
@@ -611,13 +611,13 @@ bool Species::print_to_file(std::ofstream &outFile) {
 }
 
 
-bool Species::print_to_file(std::ostream &outFile) {
+bool Species::printToFile(std::ostream &outFile) {
 	std::vector<Organism*>::iterator curorg;
 
 	//Print a comment on the Species info
 	//outFile<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<ave_fitness<<") (Age "<<age<<")  */"<<std::endl<<std::endl;
 	char tempbuf[1024];
-	sprintf(tempbuf,"/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), average_est, age);
+	sprintf(tempbuf,"/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), avgEst, age);
 	//sprintf(tempbuf, "/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), ave_fitness, age);
 	outFile << tempbuf;
 
@@ -692,7 +692,7 @@ bool Species::print_to_file(std::ostream &outFile) {
 //return true;
 //}
 
-double Species::compute_max_fitness() {
+double Species::computeMaxFitness() {
 	double max=0.0;
 	std::vector<Organism*>::iterator curorg;
 
@@ -701,7 +701,7 @@ double Species::compute_max_fitness() {
 			max=(*curorg)->fitness;
 	}
 
-	max_fitness=max;
+	maxFitness=max;
 
 	return max;
 }
@@ -764,7 +764,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 	
 	//Check for a mistake
-	if ((expected_offspring>0)&&
+	if ((expectedOffspring>0)&&
 		(organisms.size()==0)) {
 			//    std::cout<<"ERROR:  ATTEMPT TO REPRODUCE OUT OF EMPTY SPECIES"<<std::endl;
 			return false;
@@ -776,7 +776,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 		//Create the designated number of offspring for the Species
 		//one at a time
-		for (count=0;count<expected_offspring;count++) {
+		for (count=0;count<expectedOffspring;count++) {
 
 			mut_struct_baby=false;
 			mate_baby=false;
@@ -784,7 +784,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 			outside=false;
 
 			//Debug Trap
-			if (expected_offspring>NEAT::pop_size) {
+			if (expectedOffspring>NEAT::pop_size) {
 				//      std::cout<<"ALERT: EXPECTED OFFSPRING = "<<expected_offspring<<std::endl;
 				//      cin>>pause;
 			}
@@ -831,7 +831,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 			}
 			//If we have a Species champion, just clone it 
 			else if ((!champ_done)&&
-				(expected_offspring>5)) {
+				(expectedOffspring>5)) {
 
 					mom=thechamp; //Mom is the champ
 
@@ -1106,7 +1106,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 				//Create the first species
 				newspecies=new Species(++(pop->last_species),true);
 				(pop->species).push_back(newspecies);
-				newspecies->add_Organism(baby);  //Add the baby
+				newspecies->addOrganism(baby);  //Add the baby
 				baby->species=newspecies;  //Point the baby to its species
 			} 
 			else {
@@ -1122,7 +1122,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 						}
 						else if (((baby->gnome)->compatibility(comporg->gnome))<NEAT::compat_threshold) {
 							//Found compatible species, so add this organism to it
-							(*curspecies)->add_Organism(baby);
+							(*curspecies)->addOrganism(baby);
 							baby->species=(*curspecies);  //Point organism to its species
 							found=true;  //Note the search is over
 						}
@@ -1139,7 +1139,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 					  newspecies=new Species(++(pop->last_species),true);
 					  //std::std::cout<<"CREATING NEW SPECIES "<<pop->last_species<<std::std::endl;
 					  (pop->species).push_back(newspecies);
-					  newspecies->add_Organism(baby);  //Add the baby
+						newspecies->addOrganism(baby);  //Add the baby
 					  baby->species=newspecies;  //Point baby to its species
 					}
 
@@ -1153,13 +1153,13 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 		return true;
 }
 
-bool NEAT::order_species(Species *x, Species *y) { 
+bool NEAT::orderSpecies(Species *x, Species *y) {
 	//std::cout<<"Comparing "<<((*((x->organisms).begin()))->orig_fitness)<<" and "<<((*((y->organisms).begin()))->orig_fitness)<<": "<<(((*((x->organisms).begin()))->orig_fitness) > ((*((y->organisms).begin()))->orig_fitness))<<std::endl;
 	return (((*((x->organisms).begin()))->orig_fitness) > ((*((y->organisms).begin()))->orig_fitness));
 }
 
-bool NEAT::order_new_species(Species *x, Species *y) {
-	return (x->compute_max_fitness() > y->compute_max_fitness());
+bool NEAT::orderNewSpecies(Species *x, Species *y) {
+	return (x->computeMaxFitness() > y->computeMaxFitness());
 }
 
 

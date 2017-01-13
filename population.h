@@ -5,7 +5,7 @@
 #include <vector>
 #include "Innovation.h"
 #include "Genome.h"
-#include "species.h"
+#include "Species.h"
 #include "organism.h"
 
 namespace NEAT {
