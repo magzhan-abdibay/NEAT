@@ -2,7 +2,7 @@
 #define _GENOME_H_
 
 #include <vector>
-#include "gene.h"
+#include "Gene.h"
 #include "innovation.h"
 
 namespace NEAT {
