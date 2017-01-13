@@ -85,11 +85,11 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
     //Get ready for real-time loop
 
     //Rank all the organisms from best to worst in each species
-    pop->rank_within_species();
+    pop->rankWithinSpecies();
 
     //Assign each species an average fitness
     //This average must be kept up-to-date by rtNEAT in order to select species probabailistically for reproduction
-    pop->estimate_all_averages();
+    pop->estimateAllAverages();
 
 
     //Now create offspring one at a time, testing each offspring,
@@ -117,7 +117,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
 
             //Go through entire population, reassigning organisms to new species
             for (curOrg = (pop->organisms).begin(); curOrg != pop->organisms.end(); ++curOrg) {
-                pop->reassign_species(*curOrg);
+                pop->reassignSpecies(*curOrg);
             }
         }
 
@@ -133,7 +133,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         //Here we call two rtNEAT calls:
         //1) choose_parent_species() decides which species should produce the next offspring
         //2) reproduce_one(...) creates a single offspring fromt the chosen species
-        new_org = (pop->choose_parent_species())->reproduceOne(offspring_count, pop, pop->species);
+        new_org = (pop->chooseParentSpecies())->reproduceOne(offspring_count, pop, pop->species);
 
         //Now we evaluate the new individual
         //Note that in a true real-time simulation, evaluation would be happening to all individuals at all times.
@@ -143,7 +143,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
 
         if (win) {
             cout << "WINNER" << endl;
-            pop->print_to_file_by_species((char *) "rt_winpop");
+            pop->printToFileBySpecies((char *) "rt_winpop");
             break;
         }
 
@@ -151,7 +151,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         new_org->species->estimateAverage();
 
         //Remove the worst organism
-        pop->remove_worst();
+        pop->removeWorst();
 
     }
     return 0;

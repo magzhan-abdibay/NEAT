@@ -1,4 +1,4 @@
-#include "population.h"
+#include "Population.h"
 #include <iostream>
 #include <sstream>
 
@@ -36,8 +36,8 @@ Population::Population(std::vector<Genome *> genomeList, float power) {
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->getLastNodeId();
-    cur_innov_num = new_genome->getLastGeneInnovationNum();
+    curNodeId = new_genome->getLastNodeId();
+    curInnovNum = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();
@@ -50,8 +50,8 @@ Population::Population(const char *filename) {
 
     Genome *new_genome;
 
-    cur_node_id = 0;
-    cur_innov_num = 0.0;
+    curNodeId = 0;
+    curInnovNum = 0.0;
 
     std::ifstream iFile(filename);
     if (!iFile) {
@@ -84,11 +84,11 @@ Population::Population(const char *filename) {
 
                 new_genome = new Genome(idcheck, iFile);
                 organisms.push_back(new Organism(0, new_genome, 1, metadata));
-                if (cur_node_id < (new_genome->getLastNodeId()))
-                    cur_node_id = new_genome->getLastNodeId();
+                if (curNodeId < (new_genome->getLastNodeId()))
+                    curNodeId = new_genome->getLastNodeId();
 
-                if (cur_innov_num < (new_genome->getLastGeneInnovationNum()))
-                    cur_innov_num = new_genome->getLastGeneInnovationNum();
+                if (curInnovNum < (new_genome->getLastGeneInnovationNum()))
+                    curInnovNum = new_genome->getLastGeneInnovationNum();
             } else if (strcmp(curword, "/*") == 0) {
                 // New metadata possibly, so clear out the metadata
                 strcpy(metadata, "");
@@ -189,8 +189,8 @@ bool Population::clone(Genome *g, int size, float power) {
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->getLastNodeId();
-    cur_innov_num = new_genome->getLastGeneInnovationNum();
+    curNodeId = new_genome->getLastNodeId();
+    curInnovNum = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();
@@ -217,8 +217,8 @@ bool Population::spawn(Genome *g, int size) {
     }
 
     //Keep a record of the innovation and node number we are on
-    cur_node_id = new_genome->getLastNodeId();
-    cur_innov_num = new_genome->getLastGeneInnovationNum();
+    curNodeId = new_genome->getLastNodeId();
+    curInnovNum = new_genome->getLastGeneInnovationNum();
 
     //Separate the new Population into species
     speciate();
@@ -277,12 +277,12 @@ bool Population::speciate() {
 
     } //end for
 
-    last_species = counter;  //Keep track of highest species
+    lastSpecies = counter;  //Keep track of highest species
 
     return true;
 }
 
-bool Population::print_to_file_by_species(char *filename) {
+bool Population::printToFileBySpecies(char *filename) {
 
     std::vector<Species *>::iterator curspecies;
 
@@ -307,7 +307,7 @@ bool Population::print_to_file_by_species(char *filename) {
 }
 
 
-bool Population::rank_within_species() {
+bool Population::rankWithinSpecies() {
     std::vector<Species *>::iterator curspecies;
 
     //Add each Species in this generation to the snapshot
@@ -318,7 +318,7 @@ bool Population::rank_within_species() {
     return true;
 }
 
-void Population::estimate_all_averages() {
+void Population::estimateAllAverages() {
     std::vector<Species *>::iterator curspecies;
 
     for (curspecies = species.begin(); curspecies != species.end(); ++curspecies) {
@@ -327,7 +327,7 @@ void Population::estimate_all_averages() {
 
 }
 
-Species *Population::choose_parent_species() {
+Species *Population::chooseParentSpecies() {
 
     double total_fitness = 0;
     std::vector<Species *>::iterator curspecies;
@@ -363,7 +363,7 @@ Species *Population::choose_parent_species() {
     return (*curspecies);
 }
 
-bool Population::remove_species(Species *spec) {
+bool Population::removeSpecies(Species *spec) {
     std::vector<Species *>::iterator curspec;
 
     curspec = species.begin();
@@ -380,7 +380,7 @@ bool Population::remove_species(Species *spec) {
     }
 }
 
-Organism *Population::remove_worst() {
+Organism *Population::removeWorst() {
 
     double adjusted_fitness;
     double min_fitness = 999999;
@@ -413,7 +413,7 @@ Organism *Population::remove_worst() {
         //Did the species become empty?
         if ((orgs_species->organisms.size()) == 0) {
 
-            remove_species(orgs_species);
+            removeSpecies(orgs_species);
             delete orgs_species;
         }
             //If not, re-estimate the species average after removing the organism
@@ -429,7 +429,7 @@ Organism *Population::remove_worst() {
 //This method takes an Organism and reassigns what Species it belongs to
 //It is meant to be used so that we can reasses where Organisms should belong
 //as the speciation threshold changes.
-void Population::reassign_species(Organism *org) {
+void Population::reassignSpecies(Organism *org) {
 
     Organism *comporg;
     bool found = false;  //Note we don't really need this flag but it
@@ -454,7 +454,7 @@ void Population::reassign_species(Organism *org) {
             }
                 //Found compatible species
             else {
-                switch_species(org, org->species, (*curspecies));
+                switchSpecies(org, org->species, (*curspecies));
                 found = true;  //Note the search is over
             }
         } else {
@@ -471,37 +471,37 @@ void Population::reassign_species(Organism *org) {
     if (!found) {
 
         //Create a new species for the org
-        newspecies = new Species(++(last_species), true);
+        newspecies = new Species(++(lastSpecies), true);
         (species).push_back(newspecies);
 
-        switch_species(org, org->species, newspecies);
+        switchSpecies(org, org->species, newspecies);
     }
 
 }
 
 //Move an Organism from one Species to another
-void Population::switch_species(Organism *org, Species *orig_species, Species *new_species) {
+void Population::switchSpecies(Organism *org, Species *origSpecies, Species *newSpecies) {
 
     //Remove organism from the species we want to remove it from
-    orig_species->removeOrg(org);
+    origSpecies->removeOrg(org);
 
     //Add the organism to the new species it is being moved to
-    new_species->addOrganism(org);
-    org->species = new_species;
+    newSpecies->addOrganism(org);
+    org->species = newSpecies;
 
     //KEN: Delete orig_species if empty, and remove it from pop
-    if ((orig_species->organisms.size()) == 0) {
+    if ((origSpecies->organisms.size()) == 0) {
 
-        remove_species(orig_species);
-        delete orig_species;
+        removeSpecies(origSpecies);
+        delete origSpecies;
 
         //Re-estimate the average of the species that now has a new member
-        new_species->estimateAverage();
+        newSpecies->estimateAverage();
     }
         //If not, re-estimate the species average after removing the organism
         // AND the new species with the new member
     else {
-        orig_species->estimateAverage();
-        new_species->estimateAverage();
+        origSpecies->estimateAverage();
+        newSpecies->estimateAverage();
     }
 }

@@ -3,7 +3,7 @@
 
 #include "neat.h"
 #include "Organism.h"
-#include "population.h"
+#include "Population.h"
 
 namespace NEAT {
 

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "neat.h"
-#include "population.h"
+#include "Population.h"
 #include "experiments.h"
 
 using namespace std;

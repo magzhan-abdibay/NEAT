@@ -217,13 +217,13 @@ double Species::estimateAverage() {
 
 			if (randfloat()<NEAT::mutate_add_node_prob) {
 				//cout<<"mutate add node"<<endl;
-				new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
+				new_genome->mutateAddNode(pop->innovations, pop->curNodeId, pop->curInnovNum);
 				mut_struct_baby=true;
 			}
 			else if (randfloat()<NEAT::mutate_add_link_prob) {
 				//cout<<"mutate add link"<<endl;
 				net_analogue=new_genome->genesis(generation);
-				new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
+				new_genome->mutateAddLink(pop->innovations, pop->curInnovNum, NEAT::newlink_tries);
 				delete net_analogue;
 				mut_struct_baby=true;
 			}
@@ -381,13 +381,13 @@ double Species::estimateAverage() {
 			//Do the mutation depending on probabilities of 
 			//various mutations
 			if (randfloat()<NEAT::mutate_add_node_prob) {
-				new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
+				new_genome->mutateAddNode(pop->innovations, pop->curNodeId, pop->curInnovNum);
 				//  cout<<"mutate_add_node: "<<new_genome<<endl;
 				mut_struct_baby=true;
 			}
 			else if (randfloat()<NEAT::mutate_add_link_prob) {
 				net_analogue=new_genome->genesis(generation);
-				new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
+				new_genome->mutateAddLink(pop->innovations, pop->curInnovNum, NEAT::newlink_tries);
 				delete net_analogue;
 				//cout<<"mutate_add_link: "<<new_genome<<endl;
 				mut_struct_baby=true;
@@ -441,7 +441,7 @@ double Species::estimateAverage() {
 	curspecies=(pop->species).begin();
 	if (curspecies==(pop->species).end()){
 		//Create the first species
-		newspecies=new Species(++(pop->last_species),true);
+		newspecies=new Species(++(pop->lastSpecies),true);
 		(pop->species).push_back(newspecies);
 		newspecies->addOrganism(baby);  //Add the baby
 		baby->species=newspecies;  //Point the baby to its species
@@ -481,7 +481,7 @@ double Species::estimateAverage() {
 
 		//If we didn't find a match, create a new species
 		if (found==false) {
-			newspecies=new Species(++(pop->last_species),true);
+			newspecies=new Species(++(pop->lastSpecies),true);
 			(pop->species).push_back(newspecies);
 			newspecies->addOrganism(baby);  //Add the baby
 			baby->species=newspecies;  //Point baby to its species
@@ -811,7 +811,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 					else {
 						//Sometimes we add a link to a superchamp
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->curInnovNum, NEAT::newlink_tries);
 						delete net_analogue;
 						mut_struct_baby=true;
 					}
@@ -879,13 +879,13 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 					if (randfloat()<NEAT::mutate_add_node_prob) {
 						//std::cout<<"mutate add node"<<std::endl;
-						new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
+						new_genome->mutateAddNode(pop->innovations, pop->curNodeId, pop->curInnovNum);
 						mut_struct_baby=true;
 					}
 					else if (randfloat()<NEAT::mutate_add_link_prob) {
 						//std::cout<<"mutate add link"<<std::endl;
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->curInnovNum, NEAT::newlink_tries);
 						delete net_analogue;
 						mut_struct_baby=true;
 					}
@@ -1044,13 +1044,13 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 					//Do the mutation depending on probabilities of 
 					//various mutations
 					if (randfloat()<NEAT::mutate_add_node_prob) {
-						new_genome->mutateAddNode(pop->innovations, pop->cur_node_id, pop->cur_innov_num);
+						new_genome->mutateAddNode(pop->innovations, pop->curNodeId, pop->curInnovNum);
 						//  std::cout<<"mutate_add_node: "<<new_genome<<std::endl;
 						mut_struct_baby=true;
 					}
 					else if (randfloat()<NEAT::mutate_add_link_prob) {
 						net_analogue=new_genome->genesis(generation);
-						new_genome->mutateAddLink(pop->innovations, pop->cur_innov_num, NEAT::newlink_tries);
+						new_genome->mutateAddLink(pop->innovations, pop->curInnovNum, NEAT::newlink_tries);
 						delete net_analogue;
 						//std::cout<<"mutate_add_link: "<<new_genome<<std::endl;
 						mut_struct_baby=true;
@@ -1104,7 +1104,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 			curspecies=(pop->species).begin();
 			if (curspecies==(pop->species).end()){
 				//Create the first species
-				newspecies=new Species(++(pop->last_species),true);
+				newspecies=new Species(++(pop->lastSpecies),true);
 				(pop->species).push_back(newspecies);
 				newspecies->addOrganism(baby);  //Add the baby
 				baby->species=newspecies;  //Point the baby to its species
@@ -1136,7 +1136,7 @@ bool Species::reproduce(int generation, Population *pop,std::vector<Species*> &s
 
 					//If we didn't find a match, create a new species
 					if (found==false) {
-					  newspecies=new Species(++(pop->last_species),true);
+					  newspecies=new Species(++(pop->lastSpecies),true);
 					  //std::std::cout<<"CREATING NEW SPECIES "<<pop->last_species<<std::std::endl;
 					  (pop->species).push_back(newspecies);
 						newspecies->addOrganism(baby);  //Add the baby
