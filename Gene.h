@@ -4,7 +4,7 @@
 #include "neat.h"
 #include "Trait.h"
 #include "Link.h"
-#include "network.h"
+#include "Network.h"
 
 namespace NEAT {
 

@@ -702,7 +702,7 @@ Network *Genome::genesis(int id) {
 	newnet->genotype=this;
 	phenotype=newnet;
 
-	newnet->maxweight=maxweight;
+	newnet->maxWeight=maxweight;
 
 	return newnet;
 
@@ -1617,7 +1617,7 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 					trycount++;
 				else {
 					count=0;
-					recurflag=phenotype->is_recur(nodep1->analogue,nodep2->analogue,count,thresh);
+					recurflag= phenotype->isRecur(nodep1->analogue, nodep2->analogue, count, thresh);
 
 					//ADDED: CONSIDER connections out of outputs recurrent
 					if (((nodep1->type)==OUTPUT)||
@@ -1683,7 +1683,7 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 				else {
 
 					count=0;
-					recurflag=phenotype->is_recur(nodep1->analogue,nodep2->analogue,count,thresh);
+					recurflag= phenotype->isRecur(nodep1->analogue, nodep2->analogue, count, thresh);
 
 					//ADDED: CONSIDER connections out of outputs recurrent
 					if (((nodep1->type)==OUTPUT)||

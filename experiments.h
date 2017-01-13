@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <string>
 #include "neat.h"
-#include "network.h"
+#include "Network.h"
 #include "population.h"
 #include "organism.h"
 #include "Genome.h"

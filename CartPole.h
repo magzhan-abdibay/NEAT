@@ -6,7 +6,7 @@
 #define RTNEAT_CARTPOLE_H
 
 #include <cmath>
-#include "network.h"
+#include "Network.h"
 #include <iostream>
 
 using namespace std;

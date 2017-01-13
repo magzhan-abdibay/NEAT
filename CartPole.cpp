@@ -38,7 +38,7 @@ double CartPole::evalNet(Network *net) {
             input[5] = state[5] / 2;
             input[6] = .5;
 
-            net->load_sensors(input);
+            net->loadSensors(input);
 
             //Activate the net
             //If it loops, exit returning only fitness of 1 step
@@ -61,7 +61,7 @@ double CartPole::evalNet(Network *net) {
             input[2] = state[4] / 0.52;
             input[3] = .5;
 
-            net->load_sensors(input);
+            net->loadSensors(input);
 
             //Activate the net
             //If it loops, exit returning only fitness of 1 step
