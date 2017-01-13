@@ -3,7 +3,7 @@
 
 #include "neat.h"
 #include "trait.h"
-#include "link.h"
+#include "Link.h"
 #include "network.h"
 
 namespace NEAT {

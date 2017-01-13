@@ -7,7 +7,7 @@ SET(rtneat_sources
   gene.cpp
   genome.cpp
   innovation.cpp
-  link.cpp
+        Link.cpp
   neat.cpp
   neatmain.cpp
   network.cpp

@@ -1,4 +1,4 @@
-#include "link.h"
+#include "Link.h"
 
 using namespace NEAT;
 
