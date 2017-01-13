@@ -14,18 +14,17 @@ Genome::Genome(int id, std::vector<Trait*> t, std::vector<NNode*> n, std::vector
 
 
 Genome::Genome(int id, std::vector<Trait*> t, std::vector<NNode*> n, std::vector<Link*> links) {
-	std::vector<Link*>::iterator curlink;
-	Gene *tempgene;
+	std::vector<Link*>::iterator curLink;
+	Gene *tempGene;
 	traits=t;
 	nodes=n;
-
 	genomeId=id;
 
 	//We go through the links and turn them into original genes
-	for(curlink=links.begin();curlink!=links.end();++curlink) {
+	for(curLink=links.begin();curLink!=links.end();++curLink) {
 		//Create genes one at a time
-		tempgene=new Gene((*curlink)->linkTrait, (*curlink)->weight,(*curlink)->inNode,(*curlink)->outNode,(*curlink)->isRecurrent,1.0,0.0);
-		genes.push_back(tempgene);
+		tempGene=new Gene((*curLink)->linkTrait, (*curLink)->weight,(*curLink)->inNode,(*curLink)->outNode,(*curLink)->isRecurrent,1.0,0.0);
+		genes.push_back(tempGene);
 	}
 
 }
@@ -1477,10 +1476,10 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 		//   in this generation
 		//   so we make it match the original, identical mutation which occured
 		//   elsewhere in the population by coincidence 
-		else if (((*theinnov)->innovation_type==NEWNODE)&&
-			((*theinnov)->node_in_id==(in_node->node_id))&&
-			((*theinnov)->node_out_id==(out_node->node_id))&&
-			((*theinnov)->old_innov_num==(*thegene)->innovationNum))
+		else if (((*theinnov)->innovationType==NEWNODE)&&
+			((*theinnov)->nodeInId==(in_node->node_id))&&
+			((*theinnov)->nodeOutId==(out_node->node_id))&&
+			((*theinnov)->oldInnovNum==(*thegene)->innovationNum))
 		{
 
 			//Here, the innovation has been done before
@@ -1489,19 +1488,19 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 			traitptr=thelink->linkTrait;
 
 			//Create the new NNode
-			newnode=new NNode(NEURON,(*theinnov)->newnode_id,HIDDEN);      
+			newnode=new NNode(NEURON,(*theinnov)->newNodeId,HIDDEN);
 			//By convention, it will point to the first trait
 			//Note: In future may want to change this
 			newnode->nodetrait=(*(traits.begin()));
 
 			//Create the new Genes
 			if (thelink->isRecurrent) {
-				newgene1=new Gene(traitptr,1.0,in_node,newnode,true,(*theinnov)->innovation_num1,0);
-				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,(*theinnov)->innovation_num2,0);
+				newgene1=new Gene(traitptr,1.0,in_node,newnode,true,(*theinnov)->innovationNum1,0);
+				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,(*theinnov)->innovationNum2,0);
 			}
 			else {
-				newgene1=new Gene(traitptr,1.0,in_node,newnode,false,(*theinnov)->innovation_num1,0);
-				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,(*theinnov)->innovation_num2,0);
+				newgene1=new Gene(traitptr,1.0,in_node,newnode,false,(*theinnov)->innovationNum1,0);
+				newgene2=new Gene(traitptr,oldweight,newnode,out_node,false,(*theinnov)->innovationNum2,0);
 			}
 
 			done=true;
@@ -1768,15 +1767,15 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 				done=true;
 			}
 			//OTHERWISE, match the innovation in the innovs list
-			else if (((*theinnov)->innovation_type==NEWLINK)&&
-				((*theinnov)->node_in_id==(nodep1->node_id))&&
-				((*theinnov)->node_out_id==(nodep2->node_id))&&
-				((*theinnov)->recur_flag==(bool)recurflag)) {
+			else if (((*theinnov)->innovationType==NEWLINK)&&
+				((*theinnov)->nodeInId==(nodep1->node_id))&&
+				((*theinnov)->nodeOutId==(nodep2->node_id))&&
+				((*theinnov)->recurFlag==(bool)recurflag)) {
 
 					thetrait=traits.begin();
 
 					//Create new gene
-					newgene=new Gene(((thetrait[(*theinnov)->new_traitnum])),(*theinnov)->new_weight,nodep1,nodep2,recurflag,(*theinnov)->innovation_num1,0);
+					newgene=new Gene(((thetrait[(*theinnov)->newTraitNum])),(*theinnov)->newWeight,nodep1,nodep2,recurflag,(*theinnov)->innovationNum1,0);
 
 					done=true;
 
@@ -1907,18 +1906,18 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 					done=true;
 				} //end novel innovation case
 				//OTHERWISE, match the innovation in the innovs list
-				else if (((*theinnov)->innovation_type==NEWLINK)&&
-					((*theinnov)->node_in_id==(sensor->node_id))&&
-					((*theinnov)->node_out_id==(output->node_id))&&
-					((*theinnov)->recur_flag==false)) {
+				else if (((*theinnov)->innovationType==NEWLINK)&&
+					((*theinnov)->nodeInId==(sensor->node_id))&&
+					((*theinnov)->nodeOutId==(output->node_id))&&
+					((*theinnov)->recurFlag==false)) {
 
 						thetrait=traits.begin();
 
 						//Create new gene
 						newgene=
-							new Gene(((thetrait[(*theinnov)->new_traitnum])),
-							(*theinnov)->new_weight,sensor,output,
-							false,(*theinnov)->innovation_num1,0);
+							new Gene(((thetrait[(*theinnov)->newTraitNum])),
+							(*theinnov)->newWeight,sensor,output,
+							false,(*theinnov)->innovationNum1,0);
 
 						done=true;
 

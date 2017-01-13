@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Gene.h"
-#include "innovation.h"
+#include "Innovation.h"
 
 namespace NEAT {
 
