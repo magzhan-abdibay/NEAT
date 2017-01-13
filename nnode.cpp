@@ -61,7 +61,7 @@ NNode::NNode(NNode *n, Trait *t) {
     nodetrait = t;
     frozen = false;
     if (t != 0)
-        trait_id = t->trait_id;
+        trait_id = t->traitId;
     else trait_id = 1;
     override = false;
 }
@@ -86,10 +86,10 @@ NNode::NNode(const char *argline, std::vector<Trait *> &traits) {
     if (traitnum == 0) nodetrait = 0;
     else {
         curtrait = traits.begin();
-        while (((*curtrait)->trait_id) != traitnum)
+        while (((*curtrait)->traitId) != traitnum)
             ++curtrait;
         nodetrait = (*curtrait);
-        trait_id = nodetrait->trait_id;
+        trait_id = nodetrait->traitId;
     }
 
     override = false;
@@ -279,7 +279,7 @@ void NNode::derive_trait(Trait *curtrait) {
     }
 
     if (curtrait != 0)
-        trait_id = curtrait->trait_id;
+        trait_id = curtrait->traitId;
     else trait_id = 1;
 
 }
@@ -304,7 +304,7 @@ void NNode::activate_override() {
 
 void NNode::print_to_file(std::ofstream &outFile) {
     outFile << "node " << node_id << " ";
-    if (nodetrait != 0) outFile << nodetrait->trait_id << " ";
+    if (nodetrait != 0) outFile << nodetrait->traitId << " ";
     else outFile << "0 ";
     outFile << type << " ";
     outFile << gen_node_label << std::endl;
@@ -318,7 +318,7 @@ void NNode::print_to_file(std::ostream &outFile) {
 
     if (nodetrait != 0) {
         char tempbuf2[128];
-        sprintf(tempbuf2, "%d ", nodetrait->trait_id);
+        sprintf(tempbuf2, "%d ", nodetrait->traitId);
         outFile << tempbuf2;
     } else outFile << "0 ";
 

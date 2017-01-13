@@ -22,7 +22,7 @@ Link::Link(Trait *linkTrait, double weight, NNode *inNode, NNode *outNode, bool 
     this->linkTrait = linkTrait;
     timeDelay = false;
     if (linkTrait != 0)
-        traitId = linkTrait->trait_id;
+        traitId = linkTrait->traitId;
     else traitId = 1;
 }
 
@@ -57,7 +57,7 @@ void Link::deriveTrait(Trait *curTrait) {
     }
 
     if (curTrait != 0)
-        traitId = curTrait->trait_id;
+        traitId = curTrait->traitId;
     else traitId = 1;
 
 }

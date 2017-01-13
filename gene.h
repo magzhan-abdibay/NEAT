@@ -2,7 +2,7 @@
 #define _GENE_H_
 
 #include "neat.h"
-#include "trait.h"
+#include "Trait.h"
 #include "Link.h"
 #include "network.h"
 

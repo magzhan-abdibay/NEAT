@@ -60,7 +60,7 @@ Gene::Gene(const char *argline, std::vector<Trait *> &traits, std::vector<NNode 
     if (traitnum == 0) traitptr = 0;
     else {
         curtrait = traits.begin();
-        while (((*curtrait)->trait_id) != traitnum)
+        while (((*curtrait)->traitId) != traitnum)
             ++curtrait;
         traitptr = (*curtrait);
     }
@@ -98,7 +98,7 @@ void Gene::print_to_file(std::ofstream &outFile) {
     outFile << "gene ";
     //Start off with the trait number for this gene
     if ((lnk->linkTrait) == 0) outFile << "0 ";
-    else outFile << ((lnk->linkTrait)->trait_id) << " ";
+    else outFile << ((lnk->linkTrait)->traitId) << " ";
     outFile << (lnk->inNode)->node_id << " ";
     outFile << (lnk->outNode)->node_id << " ";
     outFile << (lnk->weight) << " ";
@@ -118,7 +118,7 @@ void Gene::print_to_file(std::ostream &outFile) {
         outFile << "0 ";
         //outFile.write(2, "0 ");
     } else {
-        outFile << ((lnk->linkTrait)->trait_id) << " ";
+        outFile << ((lnk->linkTrait)->traitId) << " ";
     }
     outFile << (lnk->inNode)->node_id << " ";
     outFile << (lnk->outNode)->node_id << " ";

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include "neat.h"
-#include "trait.h"
+#include "Trait.h"
 #include "Link.h"
 
 namespace NEAT {

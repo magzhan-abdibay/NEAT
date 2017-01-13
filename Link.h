@@ -2,7 +2,7 @@
 #define _LINK_H_
 
 #include "neat.h"
-#include "trait.h"
+#include "Trait.h"
 #include "nnode.h"
 
 namespace NEAT {
