@@ -1,5 +1,11 @@
-PACKAGE UPDATE 1.0.2 2011-09-01 (erkin@cs.utexas.edu)
+PACKAGE UPDATE
+----------------------------------------------
+This is not official version of rtNEAT.
+I'm refactoring it and removing obsolete part for better understanding.
+You can get original version here: http://nn.cs.utexas.edu/?rtNEAT
 
+PACKAGE UPDATE 1.0.2 2011-09-01 (erkin@cs.utexas.edu)
+----------------------------------------------
 Changes:
   - Fix typo in NNode::depth() causing max_depth to be calculated incorrectly.
   - Fix Makefile optimization flag and a few minor memory issues.
