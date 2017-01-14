@@ -1,5 +1,3 @@
-#include <iostream>
-#include "Neat.h"
 #include "Population.h"
 #include "experiments.h"
 

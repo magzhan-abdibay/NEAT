@@ -1,89 +1,67 @@
 #include "experiments.h"
 
-/** Real-time NEAT Validation
-Perform evolution on double pole balacing using rtNEAT methods calls
-Always uses Markov case (i.e. velocities provided)
-This test is meant to validate the rtNEAT methods and show how they can be used instead
- of the usual generational NEAT
- */
+/**
+ * Real-time NEAT Validation
+ * Perform evolution on double pole balacing using rtNEAT methods calls
+ * Always uses Markov case (i.e. velocities provided)
+ * This test is meant to validate the rtNEAT methods and show how they can be used instead
+ * of the usual generational NEAT
+ * */
 Population *pole2TestRealTime() {
-    Population *pop;
-    Genome *start_genome;
+    cout << "START DOUBLE POLE BALANCING REAL-TIME EVOLUTION VALIDATION" << endl;
+    cout << "Reading in the start genome" << endl;
     char curWord[20];
     int id;
-
-    CartPole *cartPole;
-
     ifstream iFile("pole2startgenes1", ios::in);
-
-    cout << "START DOUBLE POLE BALANCING REAL-TIME EVOLUTION VALIDATION" << endl;
-
-    cout << "Reading in the start genome" << endl;
-
-    //Read in the start Genome
     iFile >> curWord;
     iFile >> id;
     cout << "Reading in Genome id " << id << endl;
-    start_genome = new Genome(id, iFile);
+    Genome *startGenome = new Genome(id, iFile);
     iFile.close();
+    cout << "Start Genome: " << startGenome << endl;
 
-    cout << "Start Genome: " << start_genome << endl;
-
-    //Spawn the Population from starter gene
     cout << "Spawning Population off Genome" << endl;
-    pop = new Population(start_genome, NEAT::popSize);
+    Population *pop = new Population(startGenome, NEAT::popSize);
 
     cout << "Verifying Spawned Pop" << endl;
     pop->verify();
 
-    //Create the Cart
-    cartPole = new CartPole(1);
+    CartPole *cartPole = new CartPole(1);
 
     //Start the evolution loop using rtNEAT method calls 
     pole2RealTimeLoop(pop, cartPole);
 
     return pop;
-
 }
 
 int pole2RealTimeLoop(Population *pop, CartPole *cart) {
-    vector<Organism *>::iterator curOrg;
-    vector<Species *>::iterator curSpec; //used in printing out debug info
-
     int pause;
     bool win = false;
-
-    //Real-time evolution variables
-    int offspring_count;
-    Organism *new_org;
 
     cart->N_MARKOV_LONG = false;
     cart->GENERALIZATION_TEST = false;
 
     //We try to keep the number of species constant at this number
-    int num_species_target = NEAT::popSize / 15;
+    int numSpeciesTarget = NEAT::popSize / 15;
 
     //This is where we determine the frequency of compatibility threshold adjustment
-    int compat_adjust_frequency = NEAT::popSize / 10;
-    if (compat_adjust_frequency < 1)
-        compat_adjust_frequency = 1;
+    int compatAdjustFrequency = NEAT::popSize / 10;
+    if (compatAdjustFrequency < 1)
+        compatAdjustFrequency = 1;
 
     //Initially, we evaluate the whole population
     //Evaluate each organism on a test
+    vector<Organism *>::iterator curOrg;
     for (curOrg = (pop->organisms).begin(); curOrg != (pop->organisms).end(); ++curOrg) {
-
         //shouldn't happen
         if (((*curOrg)->gnome) == 0) {
             cout << "ERROR EMPTY GENOME!" << endl;
             cin >> pause;
         }
-
         if (pole2Evaluate((*curOrg), cart)) win = true;
-
     }
 
     //Get ready for real-time loop
-
     //Rank all the organisms from best to worst in each species
     pop->rankWithinSpecies();
 
@@ -91,29 +69,25 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
     //This average must be kept up-to-date by rtNEAT in order to select species probabailistically for reproduction
     pop->estimateAllAverages();
 
-
     //Now create offspring one at a time, testing each offspring,
-    // and replacing the worst with the new offspring if its better
-    for (offspring_count = 0; offspring_count < 20000; offspring_count++) {
-
-
-        //Every popSize reproductions, adjust the compat_thresh to better match the num_species_targer
+    //and replacing the worst with the new offspring if its better
+    for (int offspringCount = 0; offspringCount < 20000; offspringCount++) {
+        //Every popSize reproductions, adjust the compatThresh to better match the numSpeciesTarger
         //and reassign the population to new species
-        if (offspring_count % compat_adjust_frequency == 0) {
-
-            int num_species = (int) pop->species.size();
-            double compat_mod = 0.1;  //Modify compat thresh to control speciation
+        if (offspringCount % compatAdjustFrequency == 0) {
+            int numSpecies = (int) pop->species.size();
+            double compatMod = 0.1;  //Modify compat thresh to control speciation
 
             // This tinkers with the compatibility threshold
-            if (num_species < num_species_target) {
-                NEAT::compatThreshold -= compat_mod;
-            } else if (num_species > num_species_target)
-                NEAT::compatThreshold += compat_mod;
+            if (numSpecies < numSpeciesTarget) {
+                NEAT::compatThreshold -= compatMod;
+            } else if (numSpecies > numSpeciesTarget)
+                NEAT::compatThreshold += compatMod;
 
             if (NEAT::compatThreshold < 0.3)
                 NEAT::compatThreshold = 0.3;
 
-            cout << "compat_thresh = " << NEAT::compatThreshold << endl;
+            cout << "compatThreshold = " << NEAT::compatThreshold << endl;
 
             //Go through entire population, reassigning organisms to new species
             for (curOrg = (pop->organisms).begin(); curOrg != pop->organisms.end(); ++curOrg) {
@@ -121,8 +95,8 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
             }
         }
 
-
         //For printing only
+        vector<Species *>::iterator curSpec;
         for (curSpec = (pop->species).begin(); curSpec != (pop->species).end(); curSpec++) {
             cout << "Species " << (*curSpec)->id << " size" << (*curSpec)->organisms.size() << " average= "
                  << (*curSpec)->avgEst << endl;
@@ -131,15 +105,15 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         cout << "Pop size: " << pop->organisms.size() << endl;
 
         //Here we call two rtNEAT calls:
-        //1) choose_parent_species() decides which species should produce the next offspring
-        //2) reproduce_one(...) creates a single offspring fromt the chosen species
-        new_org = (pop->chooseParentSpecies())->reproduceOne(offspring_count, pop, pop->species);
+        //1) chooseParentSpecies() decides which species should produce the next offspring
+        //2) reproduceOne(...) creates a single offspring from the chosen species
+        Organism *newOrg = (pop->chooseParentSpecies())->reproduceOne(offspringCount, pop, pop->species);
 
         //Now we evaluate the new individual
         //Note that in a true real-time simulation, evaluation would be happening to all individuals at all times.
         //That is, this call would not appear here in a true online simulation.
         cout << "Evaluating new baby: " << endl;
-        if (pole2Evaluate(new_org, cart)) win = true;
+        if (pole2Evaluate(newOrg, cart)) win = true;
 
         if (win) {
             cout << "WINNER" << endl;
@@ -148,7 +122,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
         }
 
         //Now we reestimate the baby's species' fitness
-        new_org->species->estimateAverage();
+        newOrg->species->estimateAverage();
 
         //Remove the worst organism
         pop->removeWorst();
@@ -202,7 +176,7 @@ bool pole2Evaluate(Organism *org, CartPole *cart) {
             return false;
         }
     }
-        //if doing the long test non-markov
+    //if doing the long test non-markov
     else if (cart->N_MARKOV_LONG) {
         if (org->fitness >= 99999) {
             org->winner = true;
