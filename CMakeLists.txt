@@ -8,7 +8,7 @@ SET(rtneat_sources
         Genome.cpp
         Innovation.cpp
         Link.cpp
-  neat.cpp
+        Neat.cpp
   neatmain.cpp
         Network.cpp
         NNode.cpp

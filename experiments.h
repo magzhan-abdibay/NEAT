@@ -9,7 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include "neat.h"
+#include "Neat.h"
 #include "Network.h"
 #include "Population.h"
 #include "Organism.h"

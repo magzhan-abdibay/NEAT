@@ -250,7 +250,7 @@ bool Population::speciate() {
             while ((comporg != 0) &&
                    (curspecies != species.end())) {
 
-                if ((((*curorg)->gnome)->compatibility(comporg->gnome)) < NEAT::compat_threshold) {
+                if ((((*curorg)->gnome)->compatibility(comporg->gnome)) < NEAT::compatThreshold) {
 
                     //Found compatible species, so add this organism to it
                     (*curspecies)->addOrganism(*curorg);
@@ -348,7 +348,7 @@ Species *Population::chooseParentSpecies() {
         total_fitness += (*curspecies)->avgEst;
     }
 
-    marble = randfloat() * total_fitness;
+    marble = randFloat() * total_fitness;
     curspecies = species.begin();
     spin = (*curspecies)->avgEst;
     while (spin < marble) {
@@ -446,7 +446,7 @@ void Population::reassignSpecies(Organism *org) {
             ++curspecies;
             if (curspecies != (species).end())
                 comporg = (*curspecies)->first();
-        } else if (((org->gnome)->compatibility(comporg->gnome)) < NEAT::compat_threshold) {
+        } else if (((org->gnome)->compatibility(comporg->gnome)) < NEAT::compatThreshold) {
             //If we found the same species it's already in, return 0
             if ((*curspecies) == org->species) {
                 found = true;

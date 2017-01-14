@@ -1,5 +1,5 @@
 #include <iostream>
-#include "neat.h"
+#include "Neat.h"
 #include "Population.h"
 #include "experiments.h"
 
@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    NEAT::load_neat_params(argv[1], true);
+    NEAT::loadNeatParams(argv[1], true);
     cout << "loaded" << endl;
     cout << "Press any key: ";
     getchar();

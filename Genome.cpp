@@ -249,14 +249,14 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 	//Step through the connection matrix, randomly assigning bits
 	cmp=cm;
 	for(count=0;count<matrixdim;count++) {
-		if (randfloat()<linkProb)
+		if (randFloat()<linkProb)
 			*cmp=true;
 		else *cmp=false;
 		cmp++;
 	}
 
 	//Create a dummy trait (this is for future expansion of the system)
-	newtrait=new Trait(1,0,0,0,0,0,0,0,0,0);
+	newtrait= new Trait(1, 0, 0, 0, 0, 0, 0, 0);
 	traits.push_back(newtrait);
 
 	//Build the input nodes
@@ -321,7 +321,7 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 						out_node=(*node_iter);
 
 						//Create the gene
-						new_weight=randposneg()*randfloat();
+						new_weight= randPosNeg()* randFloat();
 						newgene=new Gene(newtrait,new_weight, in_node, out_node,false,count,new_weight);
 
 						//Add the gene to the genome
@@ -345,7 +345,7 @@ Genome::Genome(int new_id,int i, int o, int n,int nMax, bool r, double linkProb)
 						out_node=(*node_iter);
 
 						//Create the gene
-						new_weight=randposneg()*randfloat();
+						new_weight= randPosNeg()* randFloat();
 						newgene=new Gene(newtrait,new_weight, in_node, out_node,true,count,new_weight);
 
 						//Add the gene to the genome
@@ -389,7 +389,7 @@ Genome::Genome(int numIn,int numOut,int numHidden,int type) {
 	genomeId=0;
 
 	//Create a dummy trait (this is for future expansion of the system)
-	newtrait=new Trait(1,0,0,0,0,0,0,0,0,0);
+	newtrait= new Trait(1, 0, 0, 0, 0, 0, 0, 0);
 	traits.push_back(newtrait);
 
 	//Adjust hidden number
@@ -989,7 +989,7 @@ void Genome::mutateRandomTrait() {
 	int traitnum;
 
 	//Choose a random traitnum
-	traitnum=randint(0,(traits.size())-1);
+	traitnum= randInt(0, (traits.size()) - 1);
 
 	//Retrieve the trait and mutate it
 	thetrait=traits.begin();
@@ -1010,10 +1010,10 @@ void Genome::mutateLinkTrait(int times) {
 	for(loop=1;loop<=times;loop++) {
 
 		//Choose a random traitnum
-		traitnum=randint(0,(traits.size())-1);
+		traitnum= randInt(0, (traits.size()) - 1);
 
 		//Choose a random linknum
-		genenum=randint(0,genes.size()-1);
+		genenum= randInt(0, genes.size() - 1);
 
 		//set the link to point to the new trait
 		thegene=genes.begin();
@@ -1028,7 +1028,7 @@ void Genome::mutateLinkTrait(int times) {
 
 		}
 		//TRACK INNOVATION- future use
-		//(*thegene)->mutation_num+=randposneg()*randfloat()*linktrait_mut_sig;
+		//(*thegene)->mutation_num+=randPosNeg()*randFloat()*linkTraitMutSig;
 
 	}
 }
@@ -1045,10 +1045,10 @@ void Genome::mutateNodeTrait(int times) {
 	for(loop=1;loop<=times;loop++) {
 
 		//Choose a random traitnum
-		traitnum=randint(0,(traits.size())-1);
+		traitnum= randInt(0, (traits.size()) - 1);
 
 		//Choose a random nodenum
-		nodenum=randint(0,nodes.size()-1);
+		nodenum= randInt(0, nodes.size() - 1);
 
 		//set the link to point to the new trait
 		thenode=nodes.begin();
@@ -1070,7 +1070,7 @@ void Genome::mutateNodeTrait(int times) {
 		//  if (((((*thegene)->lnk)->in_node)==(*thenode))
 		//  ||
 		//  ((((*thegene)->lnk)->out_node)==(*thenode)))
-		//(*thegene)->mutation_num+=randposneg()*randfloat()*nodetrait_mut_sig;
+		//(*thegene)->mutation_num+=randPosNeg()*randFloat()*nodetrait_mut_sig;
 		//}
 	}
 }
@@ -1107,17 +1107,17 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 	//for(curgene=genes.begin();curgene!=genes.end();curgene++) {
 
 	////Mutate rate 0.2 controls how many params mutate in the list
-	//if ((randfloat()<rate)||
+	//if ((randFloat()<rate)||
 	//((gene_total>=10.0)&&(num>endpart))) {
 
 	//oldval=((*curgene)->lnk)->weight;
 
 	////The amount to perturb the value by
-	//perturb=randfloat()*power;
+	//perturb=randFloat()*power;
 
 	////Once in a while leave the end part alone
 	//if (num>endpart)
-	//if (randfloat()<0.2) perturb=0;  
+	//if (randFloat()<0.2) perturb=0;
 
 	////Decide positive or negative
 	//if (gRandGen.randI()%2) {
@@ -1125,7 +1125,7 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 
 	////if it goes over the max, find something smaller
 	//if (oldval+perturb>100.0) {
-	//perturb=(100.0-oldval)*randfloat();
+	//perturb=(100.0-oldval)*randFloat();
 	//}
 
 	//((*curgene)->lnk)->weight+=perturb;
@@ -1136,7 +1136,7 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 
 	////if it goes below the min, find something smaller
 	//if (oldval-perturb<100.0) {
-	//perturb=(oldval+100.0)*randfloat();
+	//perturb=(oldval+100.0)*randFloat();
 	//}
 
 	//((*curgene)->lnk)->weight-=perturb;
@@ -1152,23 +1152,23 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 
 	// ------------------------------------------------------ 
 
-	if (randfloat()>0.5) severe=true;
+	if (randFloat()>0.5) severe=true;
 	else severe=false;
 
 	//Go through all the Genes and perturb their link's weights
 	num=0.0;
 	gene_total=(double) genes.size();
 	endpart=gene_total*0.8;
-	//powermod=randposneg()*power*randfloat();  //Make power of mutation random
-	//powermod=randfloat();
+	//powermod=randPosNeg()*power*randFloat();  //Make power of mutation random
+	//powermod=randFloat();
 	powermod=1.0;
 
 	//Possibility: Jiggle the newest gene randomly
 	//if (gene_total>10.0) {
 	//  lastgene=genes.end();
 	//  lastgene--;
-	//  if (randfloat()>0.4)
-	//    ((*lastgene)->lnk)->weight+=0.5*randposneg()*randfloat();
+	//  if (randFloat()>0.4)
+	//    ((*lastgene)->lnk)->weight+=0.5*randPosNeg()*randFloat();
 	//}
 
 /*
@@ -1177,7 +1177,7 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 	if (mut_type==COLDGAUSSIAN) {
 		//printf("COLDGAUSSIAN");
 		for(curgene=genes.begin();curgene!=genes.end();curgene++) {
-			if (randfloat()<0.9) {
+			if (randFloat()<0.9) {
 				randnum=randposneg()*randfloat()*power*powermod;
 				((*curgene)->lnk)->weight+=randnum;
 			}
@@ -1187,7 +1187,7 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 	
 	for(curgene=genes.begin();curgene!=genes.end();curgene++) {
 		if (randfloat()<0.2) {
-			randnum=randposneg()*randfloat()*power*powermod;
+			randnum=randPosNeg()*randfloat()*power*powermod;
 			((*curgene)->lnk)->weight+=randnum;
 
 			//Cap the weights at 20.0 (experimental)
@@ -1231,7 +1231,7 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 			}
 			else {
 				//Half the time don't do any cold mutations
-				if (randfloat()>0.5) {
+				if (randFloat()>0.5) {
 					gausspoint=1.0-rate;
 					coldgausspoint=1.0-rate-0.1;
 				}
@@ -1242,13 +1242,13 @@ void Genome::mutateLinkWeights(double power, double rate, mutator mutType) {
 			}
 
 			//Possible methods of setting the perturbation:
-			//randnum=gaussrand()*powermod;
-			//randnum=gaussrand();
+			//randnum=gaussRand()*powermod;
+			//randnum=gaussRand();
 
-			randnum=randposneg()*randfloat()*power*powermod;
-            //std::cout << "RANDOM: " << randnum << " " << randposneg() << " " << randfloat() << " " << power << " " << powermod << std::endl;
+			randnum= randPosNeg()* randFloat()*power*powermod;
+            //std::cout << "RANDOM: " << randnum << " " << randPosNeg() << " " << randFloat() << " " << power << " " << powermod << std::endl;
 			if (mutType==GAUSSIAN) {
-				randchoice=randfloat();
+				randchoice= randFloat();
 				if (randchoice>gausspoint)
 					((*curgene)->link)->weight+=randnum;
 				else if (randchoice>coldgausspoint)
@@ -1284,7 +1284,7 @@ void Genome::mutateToggleEnable(int times) {
 	for (count=1;count<=times;count++) {
 
 		//Choose a random genenum
-		genenum=randint(0,genes.size()-1);
+		genenum= randInt(0, genes.size() - 1);
 
 		//find the gene
 		thegene=genes.begin();
@@ -1367,7 +1367,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 		//We bias the search towards older genes because 
 		//this encourages splitting to distribute evenly
 		while (((thegene!=genes.end())&&
-			(randfloat()<0.3))||
+			(randFloat()<0.3))||
 			((thegene!=genes.end())
 			&&(((*thegene)->link->inNode)->gen_node_label==BIAS)))
 		{
@@ -1388,7 +1388,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 		while ((trycount<20)&&(!found)) {
 
 			//Choose a random genenum
-			//randmult=gaussrand()/4;
+			//randmult=gaussRand()/4;
 			//if (randmult>1.0) randmult=1.0;
 
 			//This tends to select older genes for splitting
@@ -1397,7 +1397,7 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 			//This old totally random selection is bad- splitting
 			//inside something recently splitted adds little power
 			//to the system (should use a gaussian if doing it this way)
-			genenum=randint(0,genes.size()-1);
+			genenum= randInt(0, genes.size() - 1);
 
 			//find the gene
 			thegene=genes.begin();
@@ -1556,7 +1556,7 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 
 
 	//Decide whether to make this recurrent
-	if (randfloat()<NEAT::recur_only_prob) 
+	if (randFloat()<NEAT::recurOnlyProb)
 		do_recur=true;
 	else do_recur=false;
 
@@ -1575,19 +1575,19 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 		while(trycount<tries) {
 
 			//Some of the time try to make a recur loop
-			if (randfloat()>0.5) {
+			if (randFloat()>0.5) {
 				loop_recur=true;
 			}
 			else loop_recur=false;
 
 			if (loop_recur) {
-				nodenum1=randint(first_nonsensor,nodes.size()-1);
+				nodenum1= randInt(first_nonsensor, nodes.size() - 1);
 				nodenum2=nodenum1;
 			}
 			else {
 				//Choose random nodenums
-				nodenum1=randint(0,nodes.size()-1);
-				nodenum2=randint(first_nonsensor,nodes.size()-1);
+				nodenum1= randInt(0, nodes.size() - 1);
+				nodenum2= randInt(first_nonsensor, nodes.size() - 1);
 			}
 
 			//Find the first node
@@ -1650,8 +1650,8 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 			//cout<<"TRY "<<trycount<<std::endl;
 
 			//Choose random nodenums
-			nodenum1=randint(0,nodes.size()-1);
-			nodenum2=randint(first_nonsensor,nodes.size()-1);
+			nodenum1= randInt(0, nodes.size() - 1);
+			nodenum2= randInt(first_nonsensor, nodes.size() - 1);
 
 			//Find the first node
 			thenode1=nodes.begin();
@@ -1746,15 +1746,15 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 				//      have an application with recurrency.
 				//If not recurrent, randomize recurrency
 				//if (!recurflag) 
-				//  if (randfloat()<recur_prob) recurflag=1;
+				//  if (randFloat()<recurProb) recurflag=1;
 
 				//Choose a random trait
-				traitnum=randint(0,(traits.size())-1);
+				traitnum= randInt(0, (traits.size()) - 1);
 				thetrait=traits.begin();
 
 				//Choose the new weight
-				//newweight=(gaussrand())/1.5;  //Could use a gaussian
-				newweight=randposneg()*randfloat()*1.0; //used to be 10.0
+				//newweight=(gaussRand())/1.5;  //Could use a gaussian
+				newweight= randPosNeg()* randFloat()*1.0; //used to be 10.0
 
 				//Create the new gene
 				newgene=new Gene(((thetrait[traitnum])),newweight,nodep1,nodep2,recurflag,curInnov,newweight);
@@ -1861,7 +1861,7 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 		return;
 
 	//Pick randomly from remaining sensors
-	sensor=sensors[randint(0,sensors.size()-1)];
+	sensor=sensors[randInt(0, sensors.size() - 1)];
 
 	//Add new links to chosen sensor, avoiding redundancy
 	for (int i = 0; i < outputs.size(); i++) {
@@ -1885,12 +1885,12 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 				if (theinnov==innovs.end()) {
 
 					//Choose a random trait
-					traitnum=randint(0,(traits.size())-1);
+					traitnum= randInt(0, (traits.size()) - 1);
 					thetrait=traits.begin();
 
 					//Choose the new weight
-					//newweight=(gaussrand())/1.5;  //Could use a gaussian
-					newweight=randposneg()*randfloat()*3.0; //used to be 10.0
+					//newweight=(gaussRand())/1.5;  //Could use a gaussian
+					newweight= randPosNeg()* randFloat()*3.0; //used to be 10.0
 
 					//Create the new gene
 					newgene=new Gene(((thetrait[traitnum])),
@@ -2082,7 +2082,7 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 				p2innov=(*p2gene)->innovationNum;
 
 				if (p1innov==p2innov) {
-					if (randfloat()<0.5) {
+					if (randFloat()<0.5) {
 						chosengene=*p1gene;
 					}
 					else {
@@ -2093,7 +2093,7 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 					//will likely be disabled
 					if ((((*p1gene)->enable)==false)||
 						(((*p2gene)->enable)==false)) 
-						if (randfloat()<0.75) disable=true;
+						if (randFloat()<0.75) disable=true;
 
 					++p1gene;
 					++p2gene;
@@ -2315,7 +2315,7 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 	//double blx_range;   //The space range
 	//double blx_explore;  //Exploration space on left or right
 	//double blx_pos;  //Decide where to put gnes distancewise
-	//blx_pos=randfloat();
+	//blx_pos=randFloat();
 
 	//First, average the Traits from the 2 parents to form the baby's Traits
 	//It is assumed that trait lists are the same length
@@ -2393,7 +2393,7 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 
 				if (p1innov==p2innov) {
 					//Average them into the avgene
-					if (randfloat()>0.5) (avgene->link)->linkTrait=((*p1gene)->link)->linkTrait;
+					if (randFloat()>0.5) (avgene->link)->linkTrait=((*p1gene)->link)->linkTrait;
 					else (avgene->link)->linkTrait=((*p2gene)->link)->linkTrait;
 
 					//WEIGHTS AVERAGED HERE
@@ -2424,13 +2424,13 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 					//(avgene->lnk)->weight=blx_min+blx_pos*blx_range;
 					//
 
-					if (randfloat()>0.5) (avgene->link)->inNode=((*p1gene)->link)->inNode;
+					if (randFloat()>0.5) (avgene->link)->inNode=((*p1gene)->link)->inNode;
 					else (avgene->link)->inNode=((*p2gene)->link)->inNode;
 
-					if (randfloat()>0.5) (avgene->link)->outNode=((*p1gene)->link)->outNode;
+					if (randFloat()>0.5) (avgene->link)->outNode=((*p1gene)->link)->outNode;
 					else (avgene->link)->outNode=((*p2gene)->link)->outNode;
 
-					if (randfloat()>0.5) (avgene->link)->isRecurrent=((*p1gene)->link)->isRecurrent;
+					if (randFloat()>0.5) (avgene->link)->isRecurrent=((*p1gene)->link)->isRecurrent;
 					else (avgene->link)->isRecurrent=((*p2gene)->link)->isRecurrent;
 
 					avgene->innovationNum=(*p1gene)->innovationNum;
@@ -2438,7 +2438,7 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 
 					if ((((*p1gene)->enable)==false)||
 						(((*p2gene)->enable)==false)) 
-						if (randfloat()<0.75) avgene->enable=false;
+						if (randFloat()<0.75) avgene->enable=false;
 
 					chosengene=avgene;
 					++p1gene;
@@ -2659,7 +2659,7 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 
 	//Decide where to cross  (p1gene will always be in smaller Genome)
 	if (genes.size()<(g->genes).size()) {
-		crosspoint=randint(0,(genes.size())-1);
+		crosspoint= randInt(0, (genes.size()) - 1);
 		p1gene=genes.begin();
 		p2gene=(g->genes).begin();
 		stopper=(g->genes).end();
@@ -2667,7 +2667,7 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 		p2stop=(g->genes).end();
 	}
 	else {
-		crosspoint=randint(0,((g->genes).size())-1);
+		crosspoint= randInt(0, ((g->genes).size()) - 1);
 		p2gene=genes.begin();
 		p1gene=(g->genes).begin();
 		stopper=genes.end();
@@ -2716,20 +2716,20 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 				else {
 
 					//Average them into the avgene
-					if (randfloat()>0.5) (avgene->link)->linkTrait=((*p1gene)->link)->linkTrait;
+					if (randFloat()>0.5) (avgene->link)->linkTrait=((*p1gene)->link)->linkTrait;
 					else (avgene->link)->linkTrait=((*p2gene)->link)->linkTrait;
 
 					//WEIGHTS AVERAGED HERE
 					(avgene->link)->weight=(((*p1gene)->link)->weight+((*p2gene)->link)->weight)/2.0;
 
 
-					if (randfloat()>0.5) (avgene->link)->inNode=((*p1gene)->link)->inNode;
+					if (randFloat()>0.5) (avgene->link)->inNode=((*p1gene)->link)->inNode;
 					else (avgene->link)->inNode=((*p2gene)->link)->inNode;
 
-					if (randfloat()>0.5) (avgene->link)->outNode=((*p1gene)->link)->outNode;
+					if (randFloat()>0.5) (avgene->link)->outNode=((*p1gene)->link)->outNode;
 					else (avgene->link)->outNode=((*p2gene)->link)->outNode;
 
-					if (randfloat()>0.5) (avgene->link)->isRecurrent=((*p1gene)->link)->isRecurrent;
+					if (randFloat()>0.5) (avgene->link)->isRecurrent=((*p1gene)->link)->isRecurrent;
 					else (avgene->link)->isRecurrent=((*p2gene)->link)->isRecurrent;
 
 					avgene->innovationNum=(*p1gene)->innovationNum;
@@ -2975,18 +2975,18 @@ double Genome::compatibility(Genome *g) {
 		//in the Genome
 
 		//Normalizing for genome size
-		//return (disjoint_coeff*(num_disjoint/max_genome_size)+
-		//  excess_coeff*(num_excess/max_genome_size)+
-		//  mutdiff_coeff*(mut_diff_total/num_matching));
+		//return (disjointCoeff*(num_disjoint/max_genome_size)+
+		//  excessCoeff*(num_excess/max_genome_size)+
+		//  mutDiffCoeff*(mut_diff_total/num_matching));
 
 
 		//Look at disjointedness and excess in the absolute (ignoring size)
 
-		//cout<<"COMPAT: size = "<<max_genome_size<<" disjoint = "<<num_disjoint<<" excess = "<<num_excess<<" diff = "<<mut_diff_total<<"  TOTAL = "<<(disjoint_coeff*(num_disjoint/1.0)+excess_coeff*(num_excess/1.0)+mutdiff_coeff*(mut_diff_total/num_matching))<<std::endl;
+		//cout<<"COMPAT: size = "<<max_genome_size<<" disjoint = "<<num_disjoint<<" excess = "<<num_excess<<" diff = "<<mut_diff_total<<"  TOTAL = "<<(disjointCoeff*(num_disjoint/1.0)+excessCoeff*(num_excess/1.0)+mutDiffCoeff*(mut_diff_total/num_matching))<<std::endl;
 
-		return (NEAT::disjoint_coeff*(num_disjoint/1.0)+
-			NEAT::excess_coeff*(num_excess/1.0)+
-			NEAT::mutdiff_coeff*(mut_diff_total/num_matching));
+		return (NEAT::disjointCoeff*(num_disjoint/1.0)+
+			NEAT::excessCoeff*(num_excess/1.0)+
+			NEAT::mutDiffCoeff*(mut_diff_total/num_matching));
 }
 
 double Genome::traitCompare(Trait *t1, Trait *t2) {
@@ -3037,7 +3037,7 @@ void Genome::randomize_traits() {
 
 	//Go through all nodes and randomize their trait pointers
 	for(curnode=nodes.begin();curnode!=nodes.end();++curnode) {
-		traitnum=randint(1,numtraits); //randomize trait
+		traitnum= randInt(1, numtraits); //randomize trait
 		(*curnode)->traitId=traitnum;
 
 		curtrait=traits.begin();
@@ -3051,7 +3051,7 @@ void Genome::randomize_traits() {
 
 	//Go through all connections and randomize their trait pointers
 	for(curgene=genes.begin();curgene!=genes.end();++curgene) {
-		traitnum=randint(1,numtraits); //randomize trait
+		traitnum= randInt(1, numtraits); //randomize trait
 		(*curgene)->link->traitId=traitnum;
 
 		curtrait=traits.begin();

@@ -166,11 +166,11 @@ Number:
 At the "Number:" prompt, you can enter your choice.  The correct starter 
 genome will be loaded in automatically and evolution will commence.  
 Most experiments output generational population files ("gen_#") at 
-regular intervals based on the "print_every" parameter in the supplied 
-.ne file. For example, if print_every is 5, then gen_5, gen_10, gen_15, 
+regular intervals based on the "printEvery" parameter in the supplied
+.ne file. For example, if printEvery is 5, then gen_5, gen_10, gen_15,
 etc., will be written to the directory containing rtNEAT.
 
-Experiment 4 does not output files based on "print_every" because it is 
+Experiment 4 does not output files based on "printEvery" because it is
 real-time and therefore does not utilize generations.  Instead, it 
 outputs the population into the file "rt_winpop" when a solution is 
 found.

@@ -271,10 +271,10 @@ void NNode::flushBackCheck(std::vector<NNode *> &seenList) {
 void NNode::deriveTrait(Trait *curTrait) {
 
     if (curTrait != 0) {
-        for (int count = 0; count < NEAT::num_trait_params; count++)
+        for (int count = 0; count < NEAT::numTraitParams; count++)
             params[count] = (curTrait->params)[count];
     } else {
-        for (int count = 0; count < NEAT::num_trait_params; count++)
+        for (int count = 0; count < NEAT::numTraitParams; count++)
             params[count] = 0;
     }
 

@@ -31,7 +31,7 @@ Population *pole2TestRealTime() {
 
     //Spawn the Population from starter gene
     cout << "Spawning Population off Genome" << endl;
-    pop = new Population(start_genome, NEAT::pop_size);
+    pop = new Population(start_genome, NEAT::popSize);
 
     cout << "Verifying Spawned Pop" << endl;
     pop->verify();
@@ -61,10 +61,10 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
     cart->GENERALIZATION_TEST = false;
 
     //We try to keep the number of species constant at this number
-    int num_species_target = NEAT::pop_size / 15;
+    int num_species_target = NEAT::popSize / 15;
 
     //This is where we determine the frequency of compatibility threshold adjustment
-    int compat_adjust_frequency = NEAT::pop_size / 10;
+    int compat_adjust_frequency = NEAT::popSize / 10;
     if (compat_adjust_frequency < 1)
         compat_adjust_frequency = 1;
 
@@ -97,7 +97,7 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
     for (offspring_count = 0; offspring_count < 20000; offspring_count++) {
 
 
-        //Every pop_size reproductions, adjust the compat_thresh to better match the num_species_targer
+        //Every popSize reproductions, adjust the compat_thresh to better match the num_species_targer
         //and reassign the population to new species
         if (offspring_count % compat_adjust_frequency == 0) {
 
@@ -106,14 +106,14 @@ int pole2RealTimeLoop(Population *pop, CartPole *cart) {
 
             // This tinkers with the compatibility threshold
             if (num_species < num_species_target) {
-                NEAT::compat_threshold -= compat_mod;
+                NEAT::compatThreshold -= compat_mod;
             } else if (num_species > num_species_target)
-                NEAT::compat_threshold += compat_mod;
+                NEAT::compatThreshold += compat_mod;
 
-            if (NEAT::compat_threshold < 0.3)
-                NEAT::compat_threshold = 0.3;
+            if (NEAT::compatThreshold < 0.3)
+                NEAT::compatThreshold = 0.3;
 
-            cout << "compat_thresh = " << NEAT::compat_threshold << endl;
+            cout << "compat_thresh = " << NEAT::compatThreshold << endl;
 
             //Go through entire population, reassigning organisms to new species
             for (curOrg = (pop->organisms).begin(); curOrg != pop->organisms.end(); ++curOrg) {

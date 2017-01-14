@@ -2,7 +2,7 @@
 #define _TRAIT_H_
 
 #include <fstream>
-#include "neat.h"
+#include "Neat.h"
 
 namespace NEAT {
 
@@ -25,12 +25,11 @@ namespace NEAT {
         /** Used in file saving and loading*/
         int traitId;
         /** Keep traits in an array*/
-        double params[NEAT::num_trait_params];
+        double params[NEAT::numTraitParams];
 
         Trait();
 
-        Trait(int id, double p1, double p2, double p3, double p4, double p5, double p6, double p7, double p8,
-              double p9);
+        Trait(int id, double p1, double p2, double p3, double p4, double p5, double p6, double p7);
 
         /** Copy Constructor*/
         Trait(const Trait &t);

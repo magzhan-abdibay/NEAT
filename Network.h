@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "neat.h"
+#include "Neat.h"
 #include "NNode.h"
 
 namespace NEAT {

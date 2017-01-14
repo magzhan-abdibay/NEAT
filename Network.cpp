@@ -173,8 +173,8 @@ bool Network::activate() {
                     } else {
                         //Now run the net activation through an activation function
                         if ((*curnode)->fType == SIGMOID)
-                            (*curnode)->activation = NEAT::fsigmoid((*curnode)->activeSum, 4.924273,
-                                                                    2.4621365);  //Sigmoidal activation- see comments under fsigmoid
+                            (*curnode)->activation = NEAT::sigmoidFunction((*curnode)->activeSum, 4.924273,
+                                                                           2.4621365);  //Sigmoidal activation- see comments under sigmoidFunction
                     }
                     //cout<<(*curnode)->activation<<endl;
 
@@ -207,23 +207,23 @@ bool Network::activate() {
                         ((*curlink)->traitId == 3) ||
                         ((*curlink)->traitId == 4)) {
 
-                        //In the recurrent case we must take the last activation of the input for calculating hebbian changes
+                        //In the recurrent case we must take the last activation of the input for calculating hebbianFunction changes
                         if ((*curlink)->isRecurrent) {
                             (*curlink)->weight =
-                                    hebbian((*curlink)->weight, maxWeight,
-                                            (*curlink)->inNode->last_activation,
-                                            (*curlink)->outNode->getActiveOut(),
-                                            (*curlink)->params[0], (*curlink)->params[1],
-                                            (*curlink)->params[2]);
+                                    hebbianFunction((*curlink)->weight, maxWeight,
+                                                    (*curlink)->inNode->last_activation,
+                                                    (*curlink)->outNode->getActiveOut(),
+                                                    (*curlink)->params[0], (*curlink)->params[1],
+                                                    (*curlink)->params[2]);
 
 
                         } else { //non-recurrent case
                             (*curlink)->weight =
-                                    hebbian((*curlink)->weight, maxWeight,
-                                            (*curlink)->inNode->getActiveOut(),
-                                            (*curlink)->outNode->getActiveOut(),
-                                            (*curlink)->params[0], (*curlink)->params[1],
-                                            (*curlink)->params[2]);
+                                    hebbianFunction((*curlink)->weight, maxWeight,
+                                                    (*curlink)->inNode->getActiveOut(),
+                                                    (*curlink)->outNode->getActiveOut(),
+                                                    (*curlink)->params[0], (*curlink)->params[1],
+                                                    (*curlink)->params[2]);
                         }
                     }
 

@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "neat.h"
+#include "Neat.h"
 #include "Trait.h"
 #include "Link.h"
 
@@ -101,7 +101,7 @@ namespace NEAT {
          * neurons that learn through habituation,
          * sensitization, or Hebbian-type processes*/
 
-        double params[NEAT::num_trait_params];
+        double params[NEAT::numTraitParams];
 
         /** A list of pointers to incoming weighted signals from other nodes*/
         std::vector<Link *> incoming;

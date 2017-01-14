@@ -1,7 +1,7 @@
 #ifndef _GENE_H_
 #define _GENE_H_
 
-#include "neat.h"
+#include "Neat.h"
 #include "Trait.h"
 #include "Link.h"
 #include "Network.h"

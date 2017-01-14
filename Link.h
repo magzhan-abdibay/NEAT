@@ -1,7 +1,7 @@
 #ifndef _LINK_H_
 #define _LINK_H_
 
-#include "neat.h"
+#include "Neat.h"
 #include "Trait.h"
 #include "NNode.h"
 
@@ -38,7 +38,7 @@ namespace NEAT {
 
         /**@brief The amount of weight adjustment*/
         double added_weight;
-        double params[NEAT::num_trait_params];
+        double params[NEAT::numTraitParams];
 
         Link(double weight, NNode *inNode, NNode *outNode, bool isRecurrent);
 
