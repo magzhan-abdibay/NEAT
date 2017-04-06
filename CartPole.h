@@ -41,15 +41,15 @@ private:
 
     bool outsideBounds();
 
-    const static int NUM_INPUTS = 7;
-    const static double MUP = 0.000002;
-    const static double GRAVITY = -9.8;
-    const static double MASS_CART = 1.0;
-    const static double MASS_POLE_1 = 0.1;
-    const static double LENGTH_1 = 0.5;         //actually half the pole's length
-    const static double FORCE_MAG = 10.0;
-    const static double TAU = 0.01;             //seconds between state updates
-    const static double thirty_six_degrees = 0.628329;
+	const static int NUM_INPUTS;
+	const static double MUP;
+	const static double GRAVITY;
+	const static double MASS_CART;
+	const static double MASS_POLE_1;
+	const static double LENGTH_1;
+	const static double FORCE_MAG;
+	const static double TAU;
+	const static double thirty_six_degrees;
 
     double LENGTH_2;
     double MASS_POLE_2;
@@ -62,5 +62,4 @@ private:
     double POLE_V_SUM;
 
 };
-
 #endif //RTNEAT_CARTPOLE_H

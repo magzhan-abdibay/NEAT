@@ -1337,9 +1337,9 @@ bool Genome::mutateAddNode(std::vector<Innovation *> &innovs, int &curnodeId, do
 	std::vector<Innovation*>::iterator theinnov; //For finding a historical match
 	bool done=false;
 
-	Gene *newgene1;  //The new Genes
-	Gene *newgene2;
-	NNode *newnode;   //The new NNode
+	Gene *newgene1= NULL;  //The new Genes
+	Gene *newgene2 = NULL;
+	NNode *newnode=NULL;   //The new NNode
 	Trait *traitptr; //The original link's trait
 
 	//double splitweight;  //If used, Set to sqrt(oldweight of oldlink)
@@ -1525,13 +1525,13 @@ bool Genome::mutateAddLink(std::vector<Innovation *> &innovs, double &curInnov, 
 	std::vector<NNode*>::iterator thenode1,thenode2;  //Random node iterators
 	int nodecount;  //Counter for finding nodes
 	int trycount; //Iterates over attempts to find an unconnected pair of nodes
-	NNode *nodep1; //Pointers to the nodes
-	NNode *nodep2; //Pointers to the nodes
+	NNode *nodep1=NULL; //Pointers to the nodes
+	NNode *nodep2= NULL; //Pointers to the nodes
 	std::vector<Gene*>::iterator thegene; //Searches for existing link
 	bool found=false;  //Tells whether an open pair was found
 	std::vector<Innovation*>::iterator theinnov; //For finding a historical match
 	int recurflag; //Indicates whether proposed link is recurrent
-	Gene *newgene;  //The new Gene
+	Gene *newgene=NULL;  //The new Gene
 
 	int traitnum;  //Random trait finder
 	std::vector<Trait*>::iterator thetrait;
@@ -1996,7 +1996,7 @@ Genome *Genome::mateMultiPoint(Genome *g, int genomeid, double fitness1, double 
 	std::vector<Gene*>::iterator p2gene;
 	double p1innov;  //Innovation numbers for genes inside parents' Genomes
 	double p2innov;
-	Gene *chosengene;  //Gene chosen for baby to inherit
+	Gene *chosengene= NULL;  //Gene chosen for baby to inherit
 	int traitnum;  //Number of trait new gene points to
 	NNode *inode;  //NNodes connected to the chosen Gene
 	NNode *onode;
@@ -2287,7 +2287,7 @@ Genome *Genome::mateMultiPointAvg(Genome *g, int genomeid, double fitness1, doub
 	std::vector<Gene*>::iterator p2gene;
 	double p1innov;  //Innovation numbers for genes inside parents' Genomes
 	double p2innov;
-	Gene *chosengene;  //Gene chosen for baby to inherit
+	Gene *chosengene=NULL;  //Gene chosen for baby to inherit
 	int traitnum;  //Number of trait new gene points to
 	NNode *inode;  //NNodes connected to the chosen Gene
 	NNode *onode;
@@ -2629,7 +2629,7 @@ Genome *Genome::mateSinglePoint(Genome *g, int genomeid) {
 	std::vector<Gene*>::iterator p1stop;
 	double p1innov;  //Innovation numbers for genes inside parents' Genomes
 	double p2innov;
-	Gene *chosengene;  //Gene chosen for baby to inherit
+	Gene *chosengene=NULL;  //Gene chosen for baby to inherit
 	int traitnum;  //Number of trait new gene points to
 	NNode *inode;  //NNodes connected to the chosen Gene
 	NNode *onode;

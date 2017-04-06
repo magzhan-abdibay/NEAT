@@ -4,6 +4,16 @@
 
 #include "CartPole.h"
 
+const int CartPole::NUM_INPUTS = 7;
+const double CartPole::MUP = 0.000002;
+const double CartPole::GRAVITY = -9.8;
+const double CartPole::MASS_CART = 1.0;
+const double CartPole::MASS_POLE_1 = 0.1;
+const double CartPole::LENGTH_1 = 0.5;         //actually half the pole's length
+const double CartPole::FORCE_MAG = 10.0;
+const double CartPole::TAU = 0.01;             //seconds between state updates
+const double CartPole::thirty_six_degrees = 0.628329;
+
 CartPole::CartPole(bool velocity) {
     MAX_FITNESS = 100000;
     MARKOV = velocity;

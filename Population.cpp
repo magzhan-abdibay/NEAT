@@ -200,7 +200,7 @@ bool Population::clone(Genome *g, int size, float power) {
 
 bool Population::spawn(Genome *g, int size) {
     int count;
-    Genome *new_genome;
+    Genome *new_genome=NULL;
     Organism *new_organism;
 
     //Create size copies of the Genome
@@ -387,7 +387,7 @@ Organism *Population::removeWorst() {
     std::vector<Organism *>::iterator curorg;
     Organism *org_to_kill = 0;
     std::vector<Organism *>::iterator deadorg;
-    Species *orgs_species; //The species of the dead organism
+    Species *orgs_species=NULL; //The species of the dead organism
 
     //Make sure the organism is deleted from its species and the population
 
