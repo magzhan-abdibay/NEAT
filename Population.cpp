@@ -19,7 +19,7 @@ Population::Population(Genome *g, int size, float power) {
 //off of a vector of Genomes.  Useful when converging.
 Population::Population(std::vector<Genome *> genomeList, float power) {
 
-    Genome *new_genome;
+    Genome *new_genome=NULL;
     Organism *new_organism;
 
     //Create size copies of the Genome
@@ -78,7 +78,7 @@ Population::Population(const char *filename) {
 
                 // If there isn't metadata, set metadata to ""
                 if (!md) {
-                    strcpy(metadata, "");
+                    strcpy_s(metadata, "");
                 }
                 md = false;
 
@@ -91,18 +91,18 @@ Population::Population(const char *filename) {
                     curInnovNum = new_genome->getLastGeneInnovationNum();
             } else if (strcmp(curword, "/*") == 0) {
                 // New metadata possibly, so clear out the metadata
-                strcpy(metadata, "");
+                strcpy_s(metadata, "");
                 //strcpy(curword, NEAT::getUnit(curline, curwordnum++, delimiters));
                 ss >> curword;
 
                 while (strcmp(curword, "*/") != 0) {
                     // If we've started to form the metadata, put a space in the front
                     if (md) {
-                        strncat(metadata, " ", 128 - strlen(metadata));
+                        strncat_s(metadata, " ", 128 - strlen(metadata));
                     }
 
                     // Append the next word to the metadata, and say that there is metadata
-                    strncat(metadata, curword, 128 - strlen(metadata));
+                    strncat_s(metadata, curword, 128 - strlen(metadata));
                     md = true;
 
                     //strcpy(curword, NEAT::getUnit(curline, curwordnum++, delimiters));

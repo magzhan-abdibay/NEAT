@@ -18,9 +18,9 @@ Organism::Organism(double fit, Genome *g, int gen, const char *md) {
 
     // If md is null, then we don't have metadata, otherwise we do have metadata so copy it over
     if (md == 0) {
-        strcpy(metadata, "");
+        strcpy_s(metadata, "");
     } else {
-        strncpy(metadata, md, 128);
+        strncpy_s(metadata, md, 128);
     }
 
     timeAlive = 0;
@@ -50,7 +50,7 @@ Organism::Organism(const Organism &org) {
     champion = org.champion;
     superChampOffspring = org.superChampOffspring;
 
-    strcpy(metadata, org.metadata);
+    strcpy_s(metadata, org.metadata);
     //printf("copying %s did it work? %s", org.metadata, metadata);
 
     timeAlive = org.timeAlive;
@@ -79,9 +79,9 @@ bool Organism::writeToFile(std::ostream &outFile) {
 
     char tempbuf2[1024];
     if (modified) {
-        sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", (gnome)->genomeId, fitness, timeAlive);
+        sprintf_s(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", (gnome)->genomeId, fitness, timeAlive);
     } else {
-        sprintf(tempbuf2, "/* %s */\n", metadata);
+        sprintf_s(tempbuf2, "/* %s */\n", metadata);
     }
     outFile << tempbuf2;
     gnome->printToFile(outFile);

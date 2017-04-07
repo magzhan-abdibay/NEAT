@@ -313,17 +313,17 @@ void NNode::printToFile(std::ofstream &outFile) {
 
 void NNode::printToFile(std::ostream &outFile) {
     char tempbuf[128];
-    sprintf(tempbuf, "node %d ", nodeId);
+    sprintf_s(tempbuf, "node %d ", nodeId);
     outFile << tempbuf;
 
     if (nodeTrait != 0) {
         char tempbuf2[128];
-        sprintf(tempbuf2, "%d ", nodeTrait->traitId);
+        sprintf_s(tempbuf2, "%d ", nodeTrait->traitId);
         outFile << tempbuf2;
     } else outFile << "0 ";
 
     char tempbuf2[128];
-    sprintf(tempbuf2, "%d %d\n", type, gen_node_label);
+    sprintf_s(tempbuf2, "%d %d\n", type, gen_node_label);
     outFile << tempbuf2;
 }
 

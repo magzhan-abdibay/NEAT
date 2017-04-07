@@ -61,7 +61,7 @@ bool NEAT::loadNeatParams(const char *filename, bool output) {
 
     std::ifstream paramFile(filename);
 
-    if (!paramFile) {
+    if (!paramFile.is_open()) {
         return false;
     }
     char curword[128];

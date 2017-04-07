@@ -370,7 +370,7 @@ Genome::Genome(int numIn,int numOut,int numHidden,int type) {
 	std::vector<NNode*> inputs;
 	std::vector<NNode*> outputs;
 	std::vector<NNode*> hidden;
-	NNode *bias; //Remember the bias
+	NNode *bias=NULL; //Remember the bias
 
 	std::vector<NNode*>::iterator curnode1; //Node iterator1
 	std::vector<NNode*>::iterator curnode2; //Node iterator2
@@ -1810,7 +1810,7 @@ void Genome::mutateAddSensor(std::vector<Innovation *> &innovs, double &curInnov
 	Gene *gene;
 
 	double newweight = 0.0;
-	Gene* newgene;
+	Gene* newgene=NULL;
 
 	int i,j; //counters
 	bool found;

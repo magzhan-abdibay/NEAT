@@ -66,12 +66,12 @@ void Trait::printToFile(std::ofstream &outFile) {
 
 void Trait::printToFile(std::ostream &outFile) {
     char tempBuf[128];
-    sprintf(tempBuf, "trait %d ", traitId);
+    sprintf_s(tempBuf, "trait %d ", traitId);
     outFile << tempBuf;
 
     for (int count = 0; count < NEAT::numTraitParams; count++) {
         char tempBuf2[128];
-        sprintf(tempBuf2, "%f ", params[count]);
+		sprintf_s(tempBuf2, "%f ", params[count]);
         outFile << tempBuf2;
     }
     outFile << std::endl;

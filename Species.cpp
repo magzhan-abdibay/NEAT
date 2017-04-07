@@ -481,7 +481,7 @@ bool Species::addOrganism(Organism *o) {
 
 Organism *Species::get_champ() {
     double champ_fitness = -1.0;
-    Organism *thechamp;
+    Organism *thechamp=NULL;
     std::vector<Organism *>::iterator curorg;
 
     for (curorg = organisms.begin(); curorg != organisms.end(); ++curorg) {
@@ -600,7 +600,7 @@ bool Species::printToFile(std::ostream &outFile) {
     //Print a comment on the Species info
     //outFile<<std::endl<<"/* Species #"<<id<<" : (Size "<<organisms.size()<<") (AF "<<ave_fitness<<") (Age "<<age<<")  */"<<std::endl<<std::endl;
     char tempbuf[1024];
-    sprintf(tempbuf, "/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), avgEst, age);
+    sprintf_s(tempbuf, "/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), avgEst, age);
     //sprintf(tempbuf, "/* Species #%d : (Size %d) (AF %f) (Age %d)  */\n\n", id, organisms.size(), ave_fitness, age);
     outFile << tempbuf;
 
@@ -613,14 +613,14 @@ bool Species::printToFile(std::ostream &outFile) {
         //Put the fitness for each organism in a comment
         //outFile<<std::endl<<"/* Organism #"<<((*curorg)->gnome)->genome_id<<" Fitness: "<<(*curorg)->fitness<<" Error: "<<(*curorg)->error<<" */"<<std::endl;
         char tempbuf2[1024];
-        sprintf(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genomeId, (*curorg)->fitness,
+        sprintf_s(tempbuf2, "/* Organism #%d Fitness: %f Time: %d */\n", ((*curorg)->gnome)->genomeId, (*curorg)->fitness,
                 (*curorg)->timeAlive);
         outFile << tempbuf2;
 
         //If it is a winner, mark it in a comment
         if ((*curorg)->winner) {
             char tempbuf3[1024];
-            sprintf(tempbuf3, "/* ##------$ WINNER %d SPECIES #%d $------## */\n", ((*curorg)->gnome)->genomeId, id);
+            sprintf_s(tempbuf3, "/* ##------$ WINNER %d SPECIES #%d $------## */\n", ((*curorg)->gnome)->genomeId, id);
             //outFile<<"/* ##------$ WINNER "<<((*curorg)->gnome)->genome_id<<" SPECIES #"<<id<<" $------## */"<<std::endl;
         }
 
@@ -629,7 +629,7 @@ bool Species::printToFile(std::ostream &outFile) {
         //std::cout<<((*curorg)->gnome)->genome_id<<std::endl;
     }
     char tempbuf4[1024];
-    sprintf(tempbuf4, "\n\n");
+    sprintf_s(tempbuf4, "\n\n");
     outFile << tempbuf4;
 
     return true;
