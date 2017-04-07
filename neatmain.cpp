@@ -7,6 +7,7 @@ int main(int argc, char *argv[]) {
 	srand((unsigned)time(NULL));
 	if (argc != 2) {
 		cerr << "A NEAT parameters file (.ne file) is required to run the experiments!" << endl;
+
 		getchar();
 		return -1;
 	}

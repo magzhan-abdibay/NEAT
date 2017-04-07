@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{60A68286-E6F0-442A-8ECB-1DFCC944D2FE}</ProjectGuid>
+    <ProjectGuid>{A63FC2F4-49D0-439E-927C-CE1B9E588D96}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>NEATConsoleApplication</RootNamespace>
+    <RootNamespace>NEAT</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -86,10 +86,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile />
-      <AdditionalIncludeDirectories>E:\UnrealProjects\CCE\Source\CCE\NEAT\NEAT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -101,10 +99,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile />
-      <AdditionalIncludeDirectories>E:\UnrealProjects\CCE\Source\CCE\NEAT\NEAT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,10 +114,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile />
-      <AdditionalIncludeDirectories>E:\UnrealProjects\CCE\Source\CCE\NEAT\NEAT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,10 +131,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile />
-      <AdditionalIncludeDirectories>E:\UnrealProjects\CCE\Source\CCE\NEAT\NEAT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,18 +142,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CartPole.cpp" />
-    <ClCompile Include="..\experiments.cpp" />
-    <ClCompile Include="..\neatmain.cpp" />
+    <ClInclude Include="CartPole.h" />
+    <ClInclude Include="experiments.h" />
+    <ClInclude Include="Gene.h" />
+    <ClInclude Include="Genome.h" />
+    <ClInclude Include="Innovation.h" />
+    <ClInclude Include="Link.h" />
+    <ClInclude Include="Neat.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="NNode.h" />
+    <ClInclude Include="Organism.h" />
+    <ClInclude Include="Population.h" />
+    <ClInclude Include="Species.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Trait.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CartPole.h" />
-    <ClInclude Include="..\experiments.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NEAT\NEAT.vcxproj">
-      <Project>{f54a37d1-34ce-4c52-8218-1cf9b4d6e3f7}</Project>
-    </ProjectReference>
+    <ClCompile Include="CartPole.cpp" />
+    <ClCompile Include="experiments.cpp" />
+    <ClCompile Include="Gene.cpp" />
+    <ClCompile Include="Genome.cpp" />
+    <ClCompile Include="Innovation.cpp" />
+    <ClCompile Include="Link.cpp" />
+    <ClCompile Include="neatmain.cpp" />
+    <ClCompile Include="Neat.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="NNode.cpp" />
+    <ClCompile Include="Organism.cpp" />
+    <ClCompile Include="Population.cpp" />
+    <ClCompile Include="Species.cpp" />
+    <ClCompile Include="Trait.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
