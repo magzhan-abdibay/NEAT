@@ -134,30 +134,30 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Gene.cpp" />
-    <ClCompile Include="..\Genome.cpp" />
-    <ClCompile Include="..\Innovation.cpp" />
-    <ClCompile Include="..\Link.cpp" />
-    <ClCompile Include="..\Neat.cpp" />
-    <ClCompile Include="..\Network.cpp" />
-    <ClCompile Include="..\NNode.cpp" />
-    <ClCompile Include="..\Organism.cpp" />
-    <ClCompile Include="..\Population.cpp" />
-    <ClCompile Include="..\Species.cpp" />
-    <ClCompile Include="..\Trait.cpp" />
+    <ClInclude Include="Gene.h" />
+    <ClInclude Include="Genome.h" />
+    <ClInclude Include="Innovation.h" />
+    <ClInclude Include="Link.h" />
+    <ClInclude Include="Neat.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="NNode.h" />
+    <ClInclude Include="Organism.h" />
+    <ClInclude Include="Population.h" />
+    <ClInclude Include="Species.h" />
+    <ClInclude Include="Trait.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Gene.h" />
-    <ClInclude Include="..\Genome.h" />
-    <ClInclude Include="..\Innovation.h" />
-    <ClInclude Include="..\Link.h" />
-    <ClInclude Include="..\Neat.h" />
-    <ClInclude Include="..\Network.h" />
-    <ClInclude Include="..\NNode.h" />
-    <ClInclude Include="..\Organism.h" />
-    <ClInclude Include="..\Population.h" />
-    <ClInclude Include="..\Species.h" />
-    <ClInclude Include="..\Trait.h" />
+    <ClCompile Include="Gene.cpp" />
+    <ClCompile Include="Genome.cpp" />
+    <ClCompile Include="Innovation.cpp" />
+    <ClCompile Include="Link.cpp" />
+    <ClCompile Include="Neat.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="NNode.cpp" />
+    <ClCompile Include="Organism.cpp" />
+    <ClCompile Include="Population.cpp" />
+    <ClCompile Include="Species.cpp" />
+    <ClCompile Include="Trait.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
