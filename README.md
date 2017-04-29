@@ -8,6 +8,9 @@ I'm refactoring it and removing obsolete part for better understanding.
 <li>NEATConsoleApplication - project which solves pole-balancing task using static link library(NEAT)</li>
 
 ##
-<li>[Original version](http://nn.cs.utexas.edu/?rtNEAT)</li>
-<li>[Original readme](NEAT/README)</li>
-<li>[Original license](NEAT/UT_Research_License.pdf)</li>
+[Original version](http://nn.cs.utexas.edu/?rtNEAT)
+##
+[Original readme](NEAT/README)
+##
+[Original license](NEAT/UT_Research_License.pdf)
+
