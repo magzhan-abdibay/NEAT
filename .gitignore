@@ -14,13 +14,13 @@ ipch/
 *.exe
 
 #Debug and release
-Debug/*
-Release/*
+Debug/
+Release/
+x64/
 
 # User-specific stuff:
 .idea/*
 cmake-build-debug/*
 
-x64/*
-Release/*
+
 rt_winpop
