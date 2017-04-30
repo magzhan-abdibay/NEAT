@@ -708,7 +708,7 @@ Network *Genome::genesis(int id) {
 
 }
 
-bool Genome::verify() {
+bool Genome::verifyGenome() {
 	std::vector<NNode*>::iterator curnode;
 	std::vector<Gene*>::iterator curgene;
 	std::vector<Gene*>::iterator curgene2;

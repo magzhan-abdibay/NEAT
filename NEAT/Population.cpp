@@ -155,13 +155,13 @@ Population::~Population() {
     //		}
 }
 
-bool Population::verify() {
+bool Population::verifyPopulation() {
     std::vector<Organism *>::iterator curorg;
 
     bool verification;
 
     for (curorg = organisms.begin(); curorg != organisms.end(); ++curorg) {
-        verification = ((*curorg)->gnome)->verify();
+        verification = ((*curorg)->gnome)->verifyGenome();
     }
 
     return verification;

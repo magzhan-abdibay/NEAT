@@ -50,7 +50,7 @@ namespace NEAT {
         bool printToFileBySpecies(char *filename);
 
         /** Run verify on all Genomes in this Population (Debugging)*/
-        bool verify();
+        bool verifyPopulation();
 
         /**** Real-time methods ****/
 

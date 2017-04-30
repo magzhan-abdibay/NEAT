@@ -103,7 +103,7 @@ namespace NEAT {
          * integrity
          * Note: Some of these tests do not indicate a bug, but rather are meant
          * to be used to detect specific system states*/
-        bool verify();
+        bool verifyGenome();
 
         /******** MUTATORS ********/
 

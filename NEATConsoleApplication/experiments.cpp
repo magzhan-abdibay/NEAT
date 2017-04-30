@@ -24,7 +24,7 @@ Population *pole2TestRealTime() {
     Population *pop = new Population(startGenome, NEAT::popSize);
 
     cout << "Verifying Spawned Pop" << endl;
-    pop->verify();
+    pop->verifyPopulation();
 
     CartPole *cartPole = new CartPole(1);
 
