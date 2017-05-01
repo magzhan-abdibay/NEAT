@@ -10,7 +10,7 @@ I'm refactoring it and removing obsolete part for better understanding.
 ##
 [Original version](http://nn.cs.utexas.edu/?rtNEAT)
 
-[Original readme](NEAT/README)
+[Original readme](README)
 
-[Original license](NEAT/UT_Research_License.pdf)
+[Original license](UT_Research_License.pdf)
 
